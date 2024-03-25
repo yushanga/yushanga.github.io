@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>基于ET的放置网络游戏 | WindDust</title>
+  <title>关于图形学 | WindDust</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -81,7 +81,8 @@
         
     
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="WindDust" type="application/atom+xml">
+</head>
 
   
   <!-- 依赖于jquery和vue -->
@@ -237,9 +238,123 @@
     <div class="drawer-box-content">
       <ul class="drawer-box-content_menu">
         
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                  
+                  <span class="name">首页</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/archives" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-archive" aria-hidden="true"></i>
+                  
+                  <span class="name">归档</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="javascript:;" class="drawer-menu-item-link has-children" @click="openOrCloseMenu(2)">
+                  <span>
+                    
+                      <i class="fas fa-archive"></i>
+                    
+                    <span class="name">Demo</span>
+                  </span>
+                  <i class="fas fa-chevron-left arrow " :class="{'icon-rotate': isOpen(2)}" aria-hidden="true"></i>
+                </a>
+                <ul class="drawer-sub-menu" v-if="isOpen(2)">
+                  
+                  <li>
+                    <a href="/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ET放置类网络游戏</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETSkill</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETMMO</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2022/04/07/Demo">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>杂七杂八</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="javascript:;" class="drawer-menu-item-link has-children" @click="openOrCloseMenu(3)">
+                  <span>
+                    
+                      <i class="fas fa-archive"></i>
+                    
+                    <span class="name">图形学</span>
+                  </span>
+                  <i class="fas fa-chevron-left arrow " :class="{'icon-rotate': isOpen(3)}" aria-hidden="true"></i>
+                </a>
+                <ul class="drawer-sub-menu" v-if="isOpen(3)">
+                  
+                  <li>
+                    <a href="/2024/03/22/graphics/RenderPipeline/">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>渲染管线Render Pipeline个人理解总结</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/tags" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-tags" aria-hidden="true"></i>
+                  
+                  <span class="name">标签</span>
+                </a>
+              
+            </li>
+          
+        
         
           <li class="drawer-box-content_item">
-            <a target="_blank" rel="noopener" href="https://yushanga.github.io">
+            <a target="_blank" rel="noopener" href="https://gitee.com/FengChen512">
               <i class="fas fa-github" aria-hidden="true"></i>
               <span>Github</span>
             </a>
@@ -306,6 +421,116 @@
     </div>
     <nav class="navbar">
       <ul class="menu">
+        
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/" class="menu-item-link" title="首页">
+                  
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                  
+                  <span class="name">首页</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/archives" class="menu-item-link" title="归档">
+                  
+                    <i class="fas fa-archive" aria-hidden="true"></i>
+                  
+                  <span class="name">归档</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="javascript:;" class="menu-item-link" title="Demo">
+                  
+                    <i class="fas fa-archive"></i>
+                  
+                  <span class="name">Demo</span>
+                  <i class="fas fa-chevron-down arrow" aria-hidden="true"></i>
+                </a>
+                <ul class="sub-menu">
+                  
+                  <li>
+                    <a href="/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ET放置类网络游戏</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETSkill</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETMMO</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2022/04/07/Demo">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>杂七杂八</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="javascript:;" class="menu-item-link" title="图形学">
+                  
+                    <i class="fas fa-archive"></i>
+                  
+                  <span class="name">图形学</span>
+                  <i class="fas fa-chevron-down arrow" aria-hidden="true"></i>
+                </a>
+                <ul class="sub-menu">
+                  
+                  <li>
+                    <a href="/2024/03/22/graphics/RenderPipeline/">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>渲染管线Render Pipeline个人理解总结</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/tags" class="menu-item-link" title="标签">
+                  
+                    <i class="fas fa-tags" aria-hidden="true"></i>
+                  
+                  <span class="name">标签</span>
+                </a>
+              
+            </li>
+          
         
       </ul>
       
@@ -389,7 +614,7 @@
     </nav>
   </div>
   
-    <a target="_blank" rel="noopener" href="https://yushanga.github.io" class="github-corner color-primary" aria-label="View source on GitHub"><svg width="60" height="60" viewBox="0 0 250 250" style="fill:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <a target="_blank" rel="noopener" href="https://gitee.com/FengChen512" class="github-corner color-primary" aria-label="View source on GitHub"><svg width="60" height="60" viewBox="0 0 250 250" style="fill:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
   
   
 </header>
@@ -408,24 +633,33 @@
 
 
 <div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
-  background-position: center center;position: relative;background-image:url('/medias/3.jpg')">
+  background-position: center center;position: relative;background-image:url('/medias/4.jpg')">
   <div class="post-detail-header-mask"></div>
   <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
   <div class="post-detail-header_info-box">
     <div class="title-box">
       <span class="title">
-        基于ET的放置网络游戏
+        关于图形学
       </span>
     </div>
     
     
       
         <span class="post-detail-header_date">
-          <i class="fas fa-calendar"></i> 发表于：2024-03-20 |
+          <i class="fas fa-calendar"></i> 发表于：2024-03-22 |
         </span>
       
 
+      
+        <span class="post-detail-header_categories">
+          <i class="iconfont iconbookmark1"></i> 分类：
+          
+            <a href="/categories/Grapics/" class="post-detail-header_category">
+              Grapics
+            </a>
+          
+        </span>
       
 
       
@@ -446,13 +680,7 @@
   <div class="main-content">
     <article class="post post-detail">
       <div class="post-content">
-        <h2 id="基于ET的放置网络游戏"><a href="#基于ET的放置网络游戏" class="headerlink" title="基于ET的放置网络游戏"></a><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1St421G7EP/?vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">基于ET的放置网络游戏</a></h2><p><a target="_blank" rel="noopener" href="https://github.com/yushanga/waitinggame">gitee 地址</a><br>rider + vs +unity + mongodb + Dotween + ET6.0<br> 1.账号登录<br>   账号规定 （大小写+ 数字 ） 不可以重复<br>   密码加密<br>   本地保存</p>
-<p> 2.区服管理<br>   不同区服<br> 3.账号角色管理<br>   账号 角色绑定<br>   一个账号 多个角色<br>   角色名称不可重复<br> 4.角色数据管理<br>   账号数据<br>   装备数据<br> 5.角色数值<br>    一级数值<br>    二级数值<br>    百分比数值<br> 6.战斗副本<br>   1.根据配置生成怪物数量<br>   2.根据怪物id 生成怪物<br>   3.伤害计算<br>   4.战斗漂字<br>   5.服务器战斗核算<br>     根据服务器最初数据和随机数种子进行战斗模拟计算<br>   6.<br> 7.个人装备模块<br>   装备数据<br>   装备属性</p>
-<p> 8.任务模块<br>  任务id<br>  任务类型<br>  任务奖励<br>  任务<br> 9.背包模块<br>   item 装备<br>   item 售卖<br> 10.装备打造模块<br>   打造条件<br>   打造装备所需材料<br>   打造定时器</p>
-<p> 缓存服务器<br> 定时数据存储 减少服务器性能压力</p>
-<p> 世界聊天</p>
-<p> 排行榜<br>  定时刷新排行榜<br>  根据等级进行排行榜<br>  等级变化回调 刷新该等级区域排行榜</p>
-
+        <h1 id><a href="#" class="headerlink" title></a><a href="/2024/03/22/graphics/RenderPipeline/" title="渲染管线的理解">渲染管线的理解</a></h1>
       </div>
       <div class="post-tags-categories">
         
@@ -465,7 +693,7 @@
     </li>
     <li class="post-copyright-link">
     <strong>文章链接:  </strong>
-    <a href="/2024/03/20/WaitGame/" target="_blank" title="基于ET的放置网络游戏">http://example.com/2024/03/20/WaitGame/</a>
+    <a href="/2024/03/22/graphics/" target="_blank" title="关于图形学">http://example.com/2024/03/22/graphics/</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明:   </strong>
@@ -483,22 +711,39 @@
 
 
 
+  
+  <div class="post-nav-prev post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="/medias/13.jpg" class="lazyload placeholder" data-srcset="/medias/13.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+    </div>
+    <a href="/2024/03/22/graphics/Drawcall/" class="post-nav-link">
+      <div class="title">
+        <i class="fas fa-angle-left"></i> 上一篇:
+        <div class="title-text">DrawCall</div>
+      </div>
+      
+      <!-- <div class="content">
+        合批处理在UGUI中会有一些不同先获得一个按Hierarchy的顺序的列表计算每个物体的深度。2.1 深度从0开始递增。
+      </div> -->
+    </a>
+  </div>
+
 
 
   
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/6.jpg" class="lazyload placeholder" data-srcset="/medias/6.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" src="" alt="">
+      <img class="lazyload lazyload placeholder" src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" src="" alt="">
     </div>
-    <a href="/2024/03/19/ETMMorpg/" class="post-nav-link">
+    <a href="/2024/03/22/graphics/RenderPipeline/" class="post-nav-link">
       <div class="title">
         下一篇: <i class="fas fa-angle-right"></i>
-        <div class="title-text">基于ET的MMPORPG</div>
+        <div class="title-text">渲染管线Render Pipeline个人理解总结</div>
       </div>
       <!-- <div class="content">
-        基于ET的MMOgitee地址
-1.服务端导航数据  2.分布式服务器  3.登录模块  4.网关处理  5.角色创建 
+        CPU与GPU的区别GPU的架构与CPU有极大的不同，这主要归因于两者不同的使用场合。试想一下，GPU面对3D游戏中成千
       </div> -->
     </a>
   </div>

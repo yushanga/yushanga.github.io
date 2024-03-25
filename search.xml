@@ -4,12 +4,56 @@
   
     
     <entry>
-      <title>基于ET的放置网络游戏</title>
-      <link href="/2024/03/20/WaitGame/"/>
-      <url>/2024/03/20/WaitGame/</url>
+      <title>DrawCall</title>
+      <link href="/2024/03/22/graphics/Drawcall/"/>
+      <url>/2024/03/22/graphics/Drawcall/</url>
       
-        <content type="html"><![CDATA[<h2 id="基于ET的放置网络游戏"><a href="#基于ET的放置网络游戏" class="headerlink" title="基于ET的放置网络游戏"></a><a href="https://www.bilibili.com/video/BV1St421G7EP/?vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">基于ET的放置网络游戏</a></h2><p><a href="https://github.com/yushanga/waitinggame">gitee 地址</a><br>rider + vs +unity + mongodb + Dotween + ET6.0<br> 1.账号登录<br>   账号规定 （大小写+ 数字 ） 不可以重复<br>   密码加密<br>   本地保存</p><p> 2.区服管理<br>   不同区服<br> 3.账号角色管理<br>   账号 角色绑定<br>   一个账号 多个角色<br>   角色名称不可重复<br> 4.角色数据管理<br>   账号数据<br>   装备数据<br> 5.角色数值<br>    一级数值<br>    二级数值<br>    百分比数值<br> 6.战斗副本<br>   1.根据配置生成怪物数量<br>   2.根据怪物id 生成怪物<br>   3.伤害计算<br>   4.战斗漂字<br>   5.服务器战斗核算<br>     根据服务器最初数据和随机数种子进行战斗模拟计算<br>   6.<br> 7.个人装备模块<br>   装备数据<br>   装备属性</p><p> 8.任务模块<br>  任务id<br>  任务类型<br>  任务奖励<br>  任务<br> 9.背包模块<br>   item 装备<br>   item 售卖<br> 10.装备打造模块<br>   打造条件<br>   打造装备所需材料<br>   打造定时器</p><p> 缓存服务器<br> 定时数据存储 减少服务器性能压力</p><p> 世界聊天</p><p> 排行榜<br>  定时刷新排行榜<br>  根据等级进行排行榜<br>  等级变化回调 刷新该等级区域排行榜</p>]]></content>
+        <content type="html"><![CDATA[<p>合批处理在UGUI中会有一些不同<br>先获得一个按Hierarchy的顺序的列表<br>计算每个物体的深度。<br>2.1 深度从0开始递增。如果世界包围盒Z轴不为0（或isCanvasInjectionIndex），则需独占一个批次，同时独占一个深度。即等于之前所有物体最大深度+1，后一个物体深度需要+1。<br>2.2 对一般物体的深度。会判断是否可跟之前的物件共享深度，走接下来的流程。<br>2.2.1 先按格子（默认大小是120，根据包围盒再计算）划分出多个格子。（只是为了加速求交）。<br>2.2.2 计算物体包围相交哪些格子，再跟格子中已有的物体进行包围盒相交判断。如果不相交则使用当前深度；如果相交且可合批，则使用相交物体中最大的深度；如果相交且不可合批，则使用相交物体中最大的深度+1。合批条件：无独占批次+材质相同+贴图相同+裁剪开关和裁剪矩形相同+贴图A8格式一致（kTexFormatAlpha8） 2.2.3 将该物体加入所有相交的格子中。若遇到独占深度的物体，则格子数据清空。即后续物件不跟之前的物件共享深度。<br>排序：按照深度-材质-贴图-层级顺序优先级排序。<br>合批：对排序后的列表，从头开始一个一个检测是否能与前面的物体合批。合批条件：无独占批次（只判断isCanvasInjectionIndex）+材质相同+贴图相同+裁剪开关和裁剪矩形相同+贴图A8格式一致（kTexFormatAlpha8），非SubBatch只判断前两个条件，一般情况下UI的材质都一样。<br>UGUI批处理原文链接：httpsblog.csdn.nethankangwenarticledetails122667647<br>在Unity中的shader中会将这些数据存到一些通道里： POSITION、NORMAL、COLOR、 TANGENT、TEXCOOR</p>]]></content>
       
+      
+      <categories>
+          
+          <category> Grapics </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>关于图形学</title>
+      <link href="/2024/03/22/graphics/"/>
+      <url>/2024/03/22/graphics/</url>
+      
+        <content type="html"><![CDATA[<h1 id><a href="#" class="headerlink" title></a><a href="/2024/03/22/graphics/RenderPipeline/" title="渲染管线的理解">渲染管线的理解</a></h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> Grapics </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>渲染管线Render Pipeline个人理解总结</title>
+      <link href="/2024/03/22/graphics/RenderPipeline/"/>
+      <url>/2024/03/22/graphics/RenderPipeline/</url>
+      
+        <content type="html"><![CDATA[<h2 id="CPU与GPU的区别"><a href="#CPU与GPU的区别" class="headerlink" title="CPU与GPU的区别"></a>CPU与GPU的区别</h2><p>GPU的架构与CPU有极大的不同，这主要归因于两者不同的使用场合。试想一下，GPU面对3D游戏中成千上万的三角面，如果仅仅是跟Cpu一样逐一单个处理计算，损失的效率是极其惊人的。</p><h2 id="渲染管线（Render-Pipeline）"><a href="#渲染管线（Render-Pipeline）" class="headerlink" title="渲染管线（Render Pipeline）"></a>渲染管线（Render Pipeline）</h2><p>在渲染流程中，CPU与GPU正如上文一样通力合作渲染图像。在运算过程中，CPU如同进货的卡车不断地将要处理的数据丢给GPU，GPU工厂调动一个个如工人一般的计算单元对这些数据进行简单的处理，最后组装出产品——图像。</p><h2 id="渲染管线流程"><a href="#渲染管线流程" class="headerlink" title="渲染管线流程"></a>渲染管线流程</h2><p>   渲染管线粗略分为几个步骤：应用阶段-几何阶段-光栅化阶段<br>   <img src="/RenderPipeline/1.png" class="lazyload placeholder" data-srcset="/RenderPipeline/1.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="渲染管线抽象图"><br>    渲染管线粗略分为几个步骤：顶点数据的输入、顶点着色器、曲面细分过程、几何着色器、三角形设置、裁剪剔除、光栅化、片段着色器以及混合测试<br>   <img src="/RenderPipeline/2.png" class="lazyload placeholder" data-srcset="/RenderPipeline/2.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="渲染管线详细图"></p><h3 id="应用阶段（Application-Stage）"><a href="#应用阶段（Application-Stage）" class="headerlink" title="应用阶段（Application Stage）"></a>应用阶段（Application Stage）</h3><p>这是一个由CPU主要负责的阶段，且完全由开发人员掌控。在这个阶段，CPU将决定递给GPU什么样的数据（譬如渲染目标场景中的灯光、场景的模型、摄像机的位置），有时候还会对这些数据进行处理（譬如只递给GPU可以被摄像机看见的元素，其他不可见的元素被剔除（culling）出去），并且告诉GPU这些数据的渲染状态（譬如纹理、材质、着色器等）。</p><p>我们同样用工业流水线进行类比，这一块相当于工厂的产品进口部门，采购员（CPU）联系发货单位（RAM）订购想要的原材料（数据），并经过一番精挑细选拿出自己满意的材料（数据处理，如剔除），把这些材料连同他们的加工方式（如应当使用的着色器）丢给工厂。值得注意的是，由于这一块采购员是与发货单位的商人而不是工厂里的工人交流， 所以他可以使用更复杂的语言（如高级程序语言）与商人讨价还价，而不是像在工厂中向工人发号施令时使用的指令（着色器语言）。</p><p>所做的工作： </p><h4 id="顶点数据的输入"><a href="#顶点数据的输入" class="headerlink" title="顶点数据的输入"></a>顶点数据的输入</h4><p>应用阶段的主要任务是把 顶点数据、shader、贴图、材质球、灯光以及一些设置等等传入GPU的过程，这个过程叫做 DrawCall<br>（1）把数据加载到显存：将数据加载到显存中能使GPU更快的访问这些数据，当把数据加载到显存后，便可以释放了数据，但一些数据仍需留在内存中，如CPU需要网格数据进行碰撞检测。<br>（2）设置渲染状态：渲染状态的一个通俗解释就是，定义了场景中的网格是怎样被渲染的。例如，使用哪个顶点着色器/片段着色器、光源属性、材质等。如果不设置渲染状态，那所有的网格将使用同一种渲染，显然这是不希望得到的结果。<br>（3）调用Draw Call：当所有的数据准备好后，CPU就需要调用一个渲染指令告诉GPU，按照上述设置进行渲染，这个渲染命令就是Draw Call。Draw Call命令仅仅指向被渲染的图元列表，而不包含任何材质信息</p><p>Unity DrawCall 内部分为 SetPassCall 和 Batch，<br>SetPassCall的作用是设置渲染管线的上下文，一般每一种Unity里的Material就是一个SetPassCall，<br>Batch就是每一次CPU向GPU打包发送顶点数据的批次，当我们优化性能的时候经常会用到（动态）合批，合批就是将拥有两个相同的材质（材质实例也要相同）的物体同时传入GPU进行处理。</p><ul><li><a href="/2024/03/22/graphics/Drawcall/" title="合批处理">合批处理</a></li></ul><h3 id="几何阶段（Geometry-Stage）"><a href="#几何阶段（Geometry-Stage）" class="headerlink" title="几何阶段（Geometry Stage）"></a>几何阶段（Geometry Stage）</h3><p>负责大部分多边形操作和顶点操作，将三维空间的数据转换为二维空间的数据。<br>这一个由GPU主导的阶段，也就是说，从这个阶段开始，我们进入了上文所说的“流水线”。几何阶段将把CPU在应用阶段发来的数据进行进一步处理，而这个阶段又可以进一步细分为若干个流水线阶段，可以类比理解为工厂流水线上进行的一道道工序。<br>流程图中展现了几何阶段中几个常见的渲染步骤（不同的图像应用接口存在着些许不同，这里以OpenGL为例），其中，绿色表示开发者可以完全编程控制的部分，虚线外框表示此阶段不是必需的，黄色表示开发者无法完全控制的部分（但可以进行一些配置），紫色表示开发者无法控制的阶段（已经由GPU固定实现）。</p><h4 id="顶点着色器"><a href="#顶点着色器" class="headerlink" title="顶点着色器"></a>顶点着色器</h4><p>顶点着色器的处理单位是顶点，但是每次处理都是独立的，因此无法创建或销毁任何一个顶点，也不能得到与其他顶点的关系<br>顶点着色器主要功能是进行坐标变换。将输入的局部坐标变换到世界坐标、观察坐标和裁剪坐标。<br>虽然我们也会在顶点着色器进行光照计算(称作高洛德着色)，然后经过光栅化插值得到各个片段的颜色，但这种得到的光照比较不自然，所以一般在片段着色器进行光照计算</p><h4 id="曲面细分着色器"><a href="#曲面细分着色器" class="headerlink" title="曲面细分着色器"></a>曲面细分着色器</h4><p>曲面细分是利用镶嵌化处理技术对三角面进行细分，以此来增加物体表面的三角面的数量，是渲染管线一个可选的阶段</p><h4 id="几何着色器"><a href="#几何着色器" class="headerlink" title="几何着色器"></a>几何着色器</h4><p>在这个阶段，开发者可以控制GPU对顶点进行增删改操作</p><h4 id="屏幕映射"><a href="#屏幕映射" class="headerlink" title="屏幕映射"></a>屏幕映射</h4><p>屏幕映射的任务就是将每个图元的x、y值变换到屏幕坐标系，对于z坐标不做任何处理（实际上屏幕坐标系和z坐标一起构成窗口坐标系），这些值会被一起传递到光栅化阶段<br>一般来说，屏幕坐标是2D的概念，只用于表示屏幕XY坐标，而窗口坐标是2.5D的概念，它还带有深度信息，也就是经过变换后的Z轴的信息。<br>使用齐次坐标的意义，其实就是为了正确记录下投影变换前(观察空间)中物体的深度信息，也就是Z坐标的值。</p><ol><li>投影</li></ol><p>GPU将顶点从摄像机观察空间转换到裁剪空间（又被称为齐次裁剪空间），为之后的剔除过程以及投射到二维平面做准备。<br>常见的投影方式有透视投影与正交投影。<br>在三维中原有的三个分量x、y、z上又额外增加了w=1分量，使得可以通过矩阵乘的方式为三维坐标实现平移的效果。</p><ol start="2"><li>裁剪</li></ol><p>只有当图元部分或全部位于视椎体内时，我们才会将它送到流水线的下个阶段，也就是光栅化阶段。对于部分位于视椎体的图元，位于外部的顶点将被裁剪掉，而且在视椎体与线段的交界处产生新的顶点。<br>在把不需要的顶点裁剪掉后，GPU需要把顶点映射到屏幕空间，这是一个从三维空间转换到二维空间的操作。<br>对于透视裁剪空间，GPU需要对裁剪空间中的顶点执行齐次除法（将齐次坐标系中的w分量除x、y、z分量），得到顶点的归一化的设备坐标（NDC）<br>通过透视除法后，我们得到了NDC坐标，获得NDC坐标是为了实现屏幕坐标的转换与硬件无关。<br>正交裁剪空间只需要把w分量去掉即可。<br>此时顶点的x、y坐标接近于在屏幕上所处的位置了，此时z分量不会被丢弃而是被写入了深度缓冲（z-buffer）</p><h3 id="光栅化阶段"><a href="#光栅化阶段" class="headerlink" title="光栅化阶段"></a>光栅化阶段</h3><p>决定每个渲染图元中哪些像素应该被绘制在屏幕上，它需要对上一阶段得到的逐顶点数据进行插值<br>到此，GPU也只是完成了渲染的一半工作，因为现在我们只是得到了一些顶点，他们还不是能被显示在屏幕上的像素。</p><h4 id="三角形设置（Triangle-Setup）"><a href="#三角形设置（Triangle-Setup）" class="headerlink" title="三角形设置（Triangle Setup）"></a>三角形设置（Triangle Setup）</h4><p>有些资料把这个过程称为图元组装（Primitive Assembly），不过个人认为叫做Primitive Assembly更为贴切。这个过程做的工作就是把顶点数据收集并组装为简单的基本体（线、点或三角形），通俗的说就是把相关的两个顶点“连连看”，有些能构成面，有些只是线，有些甚至没有与之配对的顶点只能当一个“单身狗”。</p><h4 id="三角形遍历（Triangle-Traversal）"><a href="#三角形遍历（Triangle-Traversal）" class="headerlink" title="三角形遍历（Triangle Traversal）"></a>三角形遍历（Triangle Traversal）</h4><p>这个过程将检验屏幕上的某个像素是否被一个三角形网格所覆盖，被覆盖的区域将生成一个片元（Fragment）</p><p>片元不是真正意义上的像素，而是包含了很多种状态的集合（譬如屏幕坐标、深度、法线、纹理等）<br>而片元的划分依据（像素块被覆盖到何种程度才被划分）不管怎么样都会产生锯齿，这就有许多抗锯齿的采样方式（比如MSAA）<br>片段着色器<br>片元着色器的输入是上一个阶段对顶点信息进行插值的结果（是根据从顶点着色器输出的数据插值得到的），而它的输出是像素颜色值<br>这个阶段我们能进行很多渲染技术，比如根据顶点法线或者UV计算颜色，接受阴影或者是进行纹理采样（纹理坐标是通过前述阶段的顶点数据插值得到的）</p><h4 id="逐片元计算"><a href="#逐片元计算" class="headerlink" title="逐片元计算"></a>逐片元计算</h4><p>对每个片元进行操作，将它们的颜色以某种形式合并，得到最终在屏幕上像素显示的颜色。主要的工作有两个：对片元进行测试（Test）并进行合并（Merge）。<br>测试步骤决定了片元最终会不会被显示出来，这个阶段是高度可配置的<br>如果一个片元通过了所有测试，就需要把这些片元的颜色值和颜色缓冲中已有的颜色值进行混合。</p><ol><li><p>裁切测试<br>在裁剪测试中，允许程序员开设一个裁剪框，只有在裁剪框内的片元才会被显示出来，在裁剪框外的片元皆被剔除。</p></li><li><p>透明度测试<br>在透明度测试中，允许程序员对片元的透明度值进行检测，仅仅允许透明度值达到设置的阈值后才可以会绘制。在OpenGL3.1后这个API被删除了，但你可以在片元着色器中实现类似的效果。</p></li><li><p>模板测试<br>模板测试通常用来限制渲染的区域，渲染阴影，轮廓渲染等<br>在模板测试中，GPU将读取片元的模板值与模板缓冲区的模板值进行比较，比较函数由开发者指定，如果比较不通过，这个片元将被舍弃</p></li><li><p>深度测试<br>现实生活中，近的物体会遮挡住远处的物体，深度缓冲就是用来实现这种效果的。</p></li></ol><p>GPU将读取片元的深度值（就是我们前面留下来的坐标z分量）与缓冲区的深度值进行比较，和模板测试一样，如何渲染物体之间的遮挡关系也是自定义的（可以让GPU把没有被遮挡的部分隐藏了，让被遮挡的部分显示出来的。）<br>大量的被遮挡片元直到深度测试阶段才会被剔除，而在此之前它们同样地被计算，这占用了GPU大量的资源。<br>因此有种优化技术是将深度测试提前（Early-Z）。但这带来了与透明度测试的冲突，例如某个片元甲虽然遮挡了另一个片元乙，但甲却是透明的，GPU应当渲染的是片元乙，这就产生了矛盾，这就是透明度测试会导致性能下降的原因</p><ol start="5"><li>合并<br>一个片元通过了所有测试，片元颜色就会被送到颜色缓冲区，到达了合并环节<br>合并有两种主要的方式，一种是直接进行颜色的替换，另一种是根据不透明度进行混合（Blend）<br>如果开启了混合，GPU会取出片元着色器得到的颜色（源颜色）和颜色缓冲区存在的颜色（目标颜色），之后按照设定的函数进行混合，可以设定透明度通道进行相加，相减还是相乘。<br>最后GPU会使用双重缓冲（Double Buffering）的策略，即屏幕上显示前置缓冲（Front Buffer），而渲染好的颜色先被送入后置缓冲（Back Buffer），再替换前置缓冲，以此避免在屏幕上显示正在光栅化的图元</li></ol><p>引用两位大佬的文章思路 <a href="https://zhuanlan.zhihu.com/p/137780634">1</a><a href="https://blog.csdn.net/jkkk_/article/details/126974823">2</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Grapics </category>
+          
+      </categories>
       
       
     </entry>
@@ -18,11 +62,17 @@
     
     <entry>
       <title>基于ET的MMPORPG</title>
-      <link href="/2024/03/19/ETMMorpg/"/>
-      <url>/2024/03/19/ETMMorpg/</url>
+      <link href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/"/>
+      <url>/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/</url>
       
-        <content type="html"><![CDATA[<h2 id="基于ET的MMO"><a href="#基于ET的MMO" class="headerlink" title="基于ET的MMO"></a>基于ET的MMO</h2><p><a href="https://gitee.com/FengChen512/etmomrpg">gitee地址</a></p><p>1.服务端导航数据<br>  2.分布式服务器<br>  3.登录模块<br>  4.网关处理<br>  5.角色创建<br>  6.排队服务器<br>  7.客户端ui<br>  8.touch 移动按钮 与摄像机跟随</p>]]></content>
+        <content type="html"><![CDATA[<h3 id="基于ET的MMO"><a href="#基于ET的MMO" class="headerlink" title="基于ET的MMO"></a>基于ET的MMO</h3><p><a href="https://gitee.com/FengChen512/etmomrpg">gitee地址</a></p><h4 id="服务端导航数据"><a href="#服务端导航数据" class="headerlink" title="服务端导航数据"></a>服务端导航数据</h4><h4 id="分布式服务器"><a href="#分布式服务器" class="headerlink" title="分布式服务器"></a>分布式服务器</h4><h4 id="登录模块"><a href="#登录模块" class="headerlink" title="登录模块"></a>登录模块</h4><h4 id="网关处理"><a href="#网关处理" class="headerlink" title="网关处理"></a>网关处理</h4><h4 id="角色创建"><a href="#角色创建" class="headerlink" title="角色创建"></a>角色创建</h4><h4 id="排队服务器"><a href="#排队服务器" class="headerlink" title="排队服务器"></a>排队服务器</h4><h4 id="客户端ui"><a href="#客户端ui" class="headerlink" title="客户端ui"></a>客户端ui</h4><h4 id="touch-移动按钮-与摄像机跟随"><a href="#touch-移动按钮-与摄像机跟随" class="headerlink" title="touch 移动按钮 与摄像机跟随"></a>touch 移动按钮 与摄像机跟随</h4>]]></content>
       
+      
+      <categories>
+          
+          <category> Demo </category>
+          
+      </categories>
       
       
     </entry>
@@ -31,11 +81,36 @@
     
     <entry>
       <title>基于ET的双端战斗</title>
-      <link href="/2024/03/19/ETSkill/"/>
-      <url>/2024/03/19/ETSkill/</url>
+      <link href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/"/>
+      <url>/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/</url>
       
-        <content type="html"><![CDATA[<p><img src="/ETSkill/1.png" class="lazyload placeholder" data-srcset="/ETSkill/1.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="基于ET的双端战斗分布式架构" title="ET分布式架构"></p><h2 id="基于ET的战斗"><a href="#基于ET的战斗" class="headerlink" title="基于ET的战斗"></a>基于ET的战斗</h2><p><a href="https://gitee.com/FengChen512/etskill">gitee地址</a></p><h3 id="服务端："><a href="#服务端：" class="headerlink" title="服务端："></a>服务端：</h3><p>  1.战斗系统<br>    技能释放与技能生命周期<br>    技能配置<br>    创建技能<br>    技能释放<br>    释放结束与命中<br>    法球子弹<br>    战斗消息处理<br>  2.BUff系统<br>    Buff配置<br>    buff拥有者<br>    时间<br>    间隔<br>    定时器任务<br>    buff消息处理<br>    BuffAction<br>  3.野怪数值<br>    野怪配置<br>    野怪群配置<br>    生成与死亡<br>    定时器任务</p><h3 id="客户端："><a href="#客户端：" class="headerlink" title="客户端："></a>客户端：</h3><p>   1.战斗表型<br>   2.buff表现<br>   3.消息处理</p>]]></content>
+        <content type="html"><![CDATA[<p><img src="/ETSkill/1.png" class="lazyload placeholder" data-srcset="/ETSkill/1.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="基于ET的双端战斗分布式架构" title="ET分布式架构"></p><h2 id="基于ET的战斗"><a href="#基于ET的战斗" class="headerlink" title="基于ET的战斗"></a>基于ET的战斗</h2><p><a href="https://gitee.com/FengChen512/etskill">gitee地址</a></p><h3 id="服务端："><a href="#服务端：" class="headerlink" title="服务端："></a>服务端：</h3><p>  1.战斗系统<br>    技能释放与技能生命周期<br>    技能配置<br>    创建技能<br>    技能释放<br>    释放结束与命中<br>    法球子弹<br>    战斗消息处理<br>  2.BUff系统<br>    Buff配置<br>    buff拥有者<br>    时间<br>    间隔<br>    定时器任务<br>    buff消息处理<br>    BuffAction<br>  3.野怪数值<br>    野怪配置<br>    野怪群配置<br>    生成与死亡<br>    定时器任务</p><h3 id="客户端："><a href="#客户端：" class="headerlink" title="客户端："></a>客户端：</h3><p>   1.战斗表型<br>   2.buff表现<br>   3.消息处理</p><p>permalink: Demo<br>date: 2024-03-20 20：30：36<br>categories:<br>    - Demo<br>    - ETSkill </p>]]></content>
       
+      
+      <categories>
+          
+          <category> Demo </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>基于ET的放置网络游戏</title>
+      <link href="/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/"/>
+      <url>/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/</url>
+      
+        <content type="html"><![CDATA[<h2 id="基于ET的放置网络游戏"><a href="#基于ET的放置网络游戏" class="headerlink" title="基于ET的放置网络游戏"></a><a href="https://www.bilibili.com/video/BV1St421G7EP/?vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">基于ET的放置网络游戏</a></h2><p><a href="https://github.com/yushanga/waitinggame">gitee 地址</a><br>rider + vs +unity + mongodb + Dotween + ET6.0<br> 1.账号登录<br>   账号规定 （大小写+ 数字 ） 不可以重复<br>   密码加密<br>   本地保存</p><p> 2.区服管理<br>   不同区服<br> 3.账号角色管理<br>   账号 角色绑定<br>   一个账号 多个角色<br>   角色名称不可重复<br> 4.角色数据管理<br>   账号数据<br>   装备数据<br> 5.角色数值<br>    一级数值<br>    二级数值<br>    百分比数值<br> 6.战斗副本<br>   1.根据配置生成怪物数量<br>   2.根据怪物id 生成怪物<br>   3.伤害计算<br>   4.战斗漂字<br>   5.服务器战斗核算<br>     根据服务器最初数据和随机数种子进行战斗模拟计算<br>   6.<br> 7.个人装备模块<br>   装备数据<br>   装备属性</p><p> 8.任务模块<br>  任务id<br>  任务类型<br>  任务奖励<br>  任务<br> 9.背包模块<br>   item 装备<br>   item 售卖<br> 10.装备打造模块<br>   打造条件<br>   打造装备所需材料<br>   打造定时器</p><p> 缓存服务器<br> 定时数据存储 减少服务器性能压力</p><p> 世界聊天</p><p> 排行榜<br>  定时刷新排行榜<br>  根据等级进行排行榜<br>  等级变化回调 刷新该等级区域排行榜</p><p>permalink: Demo<br>date: 2022-04-07 20：30：36<br>categories:<br>    - Demo<br>    - WaitGame</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Demo </category>
+          
+      </categories>
       
       
     </entry>
@@ -60,8 +135,14 @@
       <link href="/2022/04/07/Demo/"/>
       <url>/2022/04/07/Demo/</url>
       
-        <content type="html"><![CDATA[<h2 id="作品展示"><a href="#作品展示" class="headerlink" title="作品展示"></a>作品展示</h2><h3 id="2020年10月-使用unity制作的射击游戏-视频展示"><a href="#2020年10月-使用unity制作的射击游戏-视频展示" class="headerlink" title="2020年10月 使用unity制作的射击游戏 视频展示"></a>2020年10月 <a href="https://www.bilibili.com/video/BV1bv411k7Mq/">使用unity制作的射击游戏 视频展示</a></h3><h3 id="2020年10月至2021年10月-山东聊城运河项目-给到山东聊城博物馆"><a href="#2020年10月至2021年10月-山东聊城运河项目-给到山东聊城博物馆" class="headerlink" title="2020年10月至2021年10月 山东聊城运河项目 给到山东聊城博物馆"></a>2020年10月至2021年10月 山东聊城运河项目 给到山东聊城博物馆</h3><h3 id="2021年-2月黄金矿工（成语版）视频展示"><a href="#2021年-2月黄金矿工（成语版）视频展示" class="headerlink" title="2021年 2月黄金矿工（成语版）视频展示"></a>2021年 2月<a href="https://www.bilibili.com/video/BV1v3411J7GM?spm_id_from=333.999.0.0">黄金矿工（成语版）视频展示</a></h3><h3 id="2021年-3月-仿照市面上很火的合成大西瓜-视频展示"><a href="#2021年-3月-仿照市面上很火的合成大西瓜-视频展示" class="headerlink" title="2021年 3月 仿照市面上很火的合成大西瓜 视频展示"></a>2021年 3月 <a href="https://www.bilibili.com/video/BV1S44y1P76X?spm_id_from=333.999.0.0">仿照市面上很火的合成大西瓜 视频展示</a></h3><p><a href="https://www.aliyundrive.com/s/bErzCvDwX6n">安卓app地址阿里云盘</a></p><h3 id="2021年三月-绝地生存-游戏"><a href="#2021年三月-绝地生存-游戏" class="headerlink" title="2021年三月  绝地生存 游戏"></a>2021年三月  绝地生存 游戏</h3><h3 id="2021年4月-爆炸男孩-视频展示"><a href="#2021年4月-爆炸男孩-视频展示" class="headerlink" title="2021年4月 爆炸男孩 视频展示"></a>2021年4月 <a href="https://www.bilibili.com/video/BV15S4y117mx?spm_id_from=333.999.0.0">爆炸男孩 视频展示</a></h3><p><a href="https://www.aliyundrive.com/s/9qFfVUQV6Ba">安卓app地址阿里云盘</a></p><h3 id="2021年5月校园消防"><a href="#2021年5月校园消防" class="headerlink" title="2021年5月校园消防"></a>2021年5月校园消防</h3><h3 id="2021年7月-玉山仿真虚拟实验"><a href="#2021年7月-玉山仿真虚拟实验" class="headerlink" title="2021年7月  玉山仿真虚拟实验"></a>2021年7月  玉山仿真虚拟实验</h3><p>以上没有办法展示的 我没找到</p><h2 id="实力展示"><a href="#实力展示" class="headerlink" title="实力展示"></a>实力展示</h2><h3 id="框架编写展示"><a href="#框架编写展示" class="headerlink" title="框架编写展示"></a>框架编写<a href="https://gitee.com/FengChen512/my-frams">展示</a></h3><p>   1.该框架有ui模块<br>   2.缓存池模块<br>   3.资源加载模块<br>   4.场景加载模块<br>   5.音乐管理模块<br>   6.管理基类模块（继承mono不继承mono）<br>   7.UI事件管理器<br>   8.输入管理模块</p><h3 id="Timeline模块展示"><a href="#Timeline模块展示" class="headerlink" title="Timeline模块展示"></a>Timeline模块<a href="https://www.aliyundrive.com/s/dFFd61Anakz">展示</a></h3><p>   1.自定义Timelin模板<br>   2.text的timeline模板<br>   3.string的timeline模板</p><h3 id="基于ET的双端战斗"><a href="#基于ET的双端战斗" class="headerlink" title="基于ET的双端战斗"></a>基于ET的双端战斗</h3><ul><li><a href="/2024/03/19/ETSkill/" title="双端战斗">双端战斗</a></li></ul><h3 id="基于ET的MMPORPG"><a href="#基于ET的MMPORPG" class="headerlink" title="基于ET的MMPORPG"></a>基于ET的MMPORPG</h3><ul><li><a href="/2024/03/19/ETMMorpg/" title="基于ET的MMPORPG">基于ET的MMPORPG</a></li></ul><h3 id="基于ET的放置类网络游戏开发展示"><a href="#基于ET的放置类网络游戏开发展示" class="headerlink" title="基于ET的放置类网络游戏开发展示"></a>基于ET的放置类网络游戏开发<a href="https://www.bilibili.com/video/BV1St421G7EP/?vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">展示</a></h3><ul><li><a href="/2024/03/20/WaitGame/" title="基于ET的MMPORPG">基于ET的MMPORPG</a><p>使用rider + vs +unity + mongodb + Dotween + ET6.0  制作的双端放置类网络游戏开发</p></li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 id="作品展示"><a href="#作品展示" class="headerlink" title="作品展示"></a>作品展示</h2><h3 id="2020年10月-使用unity制作的射击游戏-视频展示"><a href="#2020年10月-使用unity制作的射击游戏-视频展示" class="headerlink" title="2020年10月 使用unity制作的射击游戏 视频展示"></a>2020年10月 <a href="https://www.bilibili.com/video/BV1bv411k7Mq/">使用unity制作的射击游戏 视频展示</a></h3><h3 id="2020年10月至2021年10月-山东聊城运河项目-给到山东聊城博物馆"><a href="#2020年10月至2021年10月-山东聊城运河项目-给到山东聊城博物馆" class="headerlink" title="2020年10月至2021年10月 山东聊城运河项目 给到山东聊城博物馆"></a>2020年10月至2021年10月 山东聊城运河项目 给到山东聊城博物馆</h3><h3 id="2021年-2月黄金矿工（成语版）视频展示"><a href="#2021年-2月黄金矿工（成语版）视频展示" class="headerlink" title="2021年 2月黄金矿工（成语版）视频展示"></a>2021年 2月<a href="https://www.bilibili.com/video/BV1v3411J7GM?spm_id_from=333.999.0.0">黄金矿工（成语版）视频展示</a></h3><h3 id="2021年-3月-仿照市面上很火的合成大西瓜-视频展示"><a href="#2021年-3月-仿照市面上很火的合成大西瓜-视频展示" class="headerlink" title="2021年 3月 仿照市面上很火的合成大西瓜 视频展示"></a>2021年 3月 <a href="https://www.bilibili.com/video/BV1S44y1P76X?spm_id_from=333.999.0.0">仿照市面上很火的合成大西瓜 视频展示</a></h3><p><a href="https://www.aliyundrive.com/s/bErzCvDwX6n">安卓app地址阿里云盘</a></p><h3 id="2021年三月-绝地生存-游戏"><a href="#2021年三月-绝地生存-游戏" class="headerlink" title="2021年三月  绝地生存 游戏"></a>2021年三月  绝地生存 游戏</h3><h3 id="2021年4月-爆炸男孩-视频展示"><a href="#2021年4月-爆炸男孩-视频展示" class="headerlink" title="2021年4月 爆炸男孩 视频展示"></a>2021年4月 <a href="https://www.bilibili.com/video/BV15S4y117mx?spm_id_from=333.999.0.0">爆炸男孩 视频展示</a></h3><p><a href="https://www.aliyundrive.com/s/9qFfVUQV6Ba">安卓app地址阿里云盘</a></p><h3 id="2021年5月校园消防"><a href="#2021年5月校园消防" class="headerlink" title="2021年5月校园消防"></a>2021年5月校园消防</h3><h3 id="2021年7月-玉山仿真虚拟实验"><a href="#2021年7月-玉山仿真虚拟实验" class="headerlink" title="2021年7月  玉山仿真虚拟实验"></a>2021年7月  玉山仿真虚拟实验</h3><p>以上没有办法展示的 我没找到</p><h2 id="实力展示"><a href="#实力展示" class="headerlink" title="实力展示"></a>实力展示</h2><h3 id="框架编写展示"><a href="#框架编写展示" class="headerlink" title="框架编写展示"></a>框架编写<a href="https://gitee.com/FengChen512/my-frams">展示</a></h3><p>   1.该框架有ui模块<br>   2.缓存池模块<br>   3.资源加载模块<br>   4.场景加载模块<br>   5.音乐管理模块<br>   6.管理基类模块（继承mono不继承mono）<br>   7.UI事件管理器<br>   8.输入管理模块</p><h3 id="Timeline模块展示"><a href="#Timeline模块展示" class="headerlink" title="Timeline模块展示"></a>Timeline模块<a href="https://www.aliyundrive.com/s/dFFd61Anakz">展示</a></h3><p>   1.自定义Timelin模板<br>   2.text的timeline模板<br>   3.string的timeline模板</p><h3 id="基于ET的双端战斗"><a href="#基于ET的双端战斗" class="headerlink" title="基于ET的双端战斗"></a>基于ET的双端战斗</h3><ul><li><a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/" title="双端战斗">双端战斗</a></li></ul><h3 id="基于ET的MMPORPG"><a href="#基于ET的MMPORPG" class="headerlink" title="基于ET的MMPORPG"></a>基于ET的MMPORPG</h3><ul><li><a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/" title="基于ET的MMPORPG">基于ET的MMPORPG</a></li></ul><h3 id="基于ET的放置类网络游戏开发展示"><a href="#基于ET的放置类网络游戏开发展示" class="headerlink" title="基于ET的放置类网络游戏开发展示"></a>基于ET的放置类网络游戏开发<a href="https://www.bilibili.com/video/BV1St421G7EP/?vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">展示</a></h3><ul><li><a href="/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/" title="基于ET的MMPORPG">基于ET的MMPORPG</a><p>使用rider + vs +unity + mongodb + Dotween + ET6.0  制作的双端放置类网络游戏开发</p></li></ul><p>categories:</p><ul><li>Demo</li></ul>]]></content>
       
+      
+      <categories>
+          
+          <category> Demo </category>
+          
+      </categories>
       
       
     </entry>
