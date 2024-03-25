@@ -6,7 +6,7 @@
 <hr>
 <h2 id="CPU与GPU的区别"><a href="#CPU与GPU的区别" class="headerlink" title="CPU与GPU的区别"></a>CPU与GPU的区别</h2><p>GPU的架构与CPU有极大的不同，这主要归因于两者不同的使用场合。试想一下，GPU面对3D游戏中成千上万的三角面，如果仅仅是跟Cpu一样逐一单个处理计算，损失的效率是极其惊人的。</p>
 <h2 id="渲染管线（Render-Pipeline）"><a href="#渲染管线（Render-Pipeline）" class="headerlink" title="渲染管线（Render Pipeline）"></a>渲染管线（Render Pipeline）</h2><p>在渲染流程中，CPU与GPU正如上文一样通力合作渲染图像。在运算过程中，CPU如同进货的卡车不断地将要处理的数据丢给GPU，GPU工厂调动一个个如工人一般的计算单元对这些数据进行简单的处理，最后组装出产品——图像。</p>
-<h2 id="渲染管线流程"><a href="#渲染管线流程" class="headerlink" title="渲染管线流程"></a>渲染管线流程</h2><p>   渲染管线粗略分为几个步骤：应用阶段-几何阶段-光栅化阶段<br>   <img src="RenderPipeline/1.png" alt="渲染管线抽象图"><br>    渲染管线粗略分为几个步骤：顶点数据的输入、顶点着色器、曲面细分过程、几何着色器、三角形设置、裁剪剔除、光栅化、片段着色器以及混合测试<br>   <img src="RenderPipeline/2.png" alt="渲染管线详细图"></p>
+<h2 id="渲染管线流程"><a href="#渲染管线流程" class="headerlink" title="渲染管线流程"></a>渲染管线流程</h2><p>   渲染管线粗略分为几个步骤：应用阶段-几何阶段-光栅化阶段<br>   <img src="RenderPipeline/1.png" alt="渲染管线抽象图"><br>    渲染管线粗略分为几个步骤：顶点数据的输入、顶点着色器、曲面细分过程、几何着色器、投影，裁剪剔除、屏幕映射， 光栅化、片段着色器以及混合测试<br>   <img src="RenderPipeline/2.png" alt="渲染管线详细图"></p>
 <h3 id="应用阶段（Application-Stage）"><a href="#应用阶段（Application-Stage）" class="headerlink" title="应用阶段（Application Stage）"></a>应用阶段（Application Stage）</h3><p>这是一个由CPU主要负责的阶段，且完全由开发人员掌控。在这个阶段，CPU将决定递给GPU什么样的数据（譬如渲染目标场景中的灯光、场景的模型、摄像机的位置），有时候还会对这些数据进行处理（譬如只递给GPU可以被摄像机看见的元素，其他不可见的元素被剔除（culling）出去），并且告诉GPU这些数据的渲染状态（譬如纹理、材质、着色器等）。</p>
 <p>我们同样用工业流水线进行类比，这一块相当于工厂的产品进口部门，采购员（CPU）联系发货单位（RAM）订购想要的原材料（数据），并经过一番精挑细选拿出自己满意的材料（数据处理，如剔除），把这些材料连同他们的加工方式（如应当使用的着色器）丢给工厂。值得注意的是，由于这一块采购员是与发货单位的商人而不是工厂里的工人交流， 所以他可以使用更复杂的语言（如高级程序语言）与商人讨价还价，而不是像在工厂中向工人发号施令时使用的指令（着色器语言）。</p>
 <p>所做的工作： </p>
