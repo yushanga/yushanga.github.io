@@ -15,9 +15,24 @@
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
-  <link href="https://unpkg.com/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/inkss/fontawesome@5.15.3/css/all.min.css" rel="stylesheet">
   <link href="/js/swiper/swiper@5.4.1.min.css" rel="stylesheet">
   
+  
+    <script>
+        var themeModelId = '';
+        if (themeModelId) {
+            localStorage.setItem('modelId', themeModelId);
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/yuang01/live2d-widget@latest/autoload.js"></script>
+    <script>
+        var live2dOpen = eval('true') || false;
+        if (!live2dOpen) {
+            localStorage.setItem('waifu-display', 1609323474481);
+        }
+    </script>
   
   
   
@@ -28,7 +43,9 @@
 
   
   
-    <link href="https://unpkg.com/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css">
+
   
   
     
@@ -42,14 +59,10 @@
             }
         }
     </style>
-    <script defer src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
     <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
 
     
-    
-    <!-- 依赖于jquery和vue -->
-    <script src="https://unpkg.com/jquery@3.5.1/dist/jquery.min.js"></script>
-    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
 
     <!-- import link -->
     
@@ -72,25 +85,51 @@
 </head>
 
   
-  <!-- 预加载动画 -->
+  <!-- 依赖于jquery和vue -->
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+  
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+
   
   
-  <div class="preloader_6" id="loader">
-  <div class="loader"></div>
-</div>
-  <script>
-    var endLoading = function () {
-      document.body.style.overflow = 'auto';
-      document.getElementById('loader').classList.add("loaded");
-    }
-    window.addEventListener('DOMContentLoaded', endLoading);
-  </script>
-
-
   <body>
+    <!-- 预加载动画 -->
+    <!-- 页面预加载动画 -->
+
+<div id='loader'>
+  <link rel="stylesheet" href="/js/loaded/index.css" >
+  <div class="loading-left-bg"></div>
+  <div class="loading-right-bg"></div>
+  <div class="spinner-box">
+    <div class="configure-border-1">
+      <div class="configure-core"></div>
+    </div>
+    <div class="configure-border-2">
+      <div class="configure-core"></div>
+    </div>
+    <div class="loading-word">加载中...</div>
+  </div>
+</div>
+
+<script>
+  var endLoading = function () {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loader').classList.add("loading");
+  }
+  window.addEventListener('DOMContentLoaded',endLoading);
+  
+</script>
+
+    
     <!-- 判断是否为暗黑风格 -->
     <!-- 判断是否为黑夜模式 -->
-<script defer>
+<script>
   let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
 
   if (isDark) {
@@ -135,7 +174,7 @@
   }
 
   //https://github.com/filamentgroup/loadCSS
-  var loadCSS = function (src) {
+  var loadCSS = function (href, before, media, attributes) {
     return new Promise(resolve => {
       setTimeout(function () {
         var link = document.createElement('link');
@@ -166,14 +205,14 @@
 <script src="/js/vue-seamless-scroll/index.js"></script>
 
 <!-- 打字机效果js -->
-<script src="https://unpkg.com/typed.js@2.0.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
 
 
     <div id="safearea">
       <main class="main" id="pjax-container">
         <!-- 头部导航 -->
         
-<header class="header  " 
+<header class="header   " 
   id="navHeader"
   style="position: fixed;
   left: 0; top: 0; z-index: 10;width: 100%;"
@@ -191,7 +230,7 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="logo">
       <h3 class="drawer-box-head_title">WindDust</h3>
       <h5 class="drawer-box-head_desc">行到水深处 坐看云起时</h5>
     </div>
@@ -199,9 +238,123 @@
     <div class="drawer-box-content">
       <ul class="drawer-box-content_menu">
         
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                  
+                  <span class="name">首页</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/archives" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-archive" aria-hidden="true"></i>
+                  
+                  <span class="name">归档</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="javascript:;" class="drawer-menu-item-link has-children" @click="openOrCloseMenu(2)">
+                  <span>
+                    
+                      <i class="fas fa-archive"></i>
+                    
+                    <span class="name">Demo</span>
+                  </span>
+                  <i class="fas fa-chevron-left arrow " :class="{'icon-rotate': isOpen(2)}" aria-hidden="true"></i>
+                </a>
+                <ul class="drawer-sub-menu" v-if="isOpen(2)">
+                  
+                  <li>
+                    <a href="/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ET放置类网络游戏</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETSkill</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETMMO</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2022/04/07/Demo">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>杂七杂八</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="javascript:;" class="drawer-menu-item-link has-children" @click="openOrCloseMenu(3)">
+                  <span>
+                    
+                      <i class="fas fa-archive"></i>
+                    
+                    <span class="name">图形学</span>
+                  </span>
+                  <i class="fas fa-chevron-left arrow " :class="{'icon-rotate': isOpen(3)}" aria-hidden="true"></i>
+                </a>
+                <ul class="drawer-sub-menu" v-if="isOpen(3)">
+                  
+                  <li>
+                    <a href="/2024/03/22/graphics/RenderPipeline/">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>渲染管线Render Pipeline个人理解总结</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/tags" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-tags" aria-hidden="true"></i>
+                  
+                  <span class="name">标签</span>
+                </a>
+              
+            </li>
+          
+        
         
           <li class="drawer-box-content_item">
-            <a target="_blank" rel="noopener" href="https://github.com/yuang01/hexo-theme-bamboo">
+            <a target="_blank" rel="noopener" href="https://gitee.com/FengChen512">
               <i class="fas fa-github" aria-hidden="true"></i>
               <span>Github</span>
             </a>
@@ -261,13 +414,123 @@
     <div class="blog-title" id="author-avatar">
       
         <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="logo">
+          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="logo">
         </div>
       
       <a href="/" class="logo">WindDust</a>
     </div>
     <nav class="navbar">
       <ul class="menu">
+        
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/" class="menu-item-link" title="首页">
+                  
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                  
+                  <span class="name">首页</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/archives" class="menu-item-link" title="归档">
+                  
+                    <i class="fas fa-archive" aria-hidden="true"></i>
+                  
+                  <span class="name">归档</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="javascript:;" class="menu-item-link" title="Demo">
+                  
+                    <i class="fas fa-archive"></i>
+                  
+                  <span class="name">Demo</span>
+                  <i class="fas fa-chevron-down arrow" aria-hidden="true"></i>
+                </a>
+                <ul class="sub-menu">
+                  
+                  <li>
+                    <a href="/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ET放置类网络游戏</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETSkill</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETMMO</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2022/04/07/Demo">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>杂七杂八</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="javascript:;" class="menu-item-link" title="图形学">
+                  
+                    <i class="fas fa-archive"></i>
+                  
+                  <span class="name">图形学</span>
+                  <i class="fas fa-chevron-down arrow" aria-hidden="true"></i>
+                </a>
+                <ul class="sub-menu">
+                  
+                  <li>
+                    <a href="/2024/03/22/graphics/RenderPipeline/">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>渲染管线Render Pipeline个人理解总结</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/tags" class="menu-item-link" title="标签">
+                  
+                    <i class="fas fa-tags" aria-hidden="true"></i>
+                  
+                  <span class="name">标签</span>
+                </a>
+              
+            </li>
+          
         
       </ul>
       
@@ -351,15 +614,14 @@
     </nav>
   </div>
   
-    <a target="_blank" rel="noopener" href="https://github.com/yuang01/hexo-theme-bamboo" class="github-corner color-primary" aria-label="View source on GitHub"><svg width="60" height="60" viewBox="0 0 250 250" style="fill:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <a target="_blank" rel="noopener" href="https://gitee.com/FengChen512" class="github-corner color-primary" aria-label="View source on GitHub"><svg width="60" height="60" viewBox="0 0 250 250" style="fill:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
   
   
 </header>
         <!-- 内容区域 -->
         
-<!-- prismjs 代码高亮 -->
-
-
+ <!-- prismjs 代码高亮 -->
+ 
 
 
 <div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -1;"></div>
@@ -371,7 +633,7 @@
 
 
 <div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
-  background-position: center center;position: relative;background-image:url('https://pic2.zhimg.com/80/v2-29e78b52051ce542adf6d786d61fbd19_1440w.webp')">
+  background-position: center center;position: relative;background-image:url('/medias/15.jpg')">
   <div class="post-detail-header-mask"></div>
   <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
@@ -405,7 +667,7 @@
   </div>
   
   
-    <script defer src="/js/bubble/bubble.js"></script>
+    <script src="/js/bubble/bubble.js"></script>
   
 </div>
 
@@ -413,7 +675,7 @@
 
 
 
-<div class="post-detail-content post-row" 
+<div class="row justify-position" 
   style="padding-top: 0px;">
   <div class="main-content">
     <article class="post post-detail">
@@ -497,7 +759,7 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="https://picx.zhimg.com/80/v2-85c31120acff76826ab53ea8934ef4bb_1440w.webp" class="lazyload placeholder" data-srcset="https://picx.zhimg.com/80/v2-85c31120acff76826ab53ea8934ef4bb_1440w.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
+      <img class="lazyload lazyload placeholder" src="/medias/4.jpg" class="lazyload placeholder" data-srcset="/medias/4.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
     </div>
     <a href="/2024/03/22/graphics/" class="post-nav-link">
       <div class="title">
@@ -517,7 +779,7 @@
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="https://pic4.zhimg.com/80/v2-83ea273b88e119d9615aed0d89aad4ab_1440w.webp" class="lazyload placeholder" data-srcset="https://pic4.zhimg.com/80/v2-83ea273b88e119d9615aed0d89aad4ab_1440w.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" src="" alt="">
+      <img class="lazyload lazyload placeholder" src="/medias/6.jpg" class="lazyload placeholder" data-srcset="/medias/6.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" src="" alt="">
     </div>
     <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/" class="post-nav-link">
       <div class="title">
@@ -571,10 +833,10 @@
       </div>
       <div class="donate-box_img">
         <div class="AlipayImg" v-show="tabActive === 'Alipay'">
-          <img src="https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp" class="lazyload placeholder" data-srcset="https://pica.zhimg.com/80/v2-61f99f8dcf899f54cad2a1aa28b21e44_1440w.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="支付宝打赏" />
+          <img src="/medias/zfb.jpg" class="lazyload placeholder" data-srcset="/medias/zfb.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="支付宝打赏" />
         </div> 
         <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
-          <img src="https://pic2.zhimg.com/80/v2-29e78b52051ce542adf6d786d61fbd19_1440w.webp" class="lazyload placeholder" data-srcset="https://pic2.zhimg.com/80/v2-29e78b52051ce542adf6d786d61fbd19_1440w.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="微信打赏" />
+          <img src="/medias/wx.jpg" class="lazyload placeholder" data-srcset="/medias/wx.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="微信打赏" />
         </div>
       </div>
     </div>
@@ -628,7 +890,7 @@
 <!-- 文章详情页的分享 -->
 <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
 
-<script defer src="/js/shareJs/social-share.min.js"></script>
+<script src="/js/shareJs/social-share.min.js"></script>
 </script>
 
 <style>
@@ -650,246 +912,81 @@
     
   </div>
 
-
-<!-- 还需要在后面这个地址里设置script, comment script in themes\hexo-theme-bamboo\layout\_partial\scripts\index.ejs -->
+<!-- comment script in themes\hexo-theme-bamboo\layout\_partial\scripts\index.ejs -->
 
 
   </div>
 
   <!-- 目录 -->
-  <aside id='l_side'>
-  
-    
-      <section class="widget side_blogger">
-  <div class='content'>
-    
-      
-        <a class='avatar flat-box rectangle' href='/about/'>
-          <img src='https://pic2.zhimg.com/80/v2-42b72d5ebee4b8d8aa70d9687effe87b_1440w.webp'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-          <h2>青墨书晚风</h2>
-        
-        
-          <p>我是副标题</p>
+  <!-- 文章详情页右侧目录 -->
 
-        
-        
-          <p><span id="jinrishici-sentence">WindDust</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="/atom.xml"
-              class="social fas fa-rss flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="mailto:me@xxx.com"
-              class="social fas fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/yuang01/hexo-theme-bamboo"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=你的qq号码"
-              class="social fab fa-qq flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
-
-    
-  
-  
-  
-
-  <div class="layout_sticky">    
-    
-      
-<section class="widget side_toc">
-  
-  <header>
-    
-      <i style="color: " class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name' style="color: ">本文目录</span>
-    
-  </header>
-
-
-  <div class='content'>
+  <div class="toc-aside">
     <div class="toc-main">
+      <div class="toc-aside-title">
+        <i class="fas fa-list-ul" aria-hidden="true"></i><span>本文目录</span>
+        
+          <div class="toc-open-close">本文目录</div>
+        
+      </div>
       <div class="toc-content">
-        <!-- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E4%B8%8EGPU%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">CPU与GPU的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF%EF%BC%88Render-Pipeline%EF%BC%89"><span class="toc-text">渲染管线（Render Pipeline）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF%E6%B5%81%E7%A8%8B"><span class="toc-text">渲染管线流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E9%98%B6%E6%AE%B5%EF%BC%88Application-Stage%EF%BC%89"><span class="toc-text">应用阶段（Application Stage）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%B6%E7%82%B9%E6%95%B0%E6%8D%AE%E7%9A%84%E8%BE%93%E5%85%A5"><span class="toc-text">顶点数据的输入</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%A0%E4%BD%95%E9%98%B6%E6%AE%B5%EF%BC%88Geometry-Stage%EF%BC%89"><span class="toc-text">几何阶段（Geometry Stage）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%B6%E7%82%B9%E7%9D%80%E8%89%B2%E5%99%A8"><span class="toc-text">顶点着色器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%B2%E9%9D%A2%E7%BB%86%E5%88%86%E7%9D%80%E8%89%B2%E5%99%A8"><span class="toc-text">曲面细分着色器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8"><span class="toc-text">几何着色器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%8F%E5%B9%95%E6%98%A0%E5%B0%84"><span class="toc-text">屏幕映射</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E6%A0%85%E5%8C%96%E9%98%B6%E6%AE%B5"><span class="toc-text">光栅化阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E8%A7%92%E5%BD%A2%E8%AE%BE%E7%BD%AE%EF%BC%88Triangle-Setup%EF%BC%89"><span class="toc-text">三角形设置（Triangle Setup）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E8%A7%92%E5%BD%A2%E9%81%8D%E5%8E%86%EF%BC%88Triangle-Traversal%EF%BC%89"><span class="toc-text">三角形遍历（Triangle Traversal）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%90%E7%89%87%E5%85%83%E8%AE%A1%E7%AE%97"><span class="toc-text">逐片元计算</span></a></li></ol></li></ol></li></ol> -->
         <div class="toc"></div>
       </div>
     </div>
   </div>
-</section>
-<!-- 手机端目录按钮 -->
-<div id="toc-mobile-btn">
-  <i class="fas fa-list-ul" aria-hidden="true"></i>
-</div>
 
-      
-  <section class="widget side_recent_post">
-    
-  <header>
-    
-      <a style="color: " href='/tags/'><i class="fas fa-book fa-fw" aria-hidden="true"></i><span class='name'>最新文章</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      
-      <!-- hash算法 -->
-      
-      <div class="aside-list">
-        
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2024/03/22/graphics/Drawcall/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="https://pic3.zhimg.com/v2-a5267dfbf175991d4b3a69b41f3f678a_b.jpg" class="lazyload placeholder" data-srcset="https://pic3.zhimg.com/v2-a5267dfbf175991d4b3a69b41f3f678a_b.jpg" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">03-22</span>
-                
-              </div>
-              <a class="post-title" href="/2024/03/22/graphics/Drawcall/">DrawCall</a>
-            </div>
-          </div>
-        
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2024/03/22/graphics/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="https://picx.zhimg.com/80/v2-85c31120acff76826ab53ea8934ef4bb_1440w.webp" class="lazyload placeholder" data-srcset="https://picx.zhimg.com/80/v2-85c31120acff76826ab53ea8934ef4bb_1440w.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">03-22</span>
-                
-              </div>
-              <a class="post-title" href="/2024/03/22/graphics/">关于图形学</a>
-            </div>
-          </div>
-        
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2024/03/22/graphics/RenderPipeline/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="https://pic2.zhimg.com/80/v2-29e78b52051ce542adf6d786d61fbd19_1440w.webp" class="lazyload placeholder" data-srcset="https://pic2.zhimg.com/80/v2-29e78b52051ce542adf6d786d61fbd19_1440w.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">03-22</span>
-                
-              </div>
-              <a class="post-title" href="/2024/03/22/graphics/RenderPipeline/">渲染管线Render Pipeline个人理解总结</a>
-            </div>
-          </div>
-        
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="https://pic4.zhimg.com/80/v2-83ea273b88e119d9615aed0d89aad4ab_1440w.webp" class="lazyload placeholder" data-srcset="https://pic4.zhimg.com/80/v2-83ea273b88e119d9615aed0d89aad4ab_1440w.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">03-22</span>
-                
-              </div>
-              <a class="post-title" href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/">基于ET的MMPORPG</a>
-            </div>
-          </div>
-        
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="https://pic4.zhimg.com/80/v2-83ea273b88e119d9615aed0d89aad4ab_1440w.webp" class="lazyload placeholder" data-srcset="https://pic4.zhimg.com/80/v2-83ea273b88e119d9615aed0d89aad4ab_1440w.webp" srcset="https://pic1.zhimg.com/v2-cd38920285d125be80b3eb504052c550_b.webp" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">03-22</span>
-                
-              </div>
-              <a class="post-title" href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/">基于ET的双端战斗</a>
-            </div>
-          </div>
-        
-      </div>
-    </div>
-  </section>
-
-    
+  <!-- 手机端目录按钮 -->
+  <div id="toc-mobile-btn">
+    <i class="fas fa-list-ul" aria-hidden="true"></i>
   </div>
-</aside>
+
+
+<script>
+  function closeToc(init) {
+    $(".toc-aside").css({'width': 0, 'padding': 0, 'transition': init ?  'noe' : 'width 0.3s' });
+    $(".toc-content").css({'width': 0});
+    $(".toc-aside-title span, .toc-aside-title i").css({'display': 'none'});
+    $(".main-content").css({'width': '75%', 'margin': '10px auto'});
+  };
+  function openToc() {
+    $(".main-content").css({'width': '65%', 'margin-right': '10px', 'margin-left': 'calc(35% - 350px)'});
+    $(".toc-aside").css({'width': '300px', 'padding': '0 10px', 'transition': 'width 0.3s'});
+    $(".toc-content").css({'width': '300px'});
+    $(".toc-aside-title span, .toc-aside-title i").css({'display': 'inline-block'});
+  }
+  function openBtnClickFn () {
+    let openOrCloseBtn = $('.toc-aside .toc-aside-title .toc-open-close');
+    let open = eval('' || 'true');
+    openOrCloseBtn.click(function() {
+      if (open) {
+        closeToc();
+        open = false;
+      } else {
+        openToc();
+        open = true;
+      }
+    });
+  };
+  openBtnClickFn();
+  initCloseTocWidth(true);
+
+  function initCloseTocWidth(init) {
+    if (window.innerWidth >= 992) {
+      let isClose = false;
+      isClose && closeToc(init)
+    }
+  }
+
+  document.addEventListener('pjax:complete', function () {
+    $(".toc-aside").css({'transition': 'no'});
+  })
+  document.addEventListener('pjax:complete', function () {
+    openBtnClickFn();
+  })
+  
+</script>
 
   <!-- 图片放大 Wrap images with fancybox support -->
-  <script defer src="/js/wrapImage.js"></script>
+  <script src="/js/wrapImage.js"></script>
 </div>
 
 <!-- 文章详情页背景图 -->
@@ -1020,7 +1117,7 @@
     if (document.getElementsByClassName('mermaid').length) {
       if (window.mermaidJsLoad) mermaid.init()
       else {
-        loadScript('https://unpkg.com/mermaid/dist/mermaid.min.js').then(() => {
+        loadScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
           window.mermaidJsLoad = true
           mermaid.initialize({
             theme: 'default',
@@ -1049,165 +1146,6 @@
     <!-- 页脚 -->
     
   
-  
-    <!-- 底部鱼儿跳动效果，依赖于jquery-->
-<div id="j-fish-skip" style=" position: relative;height: 153px;width: auto;"></div>
-<script defer>
-  var RENDERER = {
-    POINT_INTERVAL: 5,
-    FISH_COUNT: 3,
-    MAX_INTERVAL_COUNT: 50,
-    INIT_HEIGHT_RATE: .5,
-    THRESHOLD: 50,
-    FISH_COLOR: '',
-    init: function () {
-      this.setFishColor(); this.setParameters(), this.reconstructMethods(), this.setup(), this.bindEvent(), this.render()
-    },
-    setFishColor: function () {
-      let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
-      if (isDark) {
-        this.FISH_COLOR = '#222'; // 暗黑色，有时间把这整成一个变量
-      } else {
-        this.FISH_COLOR = '' || 'rgba(66, 185, 133, 0.8)';
-      }
-    },
-    setParameters: function () {
-      this.$window = $(window), this.$container = $("#j-fish-skip"), this.$canvas = $("<canvas />"), this.context = this.$canvas.appendTo(this.$container).get(0).getContext("2d"), this.points = [], this.fishes = [], this.watchIds = []
-    },
-    createSurfacePoints: function () {
-      var t = Math.round(this.width / this.POINT_INTERVAL);
-      this.pointInterval = this.width / (t - 1), this.points.push(new SURFACE_POINT(this, 0));
-      for (var i = 1; i < t; i++) {
-        var e = new SURFACE_POINT(this, i * this.pointInterval),
-          h = this.points[i - 1];
-        e.setPreviousPoint(h), h.setNextPoint(e), this.points.push(e)
-      }
-    },
-    reconstructMethods: function () {
-      this.watchWindowSize = this.watchWindowSize.bind(this), this.jdugeToStopResize = this.jdugeToStopResize.bind(this), this.startEpicenter = this.startEpicenter.bind(this), this.moveEpicenter = this.moveEpicenter.bind(this), this.reverseVertical = this.reverseVertical.bind(this), this.render = this.render.bind(this)
-    },
-    setup: function () {
-      this.points.length = 0, this.fishes.length = 0, this.watchIds.length = 0, this.intervalCount = this.MAX_INTERVAL_COUNT, this.width = this.$container.width(), this.height = this.$container.height(), this.fishCount = this.FISH_COUNT * this.width / 500 * this.height / 500, this.$canvas.attr({
-        width: this.width,
-        height: this.height
-      }), this.reverse = !1, this.fishes.push(new FISH(this)), this.createSurfacePoints()
-    },
-    watchWindowSize: function () {
-      this.clearTimer(), this.tmpWidth = this.$window.width(), this.tmpHeight = this.$window.height(), this.watchIds.push(setTimeout(this.jdugeToStopResize, this.WATCH_INTERVAL))
-    },
-    clearTimer: function () {
-      for (; this.watchIds.length > 0;) clearTimeout(this.watchIds.pop())
-    },
-    jdugeToStopResize: function () {
-      var t = this.$window.width(),
-        i = this.$window.height(),
-        e = t == this.tmpWidth && i == this.tmpHeight;
-      this.tmpWidth = t, this.tmpHeight = i, e && this.setup()
-    },
-    bindEvent: function () {
-      this.$window.on("resize", this.watchWindowSize), this.$container.on("mouseenter", this.startEpicenter), this.$container.on("mousemove", this.moveEpicenter)
-    },
-    getAxis: function (t) {
-      var i = this.$container.offset();
-      return {
-        x: t.clientX - i.left + this.$window.scrollLeft(),
-        y: t.clientY - i.top + this.$window.scrollTop()
-      }
-    },
-    startEpicenter: function (t) {
-      this.axis = this.getAxis(t)
-    },
-    moveEpicenter: function (t) {
-      var i = this.getAxis(t);
-      this.axis || (this.axis = i), this.generateEpicenter(i.x, i.y, i.y - this.axis.y), this.axis = i
-    },
-    generateEpicenter: function (t, i, e) {
-      if (!(i < this.height / 2 - this.THRESHOLD || i > this.height / 2 + this.THRESHOLD)) {
-        var h = Math.round(t / this.pointInterval);
-        h < 0 || h >= this.points.length || this.points[h].interfere(i, e)
-      }
-    },
-    reverseVertical: function () {
-      this.reverse = !this.reverse;
-      for (var t = 0, i = this.fishes.length; t < i; t++) this.fishes[t].reverseVertical()
-    },
-    controlStatus: function () {
-      for (var t = 0, i = this.points.length; t < i; t++) this.points[t].updateSelf();
-      for (t = 0, i = this.points.length; t < i; t++) this.points[t].updateNeighbors();
-      this.fishes.length < this.fishCount && 0 == --this.intervalCount && (this.intervalCount = this.MAX_INTERVAL_COUNT, this.fishes.push(new FISH(this)))
-    },
-    render: function () {
-      requestAnimationFrame(this.render), this.controlStatus(), this.context.clearRect(0, 0, this.width, this.height), this.context.fillStyle = this.FISH_COLOR;
-      for (var t = 0, i = this.fishes.length; t < i; t++) this.fishes[t].render(this.context);
-      this.context.save(), this.context.globalCompositeOperation = "xor", this.context.beginPath(), this.context.moveTo(0, this.reverse ? 0 : this.height);
-      for (t = 0, i = this.points.length; t < i; t++) this.points[t].render(this.context);
-      this.context.lineTo(this.width, this.reverse ? 0 : this.height), this.context.closePath(), this.context.fill(), this.context.restore()
-    }
-  },
-  SURFACE_POINT = function (t, i) {
-    this.renderer = t, this.x = i, this.init()
-  };
-  SURFACE_POINT.prototype = {
-    SPRING_CONSTANT: .03,
-    SPRING_FRICTION: .9,
-    WAVE_SPREAD: .3,
-    ACCELARATION_RATE: .01,
-    init: function () {
-      this.initHeight = this.renderer.height * this.renderer.INIT_HEIGHT_RATE, this.height = this.initHeight, this.fy = 0, this.force = {
-        previous: 0,
-        next: 0
-      }
-    },
-    setPreviousPoint: function (t) {
-      this.previous = t
-    },
-    setNextPoint: function (t) {
-      this.next = t
-    },
-    interfere: function (t, i) {
-      this.fy = this.renderer.height * this.ACCELARATION_RATE * (this.renderer.height - this.height - t >= 0 ? -1 : 1) * Math.abs(i)
-    },
-    updateSelf: function () {
-      this.fy += this.SPRING_CONSTANT * (this.initHeight - this.height), this.fy *= this.SPRING_FRICTION, this.height += this.fy
-    },
-    updateNeighbors: function () {
-      this.previous && (this.force.previous = this.WAVE_SPREAD * (this.height - this.previous.height)), this.next && (this.force.next = this.WAVE_SPREAD * (this.height - this.next.height))
-    },
-    render: function (t) {
-      this.previous && (this.previous.height += this.force.previous, this.previous.fy += this.force.previous), this.next && (this.next.height += this.force.next, this.next.fy += this.force.next), t.lineTo(this.x, this.renderer.height - this.height)
-    }
-  };
-  var FISH = function (t) {
-    this.renderer = t, this.init()
-  };
-  FISH.prototype = {
-    GRAVITY: .4,
-    init: function () {
-      this.direction = Math.random() < .5, this.x = this.direction ? this.renderer.width + this.renderer.THRESHOLD : -this.renderer.THRESHOLD, this.previousY = this.y, this.vx = this.getRandomValue(4, 10) * (this.direction ? -1 : 1), this.renderer.reverse ? (this.y = this.getRandomValue(1 * this.renderer.height / 10, 4 * this.renderer.height / 10), this.vy = this.getRandomValue(2, 5), this.ay = this.getRandomValue(.05, .2)) : (this.y = this.getRandomValue(6 * this.renderer.height / 10, 9 * this.renderer.height / 10), this.vy = this.getRandomValue(-5, -2), this.ay = this.getRandomValue(-.2, -.05)), this.isOut = !1, this.theta = 0, this.phi = 0
-    },
-    getRandomValue: function (t, i) {
-      return t + (i - t) * Math.random()
-    },
-    reverseVertical: function () {
-      this.isOut = !this.isOut, this.ay *= -1
-    },
-    controlStatus: function (t) {
-      this.previousY = this.y, this.x += this.vx, this.y += this.vy, this.vy += this.ay, this.renderer.reverse ? this.y > this.renderer.height * this.renderer.INIT_HEIGHT_RATE ? (this.vy -= this.GRAVITY, this.isOut = !0) : (this.isOut && (this.ay = this.getRandomValue(.05, .2)), this.isOut = !1) : this.y < this.renderer.height * this.renderer.INIT_HEIGHT_RATE ? (this.vy += this.GRAVITY, this.isOut = !0) : (this.isOut && (this.ay = this.getRandomValue(-.2, -.05)), this.isOut = !1), this.isOut || (this.theta += Math.PI / 20, this.theta %= 2 * Math.PI, this.phi += Math.PI / 30, this.phi %= 2 * Math.PI), this.renderer.generateEpicenter(this.x + (this.direction ? -1 : 1) * this.renderer.THRESHOLD, this.y, this.y - this.previousY), (this.vx > 0 && this.x > this.renderer.width + this.renderer.THRESHOLD || this.vx < 0 && this.x < -this.renderer.THRESHOLD) && this.init()
-    },
-    render: function (t) {
-      t.save(), t.translate(this.x, this.y), t.rotate(Math.PI + Math.atan2(this.vy, this.vx)), t.scale(1, this.direction ? 1 : -1), t.beginPath(), t.moveTo(-30, 0), t.bezierCurveTo(-20, 15, 15, 10, 40, 0), t.bezierCurveTo(15, -10, -20, -15, -30, 0), t.fill(), t.save(), t.translate(40, 0), t.scale(.9 + .2 * Math.sin(this.theta), 1), t.beginPath(), t.moveTo(0, 0), t.quadraticCurveTo(5, 10, 20, 8), t.quadraticCurveTo(12, 5, 10, 0), t.quadraticCurveTo(12, -5, 20, -8), t.quadraticCurveTo(5, -10, 0, 0), t.fill(), t.restore(), t.save(), t.translate(-3, 0), t.rotate((Math.PI / 3 + Math.PI / 10 * Math.sin(this.phi)) * (this.renderer.reverse ? -1 : 1)), t.beginPath(), this.renderer.reverse ? (t.moveTo(5, 0), t.bezierCurveTo(10, 10, 10, 30, 0, 40), t.bezierCurveTo(-12, 25, -8, 10, 0, 0)) : (t.moveTo(-5, 0), t.bezierCurveTo(-10, -10, -10, -30, 0, -40), t.bezierCurveTo(12, -25, 8, -10, 0, 0)), t.closePath(), t.fill(), t.restore(), t.restore(), this.controlStatus(t)
-    }
-  }, $(function () {
-    RENDERER.init()
-    $('.dark').click(function () {
-      setTimeout(() => {
-        RENDERER.setFishColor();
-        RENDERER.context.fill();
-      });
-    })
-  });
-</script>
-  
   <div class="footer bg-color">
     <div class="footer-main">
       
@@ -1219,9 +1157,24 @@
       
         
           <div class="footer-copyright">
-            <p>Copyright © 2019 - 2020 <a target="_blank" rel="noopener" href="https://github.com/yuang01">yuang01</a> | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://github.com/yuang01/theme">Bamboo</a> </p>
+            <p>Copyright © 2019 - 2020 <a target="_blank" rel="noopener" href="https://yushanga.github.io">Wind Dust</a> | Powered by <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a> | Theme <a target="_blank" rel="noopener" href="https://yushanga.github.io">Bamboo</a> </p>
 
           </div>
+        
+      
+        
+          
+            <!-- 不蒜子统计 -->
+            <!-- 不蒜子统计 -->
+<span id="busuanzi_container_site_pv">
+      <i class="fas fa-eye" aria-hidden="true"></i>本站总访问量：<span id="busuanzi_value_site_pv"></span> 次
+</span>
+<span class="post-meta-divider">|</span>
+<span id="busuanzi_container_site_uv" style='display:none'>
+      <i class="fas fa-users" aria-hidden="true"></i>本站访客数：<span id="busuanzi_value_site_uv"></span> 人
+</span>
+
+          
         
       
         
@@ -1237,45 +1190,58 @@
 
     <!-- 渲染暗黑按钮 -->
     
-      <div class="dark" onclick="toggleDarkMode()">
+      <div class="dark">
   <div class="dark-content">
-    <i class="fas" id="darkIcon" aria-hidden="true"></i>
+    <i class="fas fa-moon" aria-hidden="true"></i>
+    <!-- <span>关灯</span> -->
   </div>
+  
 </div>
 
-<script defer>
+<script>
   $(function() {
-    // 初始化暗黑模式状态
-    let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
-    updateDarkModeIcon(isDark);
-  });
-
-  function toggleDarkMode() {
-    const isDark = $(document.body).hasClass('darkModel');
-    $(document.body).toggleClass('darkModel');
-    localStorage.setItem('dark', !isDark);
-    updateDarkModeIcon(!isDark);
-  }
-
-  function updateDarkModeIcon(isDark) {
-    const iconElement = document.getElementById('darkIcon');
+    let isDark = JSON.parse(localStorage.getItem('dark'))  || JSON.parse('false');
     if (isDark) {
-      iconElement.classList.remove('fa-moon');
-      iconElement.classList.add('fa-lightbulb');
-    } else {
-      iconElement.classList.remove('fa-lightbulb');
-      iconElement.classList.add('fa-moon');
+      $(".dark-content").replaceWith(
+          `
+          <div class='dark-content'>
+            <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          </div>
+          `
+        );
     }
-  }
+    $('.dark').click(function() {
+      if ($(document.body).is('.darkModel')) {
+        $(document.body).removeClass('darkModel');
+        localStorage.setItem('dark', false);
+        $(".dark-content").replaceWith(
+          `
+          <div class='dark-content'>
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </div>
+          `
+        );
+      } else {
+        $(document.body).addClass('darkModel');
+        localStorage.setItem('dark', true);
+        $(".dark-content").replaceWith(
+          `
+          <div class='dark-content'>
+            <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          </div>
+          `
+        );
+      }
+    })
+  })
 </script>
-
     
     <!-- 渲染回到顶部按钮 -->
     
       <div class="goTop top-btn-color" pointer>
   <i class="fas fa-arrow-up" aria-hidden="true"></i>
 </div>
-<script defer src="/js/goTop.js"></script>
+<script src="/js/goTop.js"></script>
 
     
     <!-- 渲染左下角音乐播放器 -->
@@ -1329,13 +1295,13 @@
     bottom: 300px;
   }
 </style> -->
-<script defer src="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.js"></script>
-<script defer src="https://unpkg.com/meting@2/dist/Meting.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
     
 
     <!-- 图片放大 -->
     
-      <script src="https://unpkg.com/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+      <script src="/js/fancybox/jquery.fancybox.min.js"></script>
     
 
     <!-- 百度解析 -->
@@ -1343,7 +1309,7 @@
 
     <!-- Baidu Push -->
 
-<script async>
+<script>
     (function () {
         var bp = document.createElement('script');
         var curProtocol = window.location.protocol.split(':')[0];
@@ -1360,20 +1326,15 @@
     
     <!-- 背景彩带 -->
     
-      <script async type="text/javascript" size="100" alpha='0.4' zIndex="-1" src="/js/ribbon.min.js"></script>
+      <script type="text/javascript" size="100" alpha='0.4' zIndex="-1" src="/js/ribbon.min.js"></script>
     
 
     <script src="/js/utils/index.js"></script>
     <script src="/js/app.js"></script>
     
     <!-- 文章目录所需js -->
-<!-- <link href="/js/tocbot/tocbot.css" rel="stylesheet">
-<script src="/js/tocbot/tocbot.min.js"></script> -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.min.js"></script>
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.css">
+<link href="/js/tocbot/tocbot.css" rel="stylesheet">
+<script src="/js/tocbot/tocbot.min.js"></script>
 
 <script>
   var headerEl = 'h2, h3, h4',  //headers 
@@ -1388,15 +1349,12 @@
     // Which headings to grab inside of the contentSelector element.
     headingSelector: headerEl,
     scrollSmooth: true,
-    scrollSmoothOffset: -70,
-    // headingsOffset: -($(window).height() * 0.4 - 45),
-    headingsOffset: -($(window).height() * 0.4 - 70),
-    // positionFixedSelector: '.toc-main',
-    // positionFixedClass: 'is-position-fixed',
+    scrollSmoothOffset: -80,
+    headingsOffset: -($(window).height() * 0.4 - 45),
+    positionFixedSelector: '.toc-main',
+    positionFixedClass: 'is-position-fixed',
     fixedSidebarOffset: 'auto',
     activeLinkClass: 'is-active-link',
-    orderedList: true,
-    collapseDepth: 20,
     // onClick: function (e) {},
   }
   if ($('.toc').length > 0) {
@@ -1449,7 +1407,7 @@
     if (activePosition > (document.documentElement.clientHeight - 100)) {
       $cardToc.scrollTop = sidebarScrollTop + 150
     }
-    if (activePosition < 150) {
+    if (activePosition < 100) {
       $cardToc.scrollTop = sidebarScrollTop - 150
     }
   }
@@ -1469,7 +1427,7 @@
   
   // 手机端toc按钮点击出现目录
   const mobileTocClick = function () {
-    const $cardTocLayout = document.getElementsByClassName('side_toc')[0];
+    const $cardTocLayout = document.getElementsByClassName('toc-aside')[0];
     const $cardToc = $cardTocLayout.getElementsByClassName('toc-content')[0];
     let right = '45px';
     if (window.innerWidth >= 551 && window.innerWidth <= 992) {
@@ -1501,7 +1459,7 @@
 </script>
 
 <style>
-  /* .is-position-fixed {
+  .is-position-fixed {
     position: sticky !important;
     top: 74px;
   }
@@ -1516,13 +1474,14 @@
     position: absolute;
     left: 12px;
     top: 0;
-  } */
-</style>
- 
+  }
+</style> 
 
 <!-- 设置导航背景 -->
 <script>
   let setHeaderClass = () => {
+    const headerMenuTransparent = true;
+    if (!headerMenuTransparent) { return; }
     const nav = $('#navHeader');
     const navTop = nav.outerHeight();
     const winTop = $(window).scrollTop();
@@ -1574,61 +1533,6 @@
   })
 </script>
 
-<!-- 渲染远程json加载的图片标签(getPhotoOnline)里的内容 -->
-<script>
-  function loadPhotoOnlineJS() {
-    if ($(".post-detail").find(".getJsonPhoto-api").length == 0) {
-      return;
-    } 
-    loadScript('/js/getPhotoOnline/index.js');
-  };
-  $(function () {
-    loadPhotoOnlineJS();
-  });
-  document.addEventListener('pjax:complete', function () {
-    if (typeof getPhotoJson == "undefined") {
-      loadPhotoOnlineJS();
-    }
-  })
-</script>
-
-<!-- 渲染远程json加载的talk标签(getTalkOnline)里的内容 -->
-<script>
-  function loadTalkOnlineJS() {
-    if ($(".post-detail").find(".getJsonTalk-api").length == 0) {
-      return;
-    } 
-    loadScript('https://cdnjs.cloudflare.com/ajax/libs/waterfall.js/1.0.2/waterfall.min.js'); // 瀑布流插件，https://raphamorim.io/waterfall.js/
-    loadScript('/js/getTalkOnline/index.js');
-  };
-  $(function () {
-    loadTalkOnlineJS();
-  });
-  document.addEventListener('pjax:complete', function () {
-    if (typeof getTalkJson == "undefined") {
-      loadTalkOnlineJS();
-    }
-  })
-</script>
-
-<!-- 渲染远程json加载的site-card标签(getSiteOnline)里的内容 -->
-<script>
-  function loadSiteOnlineJS() {
-    if ($(".post-detail").find(".getJsonSite-api").length == 0) {
-      return;
-    } 
-    loadScript('/js/getSiteOnline/index.js');
-  };
-  $(function () {
-    loadSiteOnlineJS();
-  });
-  document.addEventListener('pjax:complete', function () {
-    if (typeof getSiteJson == "undefined") {
-      loadSiteOnlineJS();
-    }
-  })
-</script>
-
 <!-- 输入框打字特效 -->
 <!-- 输入框打字特效 -->
 
@@ -1642,8 +1546,8 @@
 
 <!-- markdown代码一键复制功能 -->
 
-  <link rel="stylesheet" href="https://unpkg.com/v-plugs-ayu/lib/ayu.css">
-  <script src="https://unpkg.com/v-plugs-ayu/lib/ayu.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/v-plugs-ayu/lib/ayu.css">
+  <script src="https://cdn.jsdelivr.net/npm/v-plugs-ayu/lib/ayu.umd.min.js"></script>
   <script src="/js/clipboard/clipboard.min.js"></script>
   <div id="appCopy">
   </div>
@@ -1697,7 +1601,7 @@
   
 
 <!-- 图片懒加载 -->
-<script defer src="https://unpkg.com/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
 <script>
   // https://www.npmjs.com/package/vanilla-lazyload
   // Set the options globally
@@ -1730,15 +1634,15 @@
 <!-- 评论所需js -->
 
   
-        <script type="text/javascript">
-  var utteranceComment = {};
+    <script type="text/javascript">
+  var utteranceCommon = {};
 
   function check_utterance() {
     let isDark = JSON.parse(localStorage.getItem('dark')) || JSON.parse('false');
     if (isDark) {
-      utteranceComment.Theme = 'github-dark';
+      utteranceCommon.Theme = 'github-dark';
     } else {
-      utteranceComment.Theme = 'github-light';
+      utteranceCommon.Theme = 'github-light';
     }
 
     return document.getElementById("gitment-container");
@@ -1753,7 +1657,7 @@
       utterances.type = 'text/javascript';
       utterances.async = true;
       utterances.setAttribute('issue-term', 'pathname')
-      utterances.setAttribute('theme', utteranceComment.Theme)
+      utterances.setAttribute('theme', utteranceCommon.Theme)
       utterances.setAttribute('repo', '')
       utterances.crossorigin = 'anonymous';
       utterances.src = 'https://utteranc.es/client.js';
@@ -1768,7 +1672,7 @@
     if (!HEAD) return;
     const message = {
       type: 'set-theme',
-      theme: utteranceComment.Theme
+      theme: utteranceCommon.Theme
     };
     const utteranceIframe = document.querySelector('iframe');
     utteranceIframe.contentWindow.postMessage(message, 'https://utteranc.es');
@@ -1792,7 +1696,7 @@
     max-width: inherit !important;
   }
 </style>
-      
+  
 
 
 <!-- 鼠标点击特效 -->
@@ -1800,8 +1704,8 @@
 
   
     <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 999; pointer-events: none;" ></canvas>
-    <script async src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
-    <script async src="/js/cursor/explosion.min.js"></script>
+    <script src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+    <script src="/js/cursor/explosion.min.js"></script>
   
 
 
@@ -1810,60 +1714,6 @@
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" data-pjax></script>
 
 
-<!-- 轮播图标签 -->
-<script>
-  var bambooSwiperTag = {};
-  function load_swiper() {
-    if (!document.querySelectorAll(".post-swiper-container")[0]) return;
-    loadCSS("https://unpkg.com/swiper@6/swiper-bundle.min.css")
-    loadScript("https://unpkg.com/swiper@6/swiper-bundle.min.js").then(() => {
-      pjax_swiper();
-    });
-  }
-
-  load_swiper();
-
-  function pjax_swiper() {
-    bambooSwiperTag.swiper = new Swiper('.post-swiper-container', {
-      slidesPerView: 'auto',
-      spaceBetween: 8,
-      centeredSlides: true,
-      loop: true,
-      autoplay: true ? {
-        delay: 3000,
-        stopOnLastSlide: false,
-        disableOnInteraction: false,
-      } : false,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      on:{
-        init: function(){
-          swiperAnimateCache(this); //隐藏动画元素 
-          swiperAnimate(this); //初始化完成开始动画
-        }, 
-        slideChangeTransitionEnd: function(){ 
-          swiperAnimate(this); //每个slide切换结束时也运行当前slide动画
-          //this.slides.eq(this.activeIndex).find('.ani').removeClass('ani'); 动画只展现一次，去除ani类名
-        } 
-      }
-    });
-  }
-
-  document.addEventListener('pjax:complete', function () {
-    if (!document.querySelectorAll(".post-swiper-container")[0]) return;
-    if (typeof bambooSwiperTag.swiper === "undefined") {
-      load_swiper();
-    } else {
-      pjax_swiper();
-    }
-  });
-</script>
     <!-- pjax -->
     
 
@@ -1872,7 +1722,9 @@
 
   <script src="/js/pjax@0.2.8/index.js"></script>
   
-    <div class="pjax-animate">
+    <!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
   
     <div class="loading-circle"><div id="loader-circle"></div></div>
     <script>
