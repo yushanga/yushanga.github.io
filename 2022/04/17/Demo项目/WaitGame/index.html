@@ -230,13 +230,138 @@
   </transition>
   <div class="drawer-box" :class="{'active': visible}">
     <div class="drawer-box-head bg-color">
-      <img class="drawer-box-head_logo lazyload placeholder" src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="logo">
+      <img class="drawer-box-head_logo lazyload placeholder" src="/" class="lazyload placeholder" data-srcset="/" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="logo">
       <h3 class="drawer-box-head_title">WindDust</h3>
       <h5 class="drawer-box-head_desc">行到水深处 坐看云起时</h5>
     </div>
     
     <div class="drawer-box-content">
       <ul class="drawer-box-content_menu">
+        
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                  
+                  <span class="name">首页</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/archives" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-archive" aria-hidden="true"></i>
+                  
+                  <span class="name">归档</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="javascript:;" class="drawer-menu-item-link has-children" @click="openOrCloseMenu(2)">
+                  <span>
+                    
+                      <i class="fas fa-archive"></i>
+                    
+                    <span class="name">Demo</span>
+                  </span>
+                  <i class="fas fa-chevron-left arrow " :class="{'icon-rotate': isOpen(2)}" aria-hidden="true"></i>
+                </a>
+                <ul class="drawer-sub-menu" v-if="isOpen(2)">
+                  
+                  <li>
+                    <a href="/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ET放置类网络游戏</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETSkill</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETMMO</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2022/04/07/Demo">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>杂七杂八</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="javascript:;" class="drawer-menu-item-link has-children" @click="openOrCloseMenu(3)">
+                  <span>
+                    
+                      <i class="fas fa-archive"></i>
+                    
+                    <span class="name">图形学</span>
+                  </span>
+                  <i class="fas fa-chevron-left arrow " :class="{'icon-rotate': isOpen(3)}" aria-hidden="true"></i>
+                </a>
+                <ul class="drawer-sub-menu" v-if="isOpen(3)">
+                  
+                  <li>
+                    <a href="/2024/03/22/graphics/RenderPipeline/">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>渲染管线Render Pipeline个人理解总结</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/categories" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-bookmark" aria-hidden="true"></i>
+                  
+                  <span class="name">分类</span>
+                </a>
+              
+            </li>
+          
+            <li class="drawer-box-content_item" style="position: relative;">
+              
+                <a href="/tags" class="drawer-menu-item-link">
+                  
+                    <i class="fas fa-tags" aria-hidden="true"></i>
+                  
+                  <span class="name">标签</span>
+                </a>
+              
+            </li>
+          
         
         
           <li class="drawer-box-content_item">
@@ -299,14 +424,131 @@
     </div>
     <div class="blog-title" id="author-avatar">
       
-        <div class="avatar">
-          <img src="/medias/logo.png" class="lazyload placeholder" data-srcset="/medias/logo.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="logo">
-        </div>
-      
       <a href="/" class="logo">WindDust</a>
     </div>
     <nav class="navbar">
       <ul class="menu">
+        
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/" class="menu-item-link" title="首页">
+                  
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                  
+                  <span class="name">首页</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/archives" class="menu-item-link" title="归档">
+                  
+                    <i class="fas fa-archive" aria-hidden="true"></i>
+                  
+                  <span class="name">归档</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="javascript:;" class="menu-item-link" title="Demo">
+                  
+                    <i class="fas fa-archive"></i>
+                  
+                  <span class="name">Demo</span>
+                  <i class="fas fa-chevron-down arrow" aria-hidden="true"></i>
+                </a>
+                <ul class="sub-menu">
+                  
+                  <li>
+                    <a href="/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ET放置类网络游戏</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETSkill</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>ETMMO</span>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href="/2022/04/07/Demo">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>杂七杂八</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="javascript:;" class="menu-item-link" title="图形学">
+                  
+                    <i class="fas fa-archive"></i>
+                  
+                  <span class="name">图形学</span>
+                  <i class="fas fa-chevron-down arrow" aria-hidden="true"></i>
+                </a>
+                <ul class="sub-menu">
+                  
+                  <li>
+                    <a href="/2024/03/22/graphics/RenderPipeline/">
+                      
+                      <i class="fas fa-archive" style="margin-top: -20px;"></i>
+                      
+                      <span>渲染管线Render Pipeline个人理解总结</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/categories" class="menu-item-link" title="分类">
+                  
+                    <i class="fas fa-bookmark" aria-hidden="true"></i>
+                  
+                  <span class="name">分类</span>
+                </a>
+              
+            </li>
+          
+            <li class="menu-item" style="position: relative;">
+              
+                <a href="/tags" class="menu-item-link" title="标签">
+                  
+                    <i class="fas fa-tags" aria-hidden="true"></i>
+                  
+                  <span class="name">标签</span>
+                </a>
+              
+            </li>
+          
         
       </ul>
       
