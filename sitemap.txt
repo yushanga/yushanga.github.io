@@ -1,3 +1,4 @@
+http://example.com/categories/index.html
 http://example.com/2022/04/07/Demo/
 http://example.com/2024/03/22/graphics/RenderPipeline/
 http://example.com/2024/03/22/graphics/Drawcall/
@@ -5,7 +6,6 @@ http://example.com/2024/03/22/graphics/
 http://example.com/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/
 http://example.com/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/
 http://example.com/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/
-http://example.com/categories/index.html
 http://example.com/about/index.html
 http://example.com/2022/04/16/rider/
 http://example.com/tags/index.html
