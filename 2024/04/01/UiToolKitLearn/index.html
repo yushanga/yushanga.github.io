@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>基于ET的MMPORPG | Wind Dust</title>
+  <title>UitoolKit+ GraphView 开发 可视化节点编译器 | Wind Dust</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -633,21 +633,21 @@
 
 
 <div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
-  background-position: center center;position: relative;background-image:url('/medias/6.jpg')">
+  background-position: center center;position: relative;background-image:url('/medias/4.jpg')">
   <div class="post-detail-header-mask"></div>
   <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
   <div class="post-detail-header_info-box">
     <div class="title-box">
       <span class="title">
-        基于ET的MMPORPG
+        UitoolKit+ GraphView 开发 可视化节点编译器
       </span>
     </div>
     
     
       
         <span class="post-detail-header_date">
-          <i class="fas fa-calendar"></i> 发表于：2024-03-22 |
+          <i class="fas fa-calendar"></i> 发表于：2024-04-01 |
         </span>
       
 
@@ -655,8 +655,8 @@
         <span class="post-detail-header_categories">
           <i class="iconfont iconbookmark1"></i> 分类：
           
-            <a href="/categories/Demo/" class="post-detail-header_category">
-              Demo
+            <a href="/categories/Learn/" class="post-detail-header_category">
+              Learn
             </a>
           
         </span>
@@ -680,8 +680,109 @@
   <div class="main-content">
     <article class="post post-detail">
       <div class="post-content">
-        <h3 id="基于ET的MMO"><a href="#基于ET的MMO" class="headerlink" title="基于ET的MMO"></a>基于ET的MMO</h3><p><a target="_blank" rel="noopener" href="https://gitee.com/FengChen512/etmomrpg">gitee地址</a></p>
-<h4 id="服务端导航数据"><a href="#服务端导航数据" class="headerlink" title="服务端导航数据"></a>服务端导航数据</h4><h4 id="分布式服务器"><a href="#分布式服务器" class="headerlink" title="分布式服务器"></a>分布式服务器</h4><h4 id="登录模块"><a href="#登录模块" class="headerlink" title="登录模块"></a>登录模块</h4><h4 id="网关处理"><a href="#网关处理" class="headerlink" title="网关处理"></a>网关处理</h4><h4 id="角色创建"><a href="#角色创建" class="headerlink" title="角色创建"></a>角色创建</h4><h4 id="排队服务器"><a href="#排队服务器" class="headerlink" title="排队服务器"></a>排队服务器</h4><h4 id="客户端ui"><a href="#客户端ui" class="headerlink" title="客户端ui"></a>客户端ui</h4><h4 id="touch-移动按钮-与摄像机跟随"><a href="#touch-移动按钮-与摄像机跟随" class="headerlink" title="touch 移动按钮 与摄像机跟随"></a>touch 移动按钮 与摄像机跟随</h4>
+        <p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1RH4y1J7Xo/">视频地址</a></p>
+<h3 id="UI-Toolkit介绍"><a href="#UI-Toolkit介绍" class="headerlink" title="UI Toolkit介绍"></a>UI Toolkit介绍</h3><p>UI Toolkit是用于开发用户界面(UI)的功能、资源和工具的集合。你可以使用UI Toolkit为Unity编辑器、运行时调试工具以及游戏和应用程序的运行时UI开发自定义UI和扩展。</p>
+<p>UIToolKit受网页开发技术的启发，通过类似于HTML+CSS的方法来构建UI，在Unity中对应的就是UXML和USS，简单来说，UXML规定UI布局，USS规定UI样式。在UI的实际开发过程当中，我们也主要是和这两个部分打交道。</p>
+<p>UIToolKit提供了一个UIBuilder工具来帮助我们完成UI的布局，具体的UIBuilder应该怎么使用这里就不做过多的解释。</p>
+<h3 id="Unity-GraphView-介绍"><a href="#Unity-GraphView-介绍" class="headerlink" title="Unity GraphView 介绍"></a>Unity GraphView 介绍</h3><p>首先Unity已经为我们提供了一个功能完善的Graphview模块，我们只需要继承这个模块，就能够定义自己的Graphview</p>
+<h3 id="可视化窗口搭建"><a href="#可视化窗口搭建" class="headerlink" title="可视化窗口搭建"></a>可视化窗口搭建</h3><p>下面就说一下使用过程中主要的函数调用 </p>
+<h4 id="创建可视化窗口"><a href="#创建可视化窗口" class="headerlink" title="创建可视化窗口"></a>创建可视化窗口</h4><p>继承EditorWindow 类去进行窗口编译器扩展<br>通过Creat/Uitoolkit/EditorWIndow 创建EditorWindow </p>
+<p>public class CharEditor : EditorWindow<br>{<br>    [MenuItem(“Tool/CharEditor”)]<br>    public static void OpenWindow()<br>    {<br>        CharEditor wnd = GetWindow<CharEditor>();<br>        wnd.titleContent = new GUIContent(“CharEditor”);<br>    }<br>}</CharEditor></p>
+<h4 id="通过UitoolKit-创建并绘制你想要的可视化窗口UI内容"><a href="#通过UitoolKit-创建并绘制你想要的可视化窗口UI内容" class="headerlink" title="通过UitoolKit 创建并绘制你想要的可视化窗口UI内容"></a>通过UitoolKit 创建并绘制你想要的可视化窗口UI内容</h4><p>使用 编写的uitolkit的 uus 和html 文件去进行绘制</p>
+<p>public class CharEditor : EditorWindow<br>{<br>        public void CreateGUI()<br>        {<br>            VisualElement root = rootVisualElement;</p>
+<pre><code>        var nodeTree = AssetDatabase.LoadAssetAtPath&lt;VisualTreeAsset&gt;( CharEditorConfig.ConfiguredPath+&quot;NodeEditor.uxml&quot;);
+        // 此处不使用visualTree.Instantiate() 为了保证行为树的单例防止重复实例化，以及需要将此root作为传参实时更新编辑器状态
+        nodeTree.CloneTree(root);
+
+        var styleSheet = AssetDatabase.LoadAssetAtPath&lt;StyleSheet&gt;(CharEditorConfig.ConfiguredPath+&quot;NodeEditor.uss&quot;);
+        root.styleSheets.Add(styleSheet);
+    &#125;
+</code></pre>
+<p>}<br>public static class CharEditorConfig<br>{<br>        public    const string  ConfiguredPath=”Assets/CharTool/Config/“;<br>}</p>
+<h3 id="编译器窗口右键功能"><a href="#编译器窗口右键功能" class="headerlink" title="编译器窗口右键功能"></a>编译器窗口右键功能</h3><h4 id="创建可视化窗口的背景样式-这里使用-uss的样式"><a href="#创建可视化窗口的背景样式-这里使用-uss的样式" class="headerlink" title="创建可视化窗口的背景样式 这里使用.uss的样式"></a>创建可视化窗口的背景样式 这里使用.uss的样式</h4><p>这里都是一样的UItoolkit种类</p>
+<h4 id="在可视化窗口UI中-增加对编译器的控制-添加该脚本"><a href="#在可视化窗口UI中-增加对编译器的控制-添加该脚本" class="headerlink" title="在可视化窗口UI中 增加对编译器的控制  添加该脚本"></a>在可视化窗口UI中 增加对编译器的控制  添加该脚本</h4><p>GraphView 这个就是编译器绘制的关键<br>public class NodeTreeViewer : GraphView<br>{<br>    public new class UxmlFactory : UxmlFactory&lt;NodeTreeViewer,GraphView.UxmlTraits&gt;{}<br>    NodeTree tree;<br>    public NodeTreeViewer(){<br>        Insert(0, new GridBackground());<br>        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(CharEditorConfig.ConfiguredPath+”NodeTreeViewer.uss”);<br>        styleSheets.Add(styleSheet);<br>    }<br>}</StyleSheet></p>
+<h4 id="编译器右键功能"><a href="#编译器右键功能" class="headerlink" title="编译器右键功能"></a>编译器右键功能</h4><p>给窗口增加创建栏<br>public class NodeTreeViewer : GraphView<br>{</p>
+<pre><code>/// &lt;summary&gt;
+/// NodeTreeViewer视图中添加右键节点创建栏
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;evt&quot;&gt;&lt;/param&gt;
+public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+&#123;
+    &#123;
+        var types = TypeCache.GetTypesDerivedFrom&lt;CompositeNode&gt;();
+        foreach(var type in types)&#123;
+            if (!type.IsAbstract)&#123;
+                evt.menu.AppendAction(type.Name, (a) =&gt; CreateNode(type));
+            &#125;
+        &#125;
+    &#125;
+&#125;
+ void CreateNode(System.Type type)&#123;&#125;
+</code></pre>
+<p>}</p>
+<h6 id="窗口中-控制监听等"><a href="#窗口中-控制监听等" class="headerlink" title="窗口中 控制监听等"></a>窗口中 控制监听等</h6><pre><code>   // 添加视图缩放
+    this.AddManipulator(new ContentZoomer());
+    // 添加视图拖拽
+    this.AddManipulator(new ContentDragger());
+    // 添加选中对象拖拽
+    this.AddManipulator(new SelectionDragger());
+</code></pre>
+<h5 id="节点之间互相连接"><a href="#节点之间互相连接" class="headerlink" title="节点之间互相连接"></a>节点之间互相连接</h5><p>GetCompatiblePorts 通过这个方法</p>
+<pre><code>public override List&lt;Port&gt; GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+&#123;
+    /* 
+        返回兼容接口列表
+        需要判断接入的兼容接口仅为入口 endport.direction != startPort.direction
+        且同个节点的出口不能接入自己的入口 endport.node != startPort.node
+    */
+    return ports.ToList().Where(
+        endport =&gt; endport.direction != startPort.direction 
+                   &amp;&amp; endport.node != startPort.node).ToList();
+&#125;
+</code></pre>
+<h4 id="uitoolkit节点制作和其他面板"><a href="#uitoolkit节点制作和其他面板" class="headerlink" title="uitoolkit节点制作和其他面板"></a>uitoolkit节点制作和其他面板</h4><p>这里这些面板的 拼接就不讲了 主要来说一些  : VisualElement<br>对Uitoolkit中的扩展<br>这样你就可以在uitollkit中使用<br>这里的</p>
+<p>public class InspectorViewer : VisualElement<br>{<br>    public new class UxmlFactory : UxmlFactory&lt;InspectorViewer,VisualElement.UxmlTraits&gt;{}<br>    Editor editor;<br>    public InspectorViewer(){</p>
+<pre><code>&#125;
+</code></pre>
+<p>}</p>
+<p>节点的 制作 UnityEditor.Experimental.GraphView.Node<br>unity中已经准备好的相关的node 节点<br>public class NodeView : UnityEditor.Experimental.GraphView.Node<br>{<br>    public NodeView(Node node) : base(CharEditorConfig.ConfiguredPath+”NodeView.uxml”){}<br>}</p>
+<h6 id="对于节点中特殊属性"><a href="#对于节点中特殊属性" class="headerlink" title="对于节点中特殊属性"></a>对于节点中特殊属性</h6><p>这两个 就是 Node中 输入，输出节点 </p>
+<p>/// <summary><br>    /// 创建输入节点<br>    /// </summary><br>    /// <exception cref="NotImplementedException"></exception><br>    private void CreateInputPorts()<br>    {<br>        input = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Multi, typeof(bool));<br>        if(input != null){<br>            // 将端口名设置为空<br>            input.portName = “”;<br>            // 因为input端口的label默认是在端口右边因此需要将排列方式调整为竖向自上往下<br>            input.style.flexDirection = FlexDirection.Column;<br>            inputContainer.Add(input);<br>        }<br>    }</p>
+<pre><code>/// &lt;summary&gt;
+/// 创建输出节点
+/// &lt;/summary&gt;
+/// &lt;exception cref=&quot;NotImplementedException&quot;&gt;&lt;/exception&gt;
+private void CreateOutputPorts()
+&#123;
+    output = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, typeof(bool));
+    
+    if(output != null)&#123;
+        output.portName = &quot;&quot;;
+        // 因为output端口的label默认是在端口左边边因此需要将排列方式调整为竖向自下往上
+        output.style.flexDirection = FlexDirection.ColumnReverse;
+        outputContainer.Add(output);
+    &#125;
+&#125;
+</code></pre>
+<h5 id="节点的位置"><a href="#节点的位置" class="headerlink" title="节点的位置"></a>节点的位置</h5><pre><code>/// &lt;summary&gt;
+/// 设置节点在节点树视图中的位置
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;newPos&quot;&gt;&lt;/param&gt;
+public override void SetPosition(Rect newPos)
+&#123;
+    // 将视图中节点位置设置为最新位置newPos
+    base.SetPosition(newPos);
+    // 撤回记录
+    Undo.RecordObject(node,&quot;Node Tree(Set Position)&quot;);
+    // 将最新位置记录到运行时节点树中持久化存储
+    node.position.x = newPos.xMin;
+    node.position.y = newPos.yMin;
+    EditorUtility.SetDirty(node);
+&#125;
+</code></pre>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>其中关于 使用uiyoolkit+graphView 进行可视化编译器开发就结束了<br>其中 uitoolkit的作用主要是编写 node格式 ，窗口样式，<br>不过 这种方式开发还是比较简单粗暴的</p>
+<p>引用文献：<br>Unity 可视化节点编辑器（GraphView、编辑器扩展）<a target="_blank" rel="noopener" href="https://blog.csdn.net/JavaD0g/article/details/134010999">地址</a><br>unity 可视化编译器行为树<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/650274861">地址</a></p>
+
       </div>
       <div class="post-tags-categories">
         
@@ -694,7 +795,7 @@
     </li>
     <li class="post-copyright-link">
     <strong>文章链接:  </strong>
-    <a href="/2024/03/22/Demo项目/ETMMorpg/" target="_blank" title="基于ET的MMPORPG">http://example.com/2024/03/22/Demo项目/ETMMorpg/</a>
+    <a href="/2024/04/01/UiToolKitLearn/" target="_blank" title="UitoolKit+ GraphView 开发 可视化节点编译器">http://example.com/2024/04/01/UiToolKitLearn/</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明:   </strong>
@@ -712,41 +813,22 @@
 
 
 
-  
-  <div class="post-nav-prev post-nav-item">
-    <div class="post-nav-img" style="background-size: cover; 
-      background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-    </div>
-    <a href="/2024/03/22/graphics/RenderPipeline/" class="post-nav-link">
-      <div class="title">
-        <i class="fas fa-angle-left"></i> 上一篇:
-        <div class="title-text">渲染管线Render Pipeline个人理解总结</div>
-      </div>
-      
-      <!-- <div class="content">
-        CPU与GPU的区别GPU的架构与CPU有极大的不同，这主要归因于两者不同的使用场合。试想一下，GPU面对3D游戏中成千
-      </div> -->
-    </a>
-  </div>
-
 
 
   
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/10.jpg" class="lazyload placeholder" data-srcset="/medias/10.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" src="" alt="">
+      <img class="lazyload lazyload placeholder" src="/medias/5.jpg" class="lazyload placeholder" data-srcset="/medias/5.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" src="" alt="">
     </div>
-    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/" class="post-nav-link">
+    <a href="/2024/03/26/rider/" class="post-nav-link">
       <div class="title">
         下一篇: <i class="fas fa-angle-right"></i>
-        <div class="title-text">����ET��˫��ս��</div>
+        <div class="title-text">Rider编译器破解</div>
       </div>
       <!-- <div class="content">
-        
-����ET��ս��gitee��ַ
-����ˣ�  1.ս��ϵͳ    �����ͷ��뼼���������� 
+        最新 2021.3 版本 IDEA 永久激活5000年教程！
+仙人JumpJump#Java学习路线#发布于 2021-
       </div> -->
     </a>
   </div>

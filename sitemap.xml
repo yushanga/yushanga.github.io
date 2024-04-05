@@ -2,6 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/2024/04/01/UiToolKitLearn/</loc>
+    
+    <lastmod>2024-04-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/2024/03/22/graphics/Drawcall/</loc>
+    
+    <lastmod>2024-04-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/</loc>
+    
+    <lastmod>2024-04-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/categories/index.html</loc>
     
     <lastmod>2024-03-26</lastmod>
@@ -29,15 +56,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/2024/03/22/graphics/Drawcall/</loc>
-    
-    <lastmod>2024-03-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/2024/03/22/graphics/</loc>
     
     <lastmod>2024-03-25</lastmod>
@@ -48,15 +66,6 @@
   
   <url>
     <loc>http://example.com/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/</loc>
-    
-    <lastmod>2024-03-22</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/</loc>
     
     <lastmod>2024-03-22</lastmod>
     
@@ -121,7 +130,7 @@
 
   <url>
     <loc>http://example.com/</loc>
-    <lastmod>2024-03-26</lastmod>
+    <lastmod>2024-04-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -131,14 +140,21 @@
   
   <url>
     <loc>http://example.com/categories/Demo/</loc>
-    <lastmod>2024-03-26</lastmod>
+    <lastmod>2024-04-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://example.com/categories/Grapics/</loc>
-    <lastmod>2024-03-26</lastmod>
+    <lastmod>2024-04-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/categories/Learn/</loc>
+    <lastmod>2024-04-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
