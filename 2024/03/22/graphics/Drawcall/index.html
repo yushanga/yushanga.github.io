@@ -680,10 +680,17 @@
   <div class="main-content">
     <article class="post post-detail">
       <div class="post-content">
-        <p>合批处理在UGUI中会有一些不同<br>先获得一个按Hierarchy的顺序的列表<br>计算每个物体的深度。<br>1 深度从0开始递增。如果世界包围盒Z轴不为0（或isCanvasInjectionIndex），则需独占一个批次，同时独占一个深度。即等于之前所有物体最大深度+1，后一个物体深度需要+1。<br>2 对一般物体的深度。会判断是否可跟之前的物件共享深度，走接下来的流程。<br>2.1 先按格子（默认大小是120，根据包围盒再计算）划分出多个格子。（只是为了加速求交）。<br>2.2 计算物体包围相交哪些格子，再跟格子中已有的物体进行包围盒相交判断。如果不相交则使用当前深度；如果相交且可合批，则使用相交物体中最大的深度；如果相交且不可合批，则使用相交物体中最大的深度+1。合批条件：无独占批次+材质相同+贴图相同+裁剪开关和裁剪矩形相同+贴图A8格式一致（kTexFormatAlpha8）<br>2.3 将该物体加入所有相交的格子中。若遇到独占深度的物体，则格子数据清空。即后续物件不跟之前的物件共享深度。<br>排序：按照深度-材质-贴图-层级顺序优先级排序。<br>合批：对排序后的列表，从头开始一个一个检测是否能与前面的物体合批。合批条件：无独占批次（只判断isCanvasInjectionIndex）+材质相同+贴图相同+裁剪开关和裁剪矩形相同+贴图A8格式一致（kTexFormatAlpha8），非SubBatch只判断前两个条件，一般情况下UI的材质都一样。<br>UGUI批处理原文链接：httpsblog.csdn.nethankangwenarticledetails122667647<br>在Unity中的shader中会将这些数据存到一些通道里： POSITION、NORMAL、COLOR、 TANGENT、TEXCOOR</p>
-<p>UgUI合批注意事项<br>首先合批的 原理： 同一Canvas下 同一材质 同一图片或者是图集</p>
-<p>首先Ugui的排序渲染方式 canvas 的渲染层级 UI的深度渲染层级 index深度 材质的渲染层级 hierarchy次序（textureID 排序）<br>UI排序<br>ugui都是先进行排序 后进行合批<br>排序的顺序取决于 index深度（box是否遮盖的关系） 材质ID textureID 排序</p>
-<p>引文链接[<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1he4y1P7n9/?spm_id_from=333.788&amp;vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f%5D">https://www.bilibili.com/video/BV1he4y1P7n9/?spm_id_from=333.788&amp;vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f]</a></p>
+        <h3 id="合批处理在UGUI中会有一些不同"><a href="#合批处理在UGUI中会有一些不同" class="headerlink" title="合批处理在UGUI中会有一些不同"></a>合批处理在UGUI中会有一些不同</h3><p>先获得一个按Hierarchy的顺序的列表<br>计算每个物体的深度。<br>1 深度从0开始递增。如果世界包围盒Z轴不为0（或isCanvasInjectionIndex），则需独占一个批次，同时独占一个深度。即等于之前所有物体最大深度+1，后一个物体深度需要+1。<br>2 对一般物体的深度。会判断是否可跟之前的物件共享深度，走接下来的流程。<br>2.1 先按格子（默认大小是120，根据包围盒再计算）划分出多个格子。（只是为了加速求交）。<br>2.2 计算物体包围相交哪些格子，再跟格子中已有的物体进行包围盒相交判断。如果不相交则使用当前深度；如果相交且可合批，则使用相交物体中最大的深度；如果相交且不可合批，则使用相交物体中最大的深度+1。合批条件：无独占批次+材质相同+贴图相同+裁剪开关和裁剪矩形相同+贴图A8格式一致（kTexFormatAlpha8）<br>2.3 将该物体加入所有相交的格子中。若遇到独占深度的物体，则格子数据清空。即后续物件不跟之前的物件共享深度。<br>排序：按照深度-材质-贴图-层级顺序优先级排序。<br>合批：对排序后的列表，从头开始一个一个检测是否能与前面的物体合批。合批条件：无独占批次（只判断isCanvasInjectionIndex）+材质相同+贴图相同+裁剪开关和裁剪矩形相同+贴图A8格式一致（kTexFormatAlpha8），非SubBatch只判断前两个条件，一般情况下UI的材质都一样。<br>UGUI批处理原文链接：httpsblog.csdn.nethankangwenarticledetails122667647<br>在Unity中的shader中会将这些数据存到一些通道里： POSITION、NORMAL、COLOR、 TANGENT、TEXCOOR</p>
+<h3 id="UgUI合批de注意事项"><a href="#UgUI合批de注意事项" class="headerlink" title="UgUI合批de注意事项"></a>UgUI合批de注意事项</h3><p>首先合批的 原理： 同一Canvas下 同一材质 同一图片或者是图集</p>
+<h4 id="Ugui的排序"><a href="#Ugui的排序" class="headerlink" title="Ugui的排序"></a>Ugui的排序</h4><p>首先Ugui的排序渲染方式 canvas 的渲染层级 UI的深度渲染层级 index深度 材质的渲染层级 hierarchy次序（textureID 排序）</p>
+<p>ugui都是先进行排序 后进行合批<br>排序的顺序取决于 index深度（box是否遮盖的关系） 材质ID textureID 排序</p>
+<h4 id="建议："><a href="#建议：" class="headerlink" title="建议："></a>建议：</h4><ol>
+<li>所有有可能打断和皮的层移动到最下边图层，避免UI元素重叠</li>
+<li>拆分多个同级或者嵌套的canvas，减少canvas的rebatch复杂度</li>
+<li>动静分离</li>
+<li>canvas 尽量使用overlay模式减少camera的性能开销</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1he4y1P7n9/?spm_id_from=333.788&vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">引文链接</a></p>
 
       </div>
       <div class="post-tags-categories">

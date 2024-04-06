@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>基于ET的放置网络游戏 | Wind Dust</title>
+  <title>unity性能优化心得 | Wind Dust</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -633,21 +633,21 @@
 
 
 <div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
-  background-position: center center;position: relative;background-image:url('/medias/3.jpg')">
+  background-position: center center;position: relative;background-image:url('/medias/14.jpg')">
   <div class="post-detail-header-mask"></div>
   <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
   <div class="post-detail-header_info-box">
     <div class="title-box">
       <span class="title">
-        基于ET的放置网络游戏
+        unity性能优化心得
       </span>
     </div>
     
     
       
         <span class="post-detail-header_date">
-          <i class="fas fa-calendar"></i> 发表于：2022-04-17 |
+          <i class="fas fa-calendar"></i> 发表于：2024-04-06 |
         </span>
       
 
@@ -655,8 +655,8 @@
         <span class="post-detail-header_categories">
           <i class="iconfont iconbookmark1"></i> 分类：
           
-            <a href="/categories/Demo/" class="post-detail-header_category">
-              Demo
+            <a href="/categories/Learn/" class="post-detail-header_category">
+              Learn
             </a>
           
         </span>
@@ -680,13 +680,57 @@
   <div class="main-content">
     <article class="post post-detail">
       <div class="post-content">
-        <h2 id="基于ET的放置网络游戏"><a href="#基于ET的放置网络游戏" class="headerlink" title="基于ET的放置网络游戏"></a><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1St421G7EP/?vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">基于ET的放置网络游戏</a></h2><p><a target="_blank" rel="noopener" href="https://github.com/yushanga/waitinggame">gitee 地址</a><br>rider + vs +unity + mongodb + Dotween + ET6.0<br> 1.账号登录<br>   账号规定 （大小写+ 数字 ） 不可以重复<br>   密码加密<br>   本地保存</p>
-<p> 2.区服管理<br>   不同区服<br> 3.账号角色管理<br>   账号 角色绑定<br>   一个账号 多个角色<br>   角色名称不可重复<br> 4.角色数据管理<br>   账号数据<br>   装备数据<br> 5.角色数值<br>    一级数值<br>    二级数值<br>    百分比数值<br> 6.战斗副本<br>   1.根据配置生成怪物数量<br>   2.根据怪物id 生成怪物<br>   3.伤害计算<br>   4.战斗漂字<br>   5.服务器战斗核算<br>     根据服务器最初数据和随机数种子进行战斗模拟计算<br>   6.<br> 7.个人装备模块<br>   装备数据<br>   装备属性</p>
-<p> 8.任务模块<br>  任务id<br>  任务类型<br>  任务奖励<br>  任务<br> 9.背包模块<br>   item 装备<br>   item 售卖<br> 10.装备打造模块<br>   打造条件<br>   打造装备所需材料<br>   打造定时器</p>
-<p> 缓存服务器<br> 定时数据存储 减少服务器性能压力</p>
-<p> 世界聊天</p>
-<p> 排行榜<br>  定时刷新排行榜<br>  根据等级进行排行榜<br>  等级变化回调 刷新该等级区域排行榜</p>
-<p>permalink: Demo<br>date: 2022-04-07 20：30：36<br>categories:<br>    - Demo<br>    - WaitGame</p>
+        <h3 id="为什么需要性能优化？"><a href="#为什么需要性能优化？" class="headerlink" title="为什么需要性能优化？"></a>为什么需要性能优化？</h3><h4 id="性能优化的本质-：-慢与快的问题"><a href="#性能优化的本质-：-慢与快的问题" class="headerlink" title="性能优化的本质 ： 慢与快的问题"></a>性能优化的本质 ： 慢与快的问题</h4><h4 id="性能优化流程"><a href="#性能优化流程" class="headerlink" title="性能优化流程"></a>性能优化流程</h4><p>发现问题（什么平台，操作系统，情况，一般还是特殊）<br>定位身体（什么地方造成的？需要工具 Or 方法？）<br>研究问题（处理方案？性能优化前提条件？）<br>解决问题</p>
+<h4 id="影响性能的cpu，gpu，带宽，内存"><a href="#影响性能的cpu，gpu，带宽，内存" class="headerlink" title="影响性能的cpu，gpu，带宽，内存"></a>影响性能的cpu，gpu，带宽，内存</h4><h4 id="优化思路："><a href="#优化思路：" class="headerlink" title="优化思路："></a>优化思路：</h4><p>  空间换时间等</p>
+<h3 id="资源的设置和检查"><a href="#资源的设置和检查" class="headerlink" title="资源的设置和检查"></a>资源的设置和检查</h3><h4 id="AssetChecker工具使用"><a href="#AssetChecker工具使用" class="headerlink" title="AssetChecker工具使用"></a>AssetChecker工具使用</h4><p>   生成资源检测报告，根据检测报告去进行具体优化</p>
+<h4 id="静态资源优化"><a href="#静态资源优化" class="headerlink" title="静态资源优化"></a>静态资源优化</h4><h5 id="AudioSource"><a href="#AudioSource" class="headerlink" title="AudioSource"></a>AudioSource</h5><ol>
+<li>立体声道（ForceTOMono） </li>
+<li>加载模式</li>
+<li>平台对应压缩格式</li>
+</ol>
+<p>优化后 ：<br> apk大小从560下将到544<br> audio 包体 76下降了70<br> cpu占有 从2.5上升到了5%<br>是因为部分audio 使用stream模式加载 </p>
+<h4 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h4><ol>
+<li><p>优化原始导入模型文件<br>统一单位<br>模型中的 多余文件（摄像机 ，灯光，材质）<br>模型中纹理（不建议纹理随模型导出）</p>
+</li>
+<li><p>Animationtype 设置<br>骨骼对应设置<br>model 的read/Write</p>
+</li>
+</ol>
+<p>优化后 ：仅只有scene 场景内存从400降低到377.4</p>
+<h4 id="纹理"><a href="#纹理" class="headerlink" title="纹理"></a>纹理</h4><ol>
+<li>纹理的导入<br>纹理类型的设置<br>平台对应压缩格式<br>加载模式<br>纹理贴图大小（2的倍数）<br>alpha is Transparency(半透明，增加内存，alpha占1字节)<br>read/Write<br>纹理过滤    2.纹理图集<br>优点：静态合批 减少drawcall<br>   减少碎纹理，通过压缩图集可以降低纹理内存和冗余<br>缺点：<br>美术需要合理规划，制作修改成本高         3.mipmap<br>逐级降低分辨率保存纹理副本，生成纹理Lod，根据像素在屏幕中占用纹理空间来选择mipmap级别进行采样<br>优点：<br>   提高纹理采样性能gpu不需要远距离对对象进行纹理采样<br>   纹理渲染质量：远距离下过采样导致的噪点问题<br>缺点：<br>造成额外的内存开销：mipmap纹理需要生成低分辨率副本<br>实际上</li>
+<li>纹理图集利用率偏低，浪费内存</li>
+<li>不合理的半透明纹理</li>
+<li>不打图集的序列帧动画</li>
+<li>大量重复纹理</li>
+<li>内容相似贴图只是颜色信息变化</li>
+<li>大量颜色渐变贴图不压缩，也不采用单像素宽度<br>优化后 ：<br>apk 大小从544.6 变化到402.9<br>整体运行内存从1.36G 变化到1.21g<br>graphic&amp; graphic Dirver 从0.98g 变化到0.77g<br>Texture 个数404 减少到359<br>内存从670 减少到 511.9</li>
+</ol>
+<h4 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h4><h5 id="优化查看原则"><a href="#优化查看原则" class="headerlink" title="优化查看原则:"></a>优化查看原则:</h5><p>看效果差异（与原始动画是否明显）<br>曲线数量（总曲线数量与各种曲线数量，常量曲线比重 大更好）<br>动画文件大小（通常都在1m以内 超过1m需要排查）</p>
+<h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><p>1.Animationtype 设置<br>   通用比人性节省30% cpu<br>2.动画压缩格式</p>
+<h3 id="unity资源"><a href="#unity资源" class="headerlink" title="unity资源"></a>unity资源</h3><h4 id="unity资源导入工作流"><a href="#unity资源导入工作流" class="headerlink" title="unity资源导入工作流"></a>unity资源导入工作流</h4><p>ToTd：暂时未理解<br>1.presets<br>2.AssetGraph<br>3.自己写工具</p>
+<h4 id="unity资源创建注意"><a href="#unity资源创建注意" class="headerlink" title="unity资源创建注意"></a>unity资源创建注意</h4><p>  1.减少空节点<br>  2.嵌套预制体</p>
+<h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><h4 id="渲染优化"><a href="#渲染优化" class="headerlink" title="渲染优化"></a>渲染优化</h4><p> TODO： 暂时没有实际做过</p>
+<ol>
+<li>rameDebugger与XCode的GPU Frame Capture工具的使用</li>
+<li>SSao优化<br>TODD： 暂时未理解</li>
+<li>AA 渲染</li>
+<li>后处理优化</li>
+</ol>
+<h4 id="渲染剔除"><a href="#渲染剔除" class="headerlink" title="渲染剔除"></a>渲染剔除</h4><p>看不见的像素，网格，对象</p>
+<p>unity 中的剔除：<br>像素剔除:摄像机平截头体剔除、Back-face Culling、EarlyZ、Pre-Z Pass<br>网格剔除:Layer Mask、可见距离剔除、Occlusion<br>灯光剔除:Tile-Based Deferred Rendering、Forward+<br>场景剔除:Additive Scene</p>
+<p>用户扩展剔除：<br>场景数据结构:Octree、BSP Tree、Portal、Voxelization、SDF等<br>GPU Culling: Hi-Z Pass、 Temporal Reprojection CullingCluster、Tile-based Visible Buffer等</p>
+<h4 id="简化方案"><a href="#简化方案" class="headerlink" title="简化方案"></a>简化方案</h4><p>Unity下的简化：<br>Quality Settings<br>通过烘焙光照简化实时光照<br>通过BoundingBox或替代体碰撞代替Mesh碰撞<br>通过Local Volume代替Global Volume<br>RayCast代替SphereCast、CapsuleCast等<br>纹理文字代替系统文字<br>Mesh LoD<br>Shader LoD<br>HLOD<br>通过Camer Override代替URP管线中的一些通用设置<br>各种OnDemand更新或分级设置接口</p>
+<p>用户扩展简化：<br>场景简化数据结构<br>第三方LOD方案<br>Mesh Impostor<br>Animation LOD<br>骨骼LOD<br>2D寻路代替Navigation Mesh<br>扩展类似OnDemand接口</p>
+<h4 id="batching"><a href="#batching" class="headerlink" title="batching"></a>batching</h4><h4 id="哪些内容需要Batching"><a href="#哪些内容需要Batching" class="headerlink" title="哪些内容需要Batching"></a>哪些内容需要Batching</h4><p>广义上讲：<br>资源Batching(Mesh、Texture、Shader参数、材质属性)<br>Draw call Batching (Static Batching、Dynamic Batching)<br>GPU Instancing(直接渲染、间接渲染、程序化间接渲染 )<br>Set Pass call Batching.( SRp Batching)</p>
+<h4 id="资源的Batching"><a href="#资源的Batching" class="headerlink" title="资源的Batching"></a>资源的Batching</h4><p>Mesh:<br>Mesh.CombineMesh，合并静态网格对象<br>Submeshes-&gt;Single Mesh,合并材质与贴图，不同材质通过通道图标记<br>Texture:<br>AtlasTexture,通过纹理坐标映射多张贴图<br>TextureArray纹理数组<br>Shader变量与材质属性<br>Material Property Block(Build In管线)<br>Const buffer(SRP管线)</p>
+<h4 id="Draw-caBatching："><a href="#Draw-caBatching：" class="headerlink" title="Draw caBatching："></a>Draw caBatching：</h4><h5 id="Static-Batching"><a href="#Static-Batching" class="headerlink" title="Static Batching"></a>Static Batching</h5><p>   StaticBatchingUtility.Combine</p>
+<h5 id="Static-Batching限制"><a href="#Static-Batching限制" class="headerlink" title="Static Batching限制"></a>Static Batching限制</h5><p>   额外内存开销<br>   64000个顶点限制<br>影响Culling剔除</p>
+<h5 id="Dynamic-Batching限制"><a href="#Dynamic-Batching限制" class="headerlink" title="Dynamic Batching限制"></a>Dynamic Batching限制</h5><p>   合批不超过900个顶点属性，(注意不是900个顶点)<br>   除了渲染阴影对象外，相同材质，不同材质实例也不能合并<br>   具有光照贴图的游戏对象如果有附加渲染器参数时，如果需要动态合批这些对象他们必须指向相同的光照贴图位置。<br>   有多Shader Pass的游戏对象无法做动态合批<br>   受多个光照影响的游戏对象，满足动态合批条件合批后，只会受一个光源的影响<br>   延迟渲染下不支持动态合批<br>  　CPU开销可能会增大，需要测试开启使用</p>
+<h4 id="Gpuinstancing："><a href="#Gpuinstancing：" class="headerlink" title="Gpuinstancing："></a>Gpuinstancing：</h4><p>DrawMeshInstanced<br>DrawMeshInstancedIndirect<br>DrawMeshInstancedProcedural</p>
+<h4 id="Batching优化顺序"><a href="#Batching优化顺序" class="headerlink" title="Batching优化顺序"></a>Batching优化顺序</h4><p>资源Batching &gt;SRP Batching =Static Batching &gt;GPU<br>Instancing&gt;Dynamic Batching</p>
+<h4 id="Batching失败原因"><a href="#Batching失败原因" class="headerlink" title="Batching失败原因"></a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/604534298">Batching失败原因</a></h4><h3 id="内存优化"><a href="#内存优化" class="headerlink" title="内存优化"></a>内存优化</h3><h4 id="托管内存优化"><a href="#托管内存优化" class="headerlink" title="托管内存优化"></a>托管内存优化</h4><h5 id="Boxing-Allocation装箱操作"><a href="#Boxing-Allocation装箱操作" class="headerlink" title="Boxing Allocation装箱操作"></a>Boxing Allocation装箱操作</h5><p>String字符串拼接<br>闭包分配<br>避免使用Linq库</p>
+<h6 id="Unity中提供了NonAloc函数"><a href="#Unity中提供了NonAloc函数" class="headerlink" title="Unity中提供了NonAloc函数"></a>Unity中提供了NonAloc函数</h6><p>如Physics.RayCastAl用Physics.RayCastAlINonAlloc代替<br>Unity.Object.FindobjectsOfType,<br>UnityEngine.Component.GetComponentsInParent,<br>UnityEngine.Component.GetComponentsinChild 等<br>成员变量访问方式<br>UnityEngine.Mesh.vertices=&gt;UnityEngine.Mesh.GetVertices,<br>UnityEngine.Mesh.uv=&gt; UnityEngine.Mesh.GetUV<br>UnityEngine.Renderer.sharedMaterials=&gt; UnityEngine.Renderer.GetSharedMaterials<br>Unity.Input.touches=&gt; Unity.Input.GeTouches等</p>
+<h3 id="引用文献"><a href="#引用文献" class="headerlink" title="引用文献"></a>引用文献</h3><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1U34y1B7Yc/?spm_id_from=333.788&vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">Unity性能优化</a></p>
 
       </div>
       <div class="post-tags-categories">
@@ -700,7 +744,7 @@
     </li>
     <li class="post-copyright-link">
     <strong>文章链接:  </strong>
-    <a href="/2022/04/17/Demo项目/WaitGame/" target="_blank" title="基于ET的放置网络游戏">http://example.com/2022/04/17/Demo项目/WaitGame/</a>
+    <a href="/2024/04/06/Learn/UnityOPtim/" target="_blank" title="unity性能优化心得">http://example.com/2024/04/06/Learn/UnityOPtim/</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明:   </strong>
@@ -718,41 +762,22 @@
 
 
 
-  
-  <div class="post-nav-prev post-nav-item">
-    <div class="post-nav-img" style="background-size: cover; 
-      background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/6.jpg" class="lazyload placeholder" data-srcset="/medias/6.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-    </div>
-    <a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/" class="post-nav-link">
-      <div class="title">
-        <i class="fas fa-angle-left"></i> 上一篇:
-        <div class="title-text">基于ET的双端战斗</div>
-      </div>
-      
-      <!-- <div class="content">
-        
-基于ET的战斗gitee地址
-服务端：  1.战斗系统    技能释放与技能生命周期    技能配置    创建技能 
-      </div> -->
-    </a>
-  </div>
-
 
 
   
   <div class="post-nav-next post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/medias/5.jpg" class="lazyload placeholder" data-srcset="/medias/5.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" src="" alt="">
+      <img class="lazyload lazyload placeholder" src="/medias/4.jpg" class="lazyload placeholder" data-srcset="/medias/4.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" src="" alt="">
     </div>
-    <a href="/2022/04/07/Demo/" class="post-nav-link">
+    <a href="/2024/04/01/Learn/UiToolKitLearn/" class="post-nav-link">
       <div class="title">
         下一篇: <i class="fas fa-angle-right"></i>
-        <div class="title-text">本人作品</div>
+        <div class="title-text">UitoolKit+ GraphView 开发 可视化节点编译器</div>
       </div>
       <!-- <div class="content">
-        作品展示2020年10月 使用unity制作的射击游戏 视频展示2020年10月至2021年10月 山东聊城运河项目 给
+        视频地址
+UI Toolkit介绍UI Toolkit是用于开发用户界面(UI)的功能、资源和工具的集合。你可以使用UI
       </div> -->
     </a>
   </div>
