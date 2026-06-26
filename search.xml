@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>Rider编译器破解</title>
+      <link href="/2026/06/26/rider/"/>
+      <url>/2026/06/26/rider/</url>
+      
+        <content type="html"><![CDATA[<p>前阵子 IDEA 更新了最新 2021.3 版本，很多网友更新之后发现以前的激活教程都不能用了。大家不用担心，最新的教程已经有了！</p><p>网上有一位不知名的的大佬在 zhile 大佬的开源文件的基础上，进行了升级！</p><p>针对最新 2021.3版本可以做到永久激活、直接激活5000年！</p><p>说明<br>本教程适用于 JetBrains 全系列产品：IntelliJ IDEA、APPCode、CLion、DataGrip、GoLand、PhpStorm、PyCharm、Rider、RubyMine 和 WebStorm 包括 Code With Me；<br>本教程适用于 Windows/Mac/Linux 系统；<br>本教程所使用的 jar 是开源的，所以非常安全，大家无需担心安全问题；<br>教程演示<br>卸载旧版本 IDEA<br>首先将电脑上的旧版本 IDEA 卸载干净，如果你的电脑是一台新电脑、没有安装过 IDEA ，那么你就可以跳过这一步。</p><p>一定要按照下图所示勾选，确保完全卸载干净。</p><p>下载最新版本 IDEA<br>然后我们再从 IDEA 官网下载最新版本的 IDEA，点击跳转官网下载<br>或者我这里的阿里云盘 2021.3版本 链接： <a href="https://www.aliyundrive.com/s/XTCwanE2RqQ">https://www.aliyundrive.com/s/XTCwanE2RqQ</a></p><p>安装最新版本 IDEA<br>双击运行 IDEA 安装包，默认安装位置是C:\Program Files\JetBrains\IntelliJ IDEA 2021.3 ，我是安装在默认位置。</p><p>大家要记住 IDEA 的安装位置，等一下会用到！</p><p>然后一直点击 Next，再点击 Install 开始安装。</p><p>安装完成之后，如下图所示不要勾选 ，我们直接点击下面的 Finish 结束。</p><p>激活步骤<br>首先获取激活补丁</p><p>压缩包目录结构：<br>zhile_agent_po.zip<br>├── plugins<br>  ├── dns.jar<br>  ├── hideme.jar<br>  ├── mymap-v1.0.1.jar<br>  ├── url.jar<br>├── ja-netfilter.jar<br>├── janf_config.txt<br>└── key.txt<br>阿里云盘链接：<a href="https://www.aliyundrive.com/s/PQ4g3uLuS6t">https://www.aliyundrive.com/s/PQ4g3uLuS6t</a></p><p>下载的激活补丁解压之后，直接放到电脑 D 盘下面，当然放在其他盘也是可以的。</p><p>切记！解压之后直接放D盘，不要删除任何文件！</p><p>切记！解压之后直接放D盘，不要删除任何文件！</p><p>切记！解压之后直接放D盘，不要删除任何文件！</p><p>我是放在 D 盘下面，所以激活补丁路径为：</p><p>1<br>-javaagent:d:/zhile_agent_po/ja-netfilter.jar</p><p>然后按照最开始 IDEA 的安装路径，找到 IDEA 的根目录，再打开 bin 文件夹。</p><p>找到 idea64.exe.vmoptions 文件并且打开。</p><p>将激活补丁的路径粘贴进去并且保存。</p><p>1<br>-javaagent:d:/zhile_agent_po/ja-netfilter.jar</p><p>现在我们打开 IDEA 软件，如下图所示点击 OK。</p><p>复制补丁文件里面的激活码<br>失效的话线上补丁码： <a href="https://idea.medeming.com/idea/">https://idea.medeming.com/idea/</a></p><p>回到 IDEA ，点击 Activation code，将激活码粘贴进去，然后点击 Activate 激活。</p><p>如下如所示，就说明你已经激活成功了。</p><p>切记，后续不要升级 IDEA，否则激活可能会失效！！！</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>大地图无缝加载与动态环境技术总结</title>
+      <link href="/2026/06/24/Learn/mapStreamLoad/"/>
+      <url>/2026/06/24/Learn/mapStreamLoad/</url>
+      
+        <content type="html"><![CDATA[<h3 id="大地图流式分块加载的作用"><a href="#大地图流式分块加载的作用" class="headerlink" title="大地图流式分块加载的作用"></a>大地图流式分块加载的作用</h3><h4 id="为什么会出现-："><a href="#为什么会出现-：" class="headerlink" title="为什么会出现 ："></a>为什么会出现 ：</h4><p>场景流式加载是平衡超大地图容量与移动端 / 低端硬件内存、显存、CPU 限制的核心技术。<br>完整地图资源全部常驻会直接引发内存溢出、APP 闪退、持续 GC 卡顿；但如果加载逻辑滞后，拖动 / 缩放地图时会出现地形空白、建筑弹出、行军线断层。流式加载通过「分块按需加载、超出延迟卸载、分级资源精度」动态调度资源，在内存占用与画面流畅度之间做平衡，是 SLG、MMO、开放世界游戏必备底层架构。</p><h4 id="难点是什么-困难是什么"><a href="#难点是什么-困难是什么" class="headerlink" title="难点是什么 困难是什么"></a>难点是什么 困难是什么</h4><p>内存资源冲突：全量加载底图、实体、导航网格会占用数百 MB 内存，中低端手机直接杀后台；<br>加载时机失衡：仅依靠坐标跨块触发刷新，快速滑动、缩放地图时资源加载滞后，出现大面积空白；<br>渲染开销不可控：远景仍渲染高精度实体、完整瓦片，DrawCall、Overdraw 持续走高，持续掉帧发热；<br>跨区块逻辑断裂：寻路、行军线、阵营同步跨 Chunk 时数据不同步，出现路径截断、实体消失；<br>频繁 GC 卡顿：进出地块反复创建销毁城堡、军队实体，堆内存频繁分配回收；<br>高精度地图扩容难：地图格子精细化后，单块数据量暴涨，原有单层分块架构内存失控；<br>缩放画面闪烁：LOD 硬切换、实体瞬时增删，滚轮缩放时画面抖动、物件忽隐忽现。<br>####<br>现有实现逻辑<br>沙盘采用10000×10000 全局逻辑 Grid，统一切分为 100×100 尺寸 Chunk（单块超大地块）；<br>底图 Tilemap 全局一次性全量加载，所有瓦片常驻内存，不做分块卸载；<br>动态实体（城堡、军队、资源点）采用九宫格 AOI 加载：以主城 / 镜头中心加载 3×9 块 （aoi 30*30）Chunk 实体；<br>刷新触发逻辑：只有镜头 / 单位移动跨过 Chunk 边界、格子数据变更时，才刷新对应区块实体；<br>缩放适配：依靠相机 FOV 区分远近，拉远后切换低精度小地图贴图；<br>简易视锥剔除：全局鸟瞰视角下，隐藏全部实体，仅保留缩略底图贴图降低渲染压力。</p><h4 id="优化方案"><a href="#优化方案" class="headerlink" title="优化方案"></a>优化方案</h4><p>问题 1：Grid 更大、格子精度更高，现有单层 Chunk 内存爆炸<br>优化方案：双层分级 Chunk 架构（粗加载块 + 精细 SubGrid 子网格）<br>架构分层设计<br>外层粗 Chunk（资源 / AOI / 卸载最小单元，维持原有 100×100 尺寸不变）<br>用途：统一管理 Tilemap 底图、实体对象池、全局寻路粗节点、网络 AOI 同步；<br>理由：复用现有业务逻辑、网络同步、九宫加载逻辑，最小改造成本，无需重构上层战斗 / 联盟业务。<br>内层 SubGrid 细分网格（Chunk 内部二次切割，单块拆 10×10 精细格子）<br>用途：存储高精度地形装饰、细分障碍、精细寻路网格；<br>加载规则：仅相机近距离、低 FOV 缩放时异步生成；镜头拉远、Chunk 卸载时直接销毁。<br>理由：远景不需要高精度细节，只在玩家可操作近景加载细分网格，大幅降低常驻内存。<br>配套细分优化手段<br>自适应 Chunk 尺寸<br>城市、城堡密集区：Chunk 缩小至 60×60；<br>荒野、空白平原：Chunk 放大至 150×100；<br>理由：高密度区域单块实体少，加快加载速度；空白区域合并减少 Chunk 总数量，降低 IO 次数。<br>分层二进制压缩存储<br>粗地形：RLE 行程压缩瓦片图集；<br>精细障碍：Bit 网格存储，1 格子仅占用 1bit；<br>特色建筑格子：仅存储变更脏格子，空白格子不持久化；<br>理由：普通数组存储障碍内存消耗提升 8<del>10 倍，二进制压缩可将单 Chunk 网格内存压缩 90%。<br>双层分层 HLA * 寻路联动<br>高层粗 Chunk：仅计算区块出入口门点，快速完成跨大区块粗寻路；<br>内层 SubGrid：近景高精度格子，完成地块内精细行军路径；<br>理由：远距离行军不需要逐格计算，粗寻路降低全局寻路 CPU 开销，近景保证行军精准度。<br>优化收益<br>同等地图精细度下，单 Chunk 内存涨幅控制 20% 以内；远景自动销毁细分网格，常驻内存降低 42%；高精度地图不会出现加载卡顿、内存溢出。<br>问题 2：频繁滚轮缩放，实体闪屏、画面抖动<br>核心根源<br>LOD 切换无重叠过渡，模型 / 图标瞬间显示消失（硬切）；<br>实体无复用池，缩放反复 Instantiate/Destroy，GC 抖动；<br>滚轮连续缩放时每帧增删 Chunk，资源加载销毁并发；<br>底图与实体切换不同步，出现 “有瓦片无建筑” 断层。<br>四层完整优化方案<br>三级平滑 LOD，重叠 Alpha 淡入淡出<br>plaintext<br>LOD0（0</del>150单位）：完整城堡、军队、文字、粒子特效<br>LOD1（120<del>300单位）：简化图标，隐藏文字、弱化特效<br>LOD2（280单位以上）：纯色简易广告牌，无动画<br>切换区间重叠 0.2</del>0.5s，新旧实体同时渲染，Shader 透明度插值混合。<br>理由：消除硬切换带来的物件闪烁，视觉过渡自然。<br>全局 LRU 实体对象池<br>城堡、军队、行军线实例统一池管理，Chunk 卸载仅回收不销毁；超出 5 分钟未使用彻底释放。<br>理由：杜绝频繁创建销毁产生 GC，缩放、进出地块无内存抖动。<br>滚轮缩放防抖节流（0.15s 延迟锁队列）<br>短时间连续缩放时暂停 Chunk 加载 / 卸载逻辑，缩放停止后批量更新区块列表；同时动态降低远景实体更新频率（2 帧刷新一次）。<br>理由：避免短时间大量资源 IO、实体增删造成瞬时卡顿闪屏。<br>Tilemap 底图分级同步卸载<br>L0 完整瓦片；L1 合并简化图集；L2 全局鸟瞰直接卸载远距离 Tilemap，替换预渲染 RT 缩略图。<br>理由：底图与实体同步切换精度，不会出现分层断层闪烁。<br>优化收益<br>缩放画面物件闪烁完全消除，主线程帧率波动降低 75%，GC 频率大幅下降。<br>问题 3：行军线跨 Chunk 断线、仅同盟 / 攻击目标可见<br>1、分 Chunk 分段存储行军线，解决跨区块断线<br>数据分层存储<br>整条行军路径按途经 Chunk 切割分段顶点数据，每个 Chunk 仅持有本区块线段；Chunk 卸载同步销毁本段渲染数据。<br>理由：不用全局存储全图行军顶点，降低常驻内存，区块卸载同步释放渲染开销。<br>Chunk 独立行军线对象池<br>每个加载 Chunk 内置 LineRenderer 池，跨区块多段线段视觉无缝拼接；行军目标超出九宫时自动扩容预加载缓冲圈，提前加载沿途线段数据。<br>理由：走到 Chunk 边界不会出现路线空白、截断。<br>双材质渲染管线<br>自身 / 同盟：高饱和发光滚动线段；<br>进攻我方敌军：红色警示线段；<br>无关第三方：直接 SetActive (false)，不进入渲染管线。<br>理由：从渲染层过滤无效线段，减少 DrawCall。<br>2、后端 + 客户端双层阵营过滤（性能核心）<br>服务端 AOI 差分下发（源头减少网络流量）<br>AOI 同步时仅推送三类行军数据：自身军团、同盟军团、主动进攻我方敌军；第三方行军包直接丢弃不推送，Chunk 脏数据按联盟分批次下发。<br>理由：减少 90% 无效网络包，降低同步与解析 CPU 开销。<br>客户端单帧快速校验<br>每条行军线绑定联盟 ID、进攻目标 ID，每帧做简单布尔判断，无关线段直接隐藏。<br>理由：兜底控制显示逻辑，避免客户端误渲染无关行军。<br>3、行军线渲染性能优化<br>远距离行军线 LOD 降级，远景简化线条、关闭滚动特效；超远鸟瞰直接隐藏；<br>同材质、同阵营线段 GPU 合并 Mesh 渲染；<br>大批量行军分帧更新顶点，不阻塞主线程。<br>优化收益<br>跨区块行军线无断点；网络同步流量降低 60%；海量行军同时渲染无明显掉帧。</p><h6 id="优化结果"><a href="#优化结果" class="headerlink" title="优化结果"></a>优化结果</h6><p>优化 1：废弃全局单张 Tilemap，改为分块独立 Tilemap 流式加载<br>改造内容<br>原有整张 Tilemap 全局常驻；重构为每个 Chunk 独立 Tilemap 预制，打包 Addressable 资源；加载异步实例瓦片网格，卸载完整 Release 图集、Mesh 资源；Chunk 边界预留 1 格重叠瓦片消除黑线断层。<br>优化理由<br>原生全局 Tilemap 只能隐藏无法释放显存，地图越大基线内存越高；分块 Tilemap 随 Chunk 生命周期完整回收资源，常驻内存降低 45%。<br>优化 2：加载逻辑升级「九宫 Chunk + 相机视锥双驱动」<br>改造内容<br>原有仅跨 Chunk 边界刷新；改为每帧同时判定：3×3Chunk 强制常驻 + 相机视锥内区块保留；画面外 Chunk 进入 2s 延迟卸载队列；滑动速度动态调整预加载缓冲（慢速 1 圈、快速 2 圈）；实体按主城 / 行军 / 野外划分加载优先级。<br>优化理由<br>单一坐标判定滑动时加载滞后，出现大片空白；视锥裁剪 + 动态预加载提前渲染前方地块，彻底解决拖动空白问题。<br>优化 3：三级缩放 LOD 完整资源释放机制<br>改造内容<br>L0 近景完整渲染；L1 中景隐藏文字特效；L2 全局鸟瞰卸载全部实体 + 远距离 Tilemap，仅使用预渲染缩略贴图。<br>优化理由<br>原有仅切换小贴图，远景实体、瓦片依旧常驻内存，DrawCall 居高不下；远景直接释放资源，大幅降低渲染压力。<br>优化 4：Chunk 全局 LRU 实体对象池管理<br>改造内容<br>城堡、军队、资源点统一对象池；地块卸载实体回池而非销毁；5 秒无访问清空池释放内存。<br>优化理由<br>频繁进出 Chunk 反复创建销毁实体，持续 GC 造成帧率抖动；对象池复用实例，消除堆内存频繁分配。<br>优化 5：分层 HLA * 寻路与 Chunk 加载联动<br>改造内容<br>行军目标超出缓冲圈自动扩容预加载范围；Chunk 加载同步生成 Bit 障碍网格，卸载同步销毁；单位走到未加载 Chunk 边界原地缓动等待。<br>优化理由<br>原有寻路与地块加载完全割裂，跨区块行军容易路径中断、寻路卡顿；加载预同步导航数据，保证路径连续。<br>优化 6：格子数据增量 Dirty 刷新<br>改造内容<br>建造、拆城仅标记对应格子 Dirty，分帧批量更新单格 Tile 与实体，不再整 Chunk 重刷。<br>优化理由<br>整块刷新会造成瞬时 CPU 峰值，多人同时操作时明显掉帧；增量更新平滑 CPU 负载。<br>优化 7：分帧异步加载限流机制<br>改造内容<br>每帧限制最多 2 个 Chunk 加载任务，IO、实例化、网格生成全部放入协程分帧执行；加载优先级：玩家所在 Chunk &gt; 行军途经 Chunk &gt; 空白地块。<br>优化理由<br>短时间滑动地图会瞬间触发大量加载任务，主线程阻塞卡顿；分帧限流平滑 IO 与实例化开销。</p><h4 id="3d方案呢？"><a href="#3d方案呢？" class="headerlink" title="3d方案呢？"></a>3d方案呢？</h4><p>一、3D 与 2.5D SLG 底层核心差异<br>表格<br>维度    现有 2.5D SLG    3D MMO 流式架构<br>资源载体    单 / 分块 Tilemap 2D 瓦片    Additive 独立子场景，地形 Mesh、静态建筑、植被多层模型<br>资源释放    Tilemap 仅隐藏，显存无法彻底回收    子场景完整 Unload，Mesh、贴图、光照全量释放<br>渲染压力    仅 2D 图标、少量粒子    大量骨骼模型、阴影、植被，依赖 HLOD、GPU Instancing 降 DC<br>寻路系统    二进制 Bit 网格    分块 Recast NavMesh，支持动态建筑局部重烘导航<br>远景优化    简易缩略贴图    HLOD 区块合并低模代理，多级地形 LOD、TextureStreaming 贴图分级<br>分层粒度    仅底图 + 实体两层    四层独立资源分层：地形层 / 静态建筑层 / 动态实体层 / 光照导航辅助层<br>二、3D 标准 Chunk 分块架构（通用 64m/100m 世界单位单块）<br>1、四层分层独立资源（分层加载、分层卸载互不阻塞）<br>地形层：Terrain 地形 Mesh、地形 LOD、分层纹理、植被系统；<br>静态建筑层：城池山体、植被、固定装饰物、HLOD 远景合并代理；<br>动态实体层：玩家、NPC、怪物、可建造工事（对应 SLG 城堡军队）；<br>辅助层：分块 Recast 导航网格、光照探针、遮挡剔除数据、环境烘焙数据。<br>设计理由<br>3D 资源体量远大于 2D 瓦片，分层可单独卸载闲置层级，不需要整体加载整块场景，内存管控粒度更细。<br>2、双层分块支撑超高精度地图<br>外层 Chunk 为 Additive 子场景，作为加载、AOI、卸载最小单元；<br>Chunk 内部划分 SubTile 细分网格，仅相机近距时异步生成高精度地形、障碍物；远景直接销毁细分网格；<br>设计理由<br>3D 高精度地形、模型数据量大，单层分块极易单场景内存爆炸，双层架构平衡精度与内存。<br>3、双驱动加载判定（行业标准）<br>每帧实时计算保留 Chunk 集合：<br>空间层：镜头中心 3×3 Chunk 强制常驻；<br>视锥层：相机 Frustum 范围内区块保留，画面外进入 2s 延迟卸载队列；<br>动态缓冲：拖动、滚轮缩放速度越快，预加载外圈 Chunk 越多；<br>设计理由<br>3D 模型加载 IO 耗时远高于 2D 瓦片，提前预加载避免大面积地形空白、模型弹出。<br>4、四级平滑 LOD+HLOD 远景合并（解决缩放闪屏）<br>L0 近景：完整高模、骨骼动画、粒子、光照；<br>L1 中景：简化模型，关闭小型粒子与文字；<br>L2 远景：广告牌低模，停止动画更新；<br>L3 全局鸟瞰：卸载全部独立实体，使用 HLOD 合并代理单模型；<br>所有 LOD 设置重叠淡入过渡区间，禁止硬切换；配合 LRU 模型对象池复用实例。<br>设计理由<br>3D 大量同屏模型缩放时频繁增删会严重卡顿、闪烁，HLOD 大幅降低远距离 DrawCall。<br>5、分块 Recast Tile 导航系统<br>每个 Chunk 独立烘焙导航网格，建造 / 拆除工事仅局部重烘对应小块；高层 Chunk 粗寻路、内层 SubTile 精细寻路；行军自动预加载沿途导航场景。<br>设计理由<br>全局 NavMesh 内存占用极高，分块导航随场景加载释放，动态修改不阻塞主线程。<br>6、3D 跨区块行军 / 玩家同步方案<br>路径按 Chunk 分段存储线段 / 实体，场景卸载同步销毁对应渲染；<br>服务端 AOI 按阵营差分同步玩家、行军数据，无关实体不推送；<br>远距离路径 LOD 降级，超远景直接隐藏；同阵营线条 GPU 合并渲染；<br>三、3D 完整加载执行流程<br>每帧获取相机坐标、FOV 缩放、镜头移动速度；<br>计算目标 Chunk 集合：九宫常驻区块 + 视锥内区块 + 动态预加载缓冲圈；<br>增量对比已加载场景：新增 Chunk 分层异步加载（地形→静态建筑→导航→动态实体），分帧限流；远离区块延迟 2s 分层卸载；<br>根据相机距离切换实体 LOD、地形贴图 Mip 精度；<br>玩家 / 军团行军时自动扩容预加载圈，提前加载途经场景导航与路径渲染资源；<br>滚轮缩放触发 0.15s 防抖节流，停止缩放后批量更新场景列表，避免瞬时资源抖动。</p><h4 id="思考还有没有问题"><a href="#思考还有没有问题" class="headerlink" title="思考还有没有问题"></a>思考还有没有问题</h4><h5 id="1-移动过快好像也会有-空白怎么防范？"><a href="#1-移动过快好像也会有-空白怎么防范？" class="headerlink" title="1.移动过快好像也会有 空白怎么防范？"></a>1.移动过快好像也会有 空白怎么防范？</h5><p>2.5D SLG 落地简化版执行流程<br>每帧计算相机滑动速度，动态扩张 / 收缩 Chunk 缓冲圈；<br>根据近 3 帧位移预判前进方向，前方地块提高加载优先级；<br>屏幕内 Chunk 进入 P0 优先加载队列；<br>未加载地块底层铺全局缩略 RT 遮罩，做视觉兜底；<br>高速滑动时只加载底图 Tilemap，城堡 / 军队延后加载；<br>5 秒内访问过的 Chunk 存入 LRU 缓存，复用不重复加载；<br>滑动停止 0.15s 防抖延迟后，批量补齐实体、高精度瓦片。<br>3D MMO 对应适配差异（方案通用，仅资源单元不同）<br>缓冲扩容、方向预判、优先级、LRU 缓存逻辑完全一致；<br>资源单元由 Tilemap 改为 Additive 子场景，分层加载地形 / 静态建筑 / 实体；<br>兜底占位不用小地图 RT，改用 HLOD 远景合并代理；<br>高速滑动临时关闭骨骼动画、粒子、实时光影，仅加载基础地形 Mesh；<br>分块 Recast 导航随缓冲圈同步预加载，避免行军寻路空白。</p><h5 id="总结-高速拖动-缩放加载滞后空白解决方案"><a href="#总结-高速拖动-缩放加载滞后空白解决方案" class="headerlink" title="总结 高速拖动 / 缩放加载滞后空白解决方案"></a>总结 高速拖动 / 缩放加载滞后空白解决方案</h5><p>玩家快速平移、滚轮极速缩放地图时，固定九宫缓冲无法覆盖视野，新 Chunk 资源未完成异步加载会出现地形空白、实体消失问题，采用 8 套组合策略兜底：<br>速度动态缓冲扩容：根据镜头位移速度自动切换 3/5/7 圈预加载缓冲区，低速收缩、高速扩容，延迟 2~3 秒卸载区块；<br>位移方向预判预加载：通过多帧位移向量判定前进方向，前方 Chunk 提升加载优先级；<br>四级加载优先级队列：屏幕可视地块最高优先级优先 IO 加载，远端地块后台闲时预缓存；<br>LRU 地块缓存池：5 秒内重复访问区块复用资源，消除重复加载开销；<br>三层渐进占位兜底：全局缩略贴图→低精度底图→完整实体分层渐进渲染，杜绝纯白空白；<br>滑动期间资源临时降级：高速拖动暂停军队、文字、特效加载，优先保证地形显示；<br>多线程分帧调度：加载 / 卸载队列分离，利用空闲帧后台预加载远端地块；<br>行军路径专属预加载：长途行军自动扩容缓冲，沿路线优先预加载地块与寻路网格。<br>2.5D 基于分块 Tilemap、3D 基于 Additive 子场景分别实现资源载体加载逻辑，底层缓冲、优先级、缓存机制完全互通，兼顾滑动流畅度与内存占用平衡。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Learn </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>自动生成UI代码并绑定</title>
+      <link href="/2024/11/25/Learn/GeneratedCode/"/>
+      <url>/2024/11/25/Learn/GeneratedCode/</url>
+      
+        <content type="html"><![CDATA[<h3 id="为什么要做自动生成ui代码并且绑定"><a href="#为什么要做自动生成ui代码并且绑定" class="headerlink" title="为什么要做自动生成ui代码并且绑定"></a>为什么要做自动生成ui代码并且绑定</h3><p>1.节省无意义重复的工作量<br>2.提升工作效率<br>3.增加安全性</p><h3 id="那怎么开始呢-？需要注意什么？目标是什么？"><a href="#那怎么开始呢-？需要注意什么？目标是什么？" class="headerlink" title="那怎么开始呢 ？需要注意什么？目标是什么？"></a>那怎么开始呢 ？需要注意什么？目标是什么？</h3><h4 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h4><p>全为一键生成</p><p>实现自动生成代码绑定UI控件 并生成字典保存UI控件</p><p>减少自己拖拽 和手动书写过程 适用动态加载面板</p><p>建议搭配UI框架使用<br>####<br>采集ui控件数据<br>使用 GetComponentsInChildren<br>根据ui控件生成对应代码，变量，方法<br>CodeTypeDeclaration 生成类<br>CodeNamespace 生成命名空间<br>CodeMemberField  生成属性<br>CodeTypeReference 是否继承类<br>MathCode 生成方法</p><h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><p>1.使用配置文件增加扩展性<br>2.增加hepler类 帮助开发<br>3.增加尾部做忽略ui检测</p><p>####工程地址<br><a href="https://gitee.com/FengChen512/unity-tool/tree/main/Assets/GeneratedUICode">https://gitee.com/FengChen512/unity-tool/tree/main/Assets/GeneratedUICode</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Learn </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>batterdev</title>
+      <link href="/2024/09/05/Learn/BatterDev/"/>
+      <url>/2024/09/05/Learn/BatterDev/</url>
+      
+        <content type="html"><![CDATA[<h4 id="此面板记录自己开发战斗编辑器的部分想法与思考"><a href="#此面板记录自己开发战斗编辑器的部分想法与思考" class="headerlink" title="此面板记录自己开发战斗编辑器的部分想法与思考"></a>此面板记录自己开发战斗编辑器的部分想法与思考</h4><p>1.xnode + timeLine 功能</p><p>Q 技能 - 英勇冲锋<br>技能说明： 盖伦可以发起冲锋，对一条直线上的敌人造成魔法伤害并使其减速。冲锋期间，他免疫控制效果。</p><p>快捷键：Q<br>冷却时间：9/8.5/8/7.5/7秒<br>法术消耗：50/60/70/80/90<br>伤害：70/80/90/100/110 (+1.1AD) (+0.6额外AD)<br>W 技能 - 忠诚卫兵<br>技能说明： 盖伦在施放技能后会激活忠诚卫兵，被动地减少近战英雄造成的伤害并保护盖伦免受物理伤害。</p><p>快捷键：W<br>冷却时间：18/16.4/14.8/13.2/11.6秒<br>法术消耗：60<br>技能效果：减少20/25/30/35/40%的近战伤害，且每减少1%伤害，额外获得2%的攻击速度。<br>E 技能 - 阿特斯之迅<br>技能说明： 盖伦施放阿特斯之迅，为自己提供一个攻击速度和移动速度加成。之后，他会治愈自己，并在施放后的1.5秒内向前冲锋，对命中的第一个敌人造成真实伤害。</p><p>快捷键：E<br>冷却时间：13/12/11/10/9秒<br>法术消耗：60<br>技能效果：攻击速度和移动速度提升：+25%<br>真实伤害：100/150/200/250/300<br>冲锋时间：1.5秒<br>冲锋距离：300码<br>R 技能 - 德玛西亚正义<br>技能说明： 盖伦施放德玛西亚正义，对一条线上的敌人造成魔法伤害，并使他们晕眩。德玛西亚正义可用来击杀敌方英雄或驱散状态效果。</p><p>快捷键：R<br>冷却时间：120秒（此技能没有法术消耗，一旦被施放，盖伦将不能攻击和施放其他技能）<br>技能效果：对一条线上的敌人造成魔法伤害，并使其晕眩2秒。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Learn </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Addressable 学习</title>
+      <link href="/2024/08/10/Learn/Addressable/"/>
+      <url>/2024/08/10/Learn/Addressable/</url>
+      
+        <content type="html"><![CDATA[<h4 id="自动化打包工具"><a href="#自动化打包工具" class="headerlink" title="自动化打包工具"></a>自动化打包工具</h4><p>为你自动化处理包体引用关系</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Learn </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>框架</title>
+      <link href="/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/"/>
+      <url>/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/</url>
+      
+        <content type="html"><![CDATA[<h3 id="自己开发的框架"><a href="#自己开发的框架" class="headerlink" title="自己开发的框架"></a>自己开发的框架</h3><p><a href="https://gitee.com/FengChen512/my-frams.git">gitee地址</a></p><h4 id="基础框架功能（2021-9）"><a href="#基础框架功能（2021-9）" class="headerlink" title="基础框架功能（2021.9）"></a>基础框架功能（2021.9）</h4><h4 id="定时器功能模块（2024-5）"><a href="#定时器功能模块（2024-5）" class="headerlink" title="定时器功能模块（2024.5）"></a>定时器功能模块（2024.5）</h4><p>  继承mono 的 和不继承mono的<br>  服务器和 unity都支持 毫秒级<br>  支持每帧</p><h4 id="红点系统（2024-6）"><a href="#红点系统（2024-6）" class="headerlink" title="红点系统（2024.6）"></a>红点系统（2024.6）</h4><p>  支持多层级 绑定GameObj<br>  支持数量显示<br>  支持多类型显示<br>  Totd： 未打开子节点 显示红点正常</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Demo </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>unity性能优化心得</title>
+      <link href="/2024/04/06/Learn/UnityOPtim/"/>
+      <url>/2024/04/06/Learn/UnityOPtim/</url>
+      
+        <content type="html"><![CDATA[<h3 id="为什么需要性能优化？"><a href="#为什么需要性能优化？" class="headerlink" title="为什么需要性能优化？"></a>为什么需要性能优化？</h3><h4 id="性能优化的本质-：-慢与快的问题"><a href="#性能优化的本质-：-慢与快的问题" class="headerlink" title="性能优化的本质 ： 慢与快的问题"></a>性能优化的本质 ： 慢与快的问题</h4><h4 id="性能优化流程"><a href="#性能优化流程" class="headerlink" title="性能优化流程"></a>性能优化流程</h4><p>发现问题（什么平台，操作系统，情况，一般还是特殊）<br>定位身体（什么地方造成的？需要工具 Or 方法？）<br>研究问题（处理方案？性能优化前提条件？）<br>解决问题</p><h4 id="影响性能的cpu，gpu，带宽，内存"><a href="#影响性能的cpu，gpu，带宽，内存" class="headerlink" title="影响性能的cpu，gpu，带宽，内存"></a>影响性能的cpu，gpu，带宽，内存</h4><h4 id="优化思路："><a href="#优化思路：" class="headerlink" title="优化思路："></a>优化思路：</h4><p>  空间换时间等</p><p>拼ui<br>取消勾选uiimage的射线检测</p><h3 id="资源的设置和检查"><a href="#资源的设置和检查" class="headerlink" title="资源的设置和检查"></a>资源的设置和检查</h3><h4 id="AssetChecker工具使用"><a href="#AssetChecker工具使用" class="headerlink" title="AssetChecker工具使用"></a>AssetChecker工具使用</h4><p>   生成资源检测报告，根据检测报告去进行具体优化</p><h4 id="静态资源优化"><a href="#静态资源优化" class="headerlink" title="静态资源优化"></a>静态资源优化</h4><h5 id="AudioSource"><a href="#AudioSource" class="headerlink" title="AudioSource"></a>AudioSource</h5><ol><li>立体声道（ForceTOMono） </li><li>加载模式</li><li>平台对应压缩格式</li></ol><p>优化后 ：<br> apk大小从560下将到544<br> audio 包体 76下降了70<br> cpu占有 从2.5上升到了5%<br>是因为部分audio 使用stream模式加载 </p><h4 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h4><ol><li><p>优化原始导入模型文件<br>统一单位<br>模型中的 多余文件（摄像机 ，灯光，材质）<br>模型中纹理（不建议纹理随模型导出）</p></li><li><p>Animationtype 设置<br>骨骼对应设置<br>model 的read/Write</p></li></ol><p>优化后 ：仅只有scene 场景内存从400降低到377.4</p><h4 id="纹理"><a href="#纹理" class="headerlink" title="纹理"></a>纹理</h4><ol><li>纹理的导入<br>纹理类型的设置<br>平台对应压缩格式<br>加载模式<br>纹理贴图大小（2的倍数）<br>alpha is Transparency(半透明，增加内存，alpha占1字节)<br>read/Write<br>纹理过滤    2.纹理图集<br>优点：静态合批 减少drawcall<br>   减少碎纹理，通过压缩图集可以降低纹理内存和冗余<br>缺点：<br>美术需要合理规划，制作修改成本高         3.mipmap<br>逐级降低分辨率保存纹理副本，生成纹理Lod，根据像素在屏幕中占用纹理空间来选择mipmap级别进行采样<br>优点：<br>   提高纹理采样性能gpu不需要远距离对对象进行纹理采样<br>   纹理渲染质量：远距离下过采样导致的噪点问题<br>缺点：<br>造成额外的内存开销：mipmap纹理需要生成低分辨率副本<br>实际上</li><li>纹理图集利用率偏低，浪费内存</li><li>不合理的半透明纹理</li><li>不打图集的序列帧动画</li><li>大量重复纹理</li><li>内容相似贴图只是颜色信息变化</li><li>大量颜色渐变贴图不压缩，也不采用单像素宽度<br>优化后 ：<br>apk 大小从544.6 变化到402.9<br>整体运行内存从1.36G 变化到1.21g<br>graphic&amp; graphic Dirver 从0.98g 变化到0.77g<br>Texture 个数404 减少到359<br>内存从670 减少到 511.9</li></ol><h4 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h4><h5 id="优化查看原则"><a href="#优化查看原则" class="headerlink" title="优化查看原则:"></a>优化查看原则:</h5><p>看效果差异（与原始动画是否明显）<br>曲线数量（总曲线数量与各种曲线数量，常量曲线比重 大更好）<br>动画文件大小（通常都在1m以内 超过1m需要排查）</p><h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><p>1.Animationtype 设置<br>   通用比人性节省30% cpu<br>2.动画压缩格式</p><h3 id="unity资源"><a href="#unity资源" class="headerlink" title="unity资源"></a>unity资源</h3><h4 id="unity资源导入工作流"><a href="#unity资源导入工作流" class="headerlink" title="unity资源导入工作流"></a>unity资源导入工作流</h4><p>ToTd：暂时未理解<br>1.presets<br>2.AssetGraph<br>3.自己写工具</p><h4 id="unity资源创建注意"><a href="#unity资源创建注意" class="headerlink" title="unity资源创建注意"></a>unity资源创建注意</h4><p>  1.减少空节点<br>  2.嵌套预制体</p><h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><h4 id="渲染优化"><a href="#渲染优化" class="headerlink" title="渲染优化"></a>渲染优化</h4><p> TODO： 暂时没有实际做过</p><ol><li>rameDebugger与XCode的GPU Frame Capture工具的使用</li><li>SSao优化<br>TODD： 暂时未理解</li><li>AA 渲染</li><li>后处理优化</li></ol><h4 id="渲染剔除"><a href="#渲染剔除" class="headerlink" title="渲染剔除"></a>渲染剔除</h4><p>看不见的像素，网格，对象</p><p>unity 中的剔除：<br>像素剔除:摄像机平截头体剔除、Back-face Culling、EarlyZ、Pre-Z Pass<br>网格剔除:Layer Mask、可见距离剔除、Occlusion<br>灯光剔除:Tile-Based Deferred Rendering、Forward+<br>场景剔除:Additive Scene</p><p>用户扩展剔除：<br>场景数据结构:Octree、BSP Tree、Portal、Voxelization、SDF等<br>GPU Culling: Hi-Z Pass、 Temporal Reprojection CullingCluster、Tile-based Visible Buffer等</p><h4 id="简化方案"><a href="#简化方案" class="headerlink" title="简化方案"></a>简化方案</h4><p>Unity下的简化：<br>Quality Settings<br>通过烘焙光照简化实时光照<br>通过BoundingBox或替代体碰撞代替Mesh碰撞<br>通过Local Volume代替Global Volume<br>RayCast代替SphereCast、CapsuleCast等<br>纹理文字代替系统文字<br>Mesh LoD<br>Shader LoD<br>HLOD<br>通过Camer Override代替URP管线中的一些通用设置<br>各种OnDemand更新或分级设置接口</p><p>用户扩展简化：<br>场景简化数据结构<br>第三方LOD方案<br>Mesh Impostor<br>Animation LOD<br>骨骼LOD<br>2D寻路代替Navigation Mesh<br>扩展类似OnDemand接口</p><h4 id="batching"><a href="#batching" class="headerlink" title="batching"></a>batching</h4><h4 id="哪些内容需要Batching"><a href="#哪些内容需要Batching" class="headerlink" title="哪些内容需要Batching"></a>哪些内容需要Batching</h4><p>广义上讲：<br>资源Batching(Mesh、Texture、Shader参数、材质属性)<br>Draw call Batching (Static Batching、Dynamic Batching)<br>GPU Instancing(直接渲染、间接渲染、程序化间接渲染 )<br>Set Pass call Batching.( SRp Batching)</p><h4 id="资源的Batching"><a href="#资源的Batching" class="headerlink" title="资源的Batching"></a>资源的Batching</h4><p>Mesh:<br>Mesh.CombineMesh，合并静态网格对象<br>Submeshes-&gt;Single Mesh,合并材质与贴图，不同材质通过通道图标记<br>Texture:<br>AtlasTexture,通过纹理坐标映射多张贴图<br>TextureArray纹理数组<br>Shader变量与材质属性<br>Material Property Block(Build In管线)<br>Const buffer(SRP管线)</p><h4 id="Draw-caBatching："><a href="#Draw-caBatching：" class="headerlink" title="Draw caBatching："></a>Draw caBatching：</h4><h5 id="Static-Batching"><a href="#Static-Batching" class="headerlink" title="Static Batching"></a>Static Batching</h5><p>   StaticBatchingUtility.Combine</p><h5 id="Static-Batching限制"><a href="#Static-Batching限制" class="headerlink" title="Static Batching限制"></a>Static Batching限制</h5><p>   额外内存开销<br>   64000个顶点限制<br>影响Culling剔除</p><h5 id="Dynamic-Batching限制"><a href="#Dynamic-Batching限制" class="headerlink" title="Dynamic Batching限制"></a>Dynamic Batching限制</h5><p>   合批不超过900个顶点属性，(注意不是900个顶点)<br>   除了渲染阴影对象外，相同材质，不同材质实例也不能合并<br>   具有光照贴图的游戏对象如果有附加渲染器参数时，如果需要动态合批这些对象他们必须指向相同的光照贴图位置。<br>   有多Shader Pass的游戏对象无法做动态合批<br>   受多个光照影响的游戏对象，满足动态合批条件合批后，只会受一个光源的影响<br>   延迟渲染下不支持动态合批<br>  　CPU开销可能会增大，需要测试开启使用</p><h4 id="Gpuinstancing："><a href="#Gpuinstancing：" class="headerlink" title="Gpuinstancing："></a>Gpuinstancing：</h4><p>DrawMeshInstanced<br>DrawMeshInstancedIndirect<br>DrawMeshInstancedProcedural</p><h4 id="Batching优化顺序"><a href="#Batching优化顺序" class="headerlink" title="Batching优化顺序"></a>Batching优化顺序</h4><p>资源Batching &gt;SRP Batching =Static Batching &gt;GPU<br>Instancing&gt;Dynamic Batching</p><h4 id="Batching失败原因"><a href="#Batching失败原因" class="headerlink" title="Batching失败原因"></a><a href="https://zhuanlan.zhihu.com/p/604534298">Batching失败原因</a></h4><h3 id="内存优化"><a href="#内存优化" class="headerlink" title="内存优化"></a>内存优化</h3><h4 id="托管内存优化"><a href="#托管内存优化" class="headerlink" title="托管内存优化"></a>托管内存优化</h4><h5 id="Boxing-Allocation装箱操作"><a href="#Boxing-Allocation装箱操作" class="headerlink" title="Boxing Allocation装箱操作"></a>Boxing Allocation装箱操作</h5><p>String字符串拼接<br>闭包分配<br>避免使用Linq库</p><h6 id="Unity中提供了NonAloc函数"><a href="#Unity中提供了NonAloc函数" class="headerlink" title="Unity中提供了NonAloc函数"></a>Unity中提供了NonAloc函数</h6><p>如Physics.RayCastAl用Physics.RayCastAlINonAlloc代替<br>Unity.Object.FindobjectsOfType,<br>UnityEngine.Component.GetComponentsInParent,<br>UnityEngine.Component.GetComponentsinChild 等<br>成员变量访问方式<br>UnityEngine.Mesh.vertices=&gt;UnityEngine.Mesh.GetVertices,<br>UnityEngine.Mesh.uv=&gt; UnityEngine.Mesh.GetUV<br>UnityEngine.Renderer.sharedMaterials=&gt; UnityEngine.Renderer.GetSharedMaterials<br>Unity.Input.touches=&gt; Unity.Input.GeTouches等</p><h3 id="引用文献"><a href="#引用文献" class="headerlink" title="引用文献"></a>引用文献</h3><p><a href="https://www.bilibili.com/video/BV1U34y1B7Yc/?spm_id_from=333.788&vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">Unity性能优化</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Learn </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>UitoolKit+ GraphView 开发 可视化节点编译器</title>
+      <link href="/2024/04/01/Learn/UiToolKitLearn/"/>
+      <url>/2024/04/01/Learn/UiToolKitLearn/</url>
+      
+        <content type="html"><![CDATA[<p><a href="https://www.bilibili.com/video/BV1RH4y1J7Xo/">视频地址</a></p><h3 id="UI-Toolkit介绍"><a href="#UI-Toolkit介绍" class="headerlink" title="UI Toolkit介绍"></a>UI Toolkit介绍</h3><p>UI Toolkit是用于开发用户界面(UI)的功能、资源和工具的集合。你可以使用UI Toolkit为Unity编辑器、运行时调试工具以及游戏和应用程序的运行时UI开发自定义UI和扩展。</p><p>UIToolKit受网页开发技术的启发，通过类似于HTML+CSS的方法来构建UI，在Unity中对应的就是UXML和USS，简单来说，UXML规定UI布局，USS规定UI样式。在UI的实际开发过程当中，我们也主要是和这两个部分打交道。</p><p>UIToolKit提供了一个UIBuilder工具来帮助我们完成UI的布局，具体的UIBuilder应该怎么使用这里就不做过多的解释。</p><h3 id="Unity-GraphView-介绍"><a href="#Unity-GraphView-介绍" class="headerlink" title="Unity GraphView 介绍"></a>Unity GraphView 介绍</h3><p>首先Unity已经为我们提供了一个功能完善的Graphview模块，我们只需要继承这个模块，就能够定义自己的Graphview</p><h3 id="可视化窗口搭建"><a href="#可视化窗口搭建" class="headerlink" title="可视化窗口搭建"></a>可视化窗口搭建</h3><p>下面就说一下使用过程中主要的函数调用 </p><h4 id="创建可视化窗口"><a href="#创建可视化窗口" class="headerlink" title="创建可视化窗口"></a>创建可视化窗口</h4><p>继承EditorWindow 类去进行窗口编译器扩展<br>通过Creat/Uitoolkit/EditorWIndow 创建EditorWindow </p><p>public class CharEditor : EditorWindow<br>{<br>    [MenuItem(“Tool/CharEditor”)]<br>    public static void OpenWindow()<br>    {<br>        CharEditor wnd = GetWindow<CharEditor>();<br>        wnd.titleContent = new GUIContent(“CharEditor”);<br>    }<br>}</CharEditor></p><h4 id="通过UitoolKit-创建并绘制你想要的可视化窗口UI内容"><a href="#通过UitoolKit-创建并绘制你想要的可视化窗口UI内容" class="headerlink" title="通过UitoolKit 创建并绘制你想要的可视化窗口UI内容"></a>通过UitoolKit 创建并绘制你想要的可视化窗口UI内容</h4><p>使用 编写的uitolkit的 uus 和html 文件去进行绘制</p><p>public class CharEditor : EditorWindow<br>{<br>        public void CreateGUI()<br>        {<br>            VisualElement root = rootVisualElement;</p><pre><code>        var nodeTree = AssetDatabase.LoadAssetAtPath&lt;VisualTreeAsset&gt;( CharEditorConfig.ConfiguredPath+&quot;NodeEditor.uxml&quot;);        // 此处不使用visualTree.Instantiate() 为了保证行为树的单例防止重复实例化，以及需要将此root作为传参实时更新编辑器状态        nodeTree.CloneTree(root);        var styleSheet = AssetDatabase.LoadAssetAtPath&lt;StyleSheet&gt;(CharEditorConfig.ConfiguredPath+&quot;NodeEditor.uss&quot;);        root.styleSheets.Add(styleSheet);    &#125;</code></pre><p>}<br>public static class CharEditorConfig<br>{<br>        public    const string  ConfiguredPath=”Assets/CharTool/Config/“;<br>}</p><h3 id="编译器窗口右键功能"><a href="#编译器窗口右键功能" class="headerlink" title="编译器窗口右键功能"></a>编译器窗口右键功能</h3><h4 id="创建可视化窗口的背景样式-这里使用-uss的样式"><a href="#创建可视化窗口的背景样式-这里使用-uss的样式" class="headerlink" title="创建可视化窗口的背景样式 这里使用.uss的样式"></a>创建可视化窗口的背景样式 这里使用.uss的样式</h4><p>这里都是一样的UItoolkit种类</p><h4 id="在可视化窗口UI中-增加对编译器的控制-添加该脚本"><a href="#在可视化窗口UI中-增加对编译器的控制-添加该脚本" class="headerlink" title="在可视化窗口UI中 增加对编译器的控制  添加该脚本"></a>在可视化窗口UI中 增加对编译器的控制  添加该脚本</h4><p>GraphView 这个就是编译器绘制的关键<br>public class NodeTreeViewer : GraphView<br>{<br>    public new class UxmlFactory : UxmlFactory&lt;NodeTreeViewer,GraphView.UxmlTraits&gt;{}<br>    NodeTree tree;<br>    public NodeTreeViewer(){<br>        Insert(0, new GridBackground());<br>        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(CharEditorConfig.ConfiguredPath+”NodeTreeViewer.uss”);<br>        styleSheets.Add(styleSheet);<br>    }<br>}</StyleSheet></p><h4 id="编译器右键功能"><a href="#编译器右键功能" class="headerlink" title="编译器右键功能"></a>编译器右键功能</h4><p>给窗口增加创建栏<br>public class NodeTreeViewer : GraphView<br>{</p><pre><code>/// &lt;summary&gt;/// NodeTreeViewer视图中添加右键节点创建栏/// &lt;/summary&gt;/// &lt;param name=&quot;evt&quot;&gt;&lt;/param&gt;public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)&#123;    &#123;        var types = TypeCache.GetTypesDerivedFrom&lt;CompositeNode&gt;();        foreach(var type in types)&#123;            if (!type.IsAbstract)&#123;                evt.menu.AppendAction(type.Name, (a) =&gt; CreateNode(type));            &#125;        &#125;    &#125;&#125; void CreateNode(System.Type type)&#123;&#125;</code></pre><p>}</p><h6 id="窗口中-控制监听等"><a href="#窗口中-控制监听等" class="headerlink" title="窗口中 控制监听等"></a>窗口中 控制监听等</h6><pre><code>   // 添加视图缩放    this.AddManipulator(new ContentZoomer());    // 添加视图拖拽    this.AddManipulator(new ContentDragger());    // 添加选中对象拖拽    this.AddManipulator(new SelectionDragger());</code></pre><h5 id="节点之间互相连接"><a href="#节点之间互相连接" class="headerlink" title="节点之间互相连接"></a>节点之间互相连接</h5><p>GetCompatiblePorts 通过这个方法</p><pre><code>public override List&lt;Port&gt; GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)&#123;    /*         返回兼容接口列表        需要判断接入的兼容接口仅为入口 endport.direction != startPort.direction        且同个节点的出口不能接入自己的入口 endport.node != startPort.node    */    return ports.ToList().Where(        endport =&gt; endport.direction != startPort.direction                    &amp;&amp; endport.node != startPort.node).ToList();&#125;</code></pre><h4 id="uitoolkit节点制作和其他面板"><a href="#uitoolkit节点制作和其他面板" class="headerlink" title="uitoolkit节点制作和其他面板"></a>uitoolkit节点制作和其他面板</h4><p>这里这些面板的 拼接就不讲了 主要来说一些  : VisualElement<br>对Uitoolkit中的扩展<br>这样你就可以在uitollkit中使用<br>这里的</p><p>public class InspectorViewer : VisualElement<br>{<br>    public new class UxmlFactory : UxmlFactory&lt;InspectorViewer,VisualElement.UxmlTraits&gt;{}<br>    Editor editor;<br>    public InspectorViewer(){</p><pre><code>&#125;</code></pre><p>}</p><p>节点的 制作 UnityEditor.Experimental.GraphView.Node<br>unity中已经准备好的相关的node 节点<br>public class NodeView : UnityEditor.Experimental.GraphView.Node<br>{<br>    public NodeView(Node node) : base(CharEditorConfig.ConfiguredPath+”NodeView.uxml”){}<br>}</p><h6 id="对于节点中特殊属性"><a href="#对于节点中特殊属性" class="headerlink" title="对于节点中特殊属性"></a>对于节点中特殊属性</h6><p>这两个 就是 Node中 输入，输出节点 </p><p>/// <summary><br>    /// 创建输入节点<br>    /// </summary><br>    /// <exception cref="NotImplementedException"></exception><br>    private void CreateInputPorts()<br>    {<br>        input = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Multi, typeof(bool));<br>        if(input != null){<br>            // 将端口名设置为空<br>            input.portName = “”;<br>            // 因为input端口的label默认是在端口右边因此需要将排列方式调整为竖向自上往下<br>            input.style.flexDirection = FlexDirection.Column;<br>            inputContainer.Add(input);<br>        }<br>    }</p><pre><code>/// &lt;summary&gt;/// 创建输出节点/// &lt;/summary&gt;/// &lt;exception cref=&quot;NotImplementedException&quot;&gt;&lt;/exception&gt;private void CreateOutputPorts()&#123;    output = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, typeof(bool));        if(output != null)&#123;        output.portName = &quot;&quot;;        // 因为output端口的label默认是在端口左边边因此需要将排列方式调整为竖向自下往上        output.style.flexDirection = FlexDirection.ColumnReverse;        outputContainer.Add(output);    &#125;&#125;</code></pre><h5 id="节点的位置"><a href="#节点的位置" class="headerlink" title="节点的位置"></a>节点的位置</h5><pre><code>/// &lt;summary&gt;/// 设置节点在节点树视图中的位置/// &lt;/summary&gt;/// &lt;param name=&quot;newPos&quot;&gt;&lt;/param&gt;public override void SetPosition(Rect newPos)&#123;    // 将视图中节点位置设置为最新位置newPos    base.SetPosition(newPos);    // 撤回记录    Undo.RecordObject(node,&quot;Node Tree(Set Position)&quot;);    // 将最新位置记录到运行时节点树中持久化存储    node.position.x = newPos.xMin;    node.position.y = newPos.yMin;    EditorUtility.SetDirty(node);&#125;</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>其中关于 使用uiyoolkit+graphView 进行可视化编译器开发就结束了<br>其中 uitoolkit的作用主要是编写 node格式 ，窗口样式，<br>不过 这种方式开发还是比较简单粗暴的</p><p>引用文献：<br>Unity 可视化节点编辑器（GraphView、编辑器扩展）<a href="https://blog.csdn.net/JavaD0g/article/details/134010999">地址</a><br>unity 可视化编译器行为树<a href="https://zhuanlan.zhihu.com/p/650274861">地址</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Learn </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>DrawCall</title>
+      <link href="/2024/03/22/graphics/Drawcall/"/>
+      <url>/2024/03/22/graphics/Drawcall/</url>
+      
+        <content type="html"><![CDATA[<h3 id="合批处理在UGUI中会有一些不同"><a href="#合批处理在UGUI中会有一些不同" class="headerlink" title="合批处理在UGUI中会有一些不同"></a>合批处理在UGUI中会有一些不同</h3><p>先获得一个按Hierarchy的顺序的列表<br>计算每个物体的深度。<br>1 深度从0开始递增。如果世界包围盒Z轴不为0（或isCanvasInjectionIndex），则需独占一个批次，同时独占一个深度。即等于之前所有物体最大深度+1，后一个物体深度需要+1。<br>2 对一般物体的深度。会判断是否可跟之前的物件共享深度，走接下来的流程。<br>2.1 先按格子（默认大小是120，根据包围盒再计算）划分出多个格子。（只是为了加速求交）。<br>2.2 计算物体包围相交哪些格子，再跟格子中已有的物体进行包围盒相交判断。如果不相交则使用当前深度；如果相交且可合批，则使用相交物体中最大的深度；如果相交且不可合批，则使用相交物体中最大的深度+1。合批条件：无独占批次+材质相同+贴图相同+裁剪开关和裁剪矩形相同+贴图A8格式一致（kTexFormatAlpha8）<br>2.3 将该物体加入所有相交的格子中。若遇到独占深度的物体，则格子数据清空。即后续物件不跟之前的物件共享深度。<br>排序：按照深度-材质-贴图-层级顺序优先级排序。<br>合批：对排序后的列表，从头开始一个一个检测是否能与前面的物体合批。合批条件：无独占批次（只判断isCanvasInjectionIndex）+材质相同+贴图相同+裁剪开关和裁剪矩形相同+贴图A8格式一致（kTexFormatAlpha8），非SubBatch只判断前两个条件，一般情况下UI的材质都一样。<br>UGUI批处理原文链接：httpsblog.csdn.nethankangwenarticledetails122667647<br>在Unity中的shader中会将这些数据存到一些通道里： POSITION、NORMAL、COLOR、 TANGENT、TEXCOOR</p><h3 id="UgUI合批de注意事项"><a href="#UgUI合批de注意事项" class="headerlink" title="UgUI合批de注意事项"></a>UgUI合批de注意事项</h3><p>首先合批的 原理： 同一Canvas下 同一材质 同一图片或者是图集</p><h4 id="Ugui的排序"><a href="#Ugui的排序" class="headerlink" title="Ugui的排序"></a>Ugui的排序</h4><p>首先Ugui的排序渲染方式 canvas 的渲染层级 UI的深度渲染层级 index深度 材质的渲染层级 hierarchy次序（textureID 排序）</p><p>ugui都是先进行排序 后进行合批<br>排序的顺序取决于 index深度（box是否遮盖的关系） 材质ID textureID 排序</p><h4 id="建议："><a href="#建议：" class="headerlink" title="建议："></a>建议：</h4><ol><li>所有有可能打断和皮的层移动到最下边图层，避免UI元素重叠</li><li>拆分多个同级或者嵌套的canvas，减少canvas的rebatch复杂度</li><li>动静分离</li><li>canvas 尽量使用overlay模式减少camera的性能开销</li></ol><p><a href="https://www.bilibili.com/video/BV1he4y1P7n9/?spm_id_from=333.788&vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">引文链接</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Grapics </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>关于图形学</title>
+      <link href="/2024/03/22/graphics/"/>
+      <url>/2024/03/22/graphics/</url>
+      
+        <content type="html"><![CDATA[<h1 id><a href="#" class="headerlink" title></a><a href="/2024/03/22/graphics/RenderPipeline/" title="渲染管线的理解">渲染管线的理解</a></h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> Grapics </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>渲染管线Render Pipeline个人理解总结</title>
+      <link href="/2024/03/22/graphics/RenderPipeline/"/>
+      <url>/2024/03/22/graphics/RenderPipeline/</url>
+      
+        <content type="html"><![CDATA[<h2 id="CPU与GPU的区别"><a href="#CPU与GPU的区别" class="headerlink" title="CPU与GPU的区别"></a>CPU与GPU的区别</h2><p>GPU的架构与CPU有极大的不同，这主要归因于两者不同的使用场合。试想一下，GPU面对3D游戏中成千上万的三角面，如果仅仅是跟Cpu一样逐一单个处理计算，损失的效率是极其惊人的。</p><h2 id="渲染管线（Render-Pipeline）"><a href="#渲染管线（Render-Pipeline）" class="headerlink" title="渲染管线（Render Pipeline）"></a>渲染管线（Render Pipeline）</h2><p>在渲染流程中，CPU与GPU正如上文一样通力合作渲染图像。在运算过程中，CPU如同进货的卡车不断地将要处理的数据丢给GPU，GPU工厂调动一个个如工人一般的计算单元对这些数据进行简单的处理，最后组装出产品——图像。</p><h2 id="渲染管线流程"><a href="#渲染管线流程" class="headerlink" title="渲染管线流程"></a>渲染管线流程</h2><p>   渲染管线粗略分为几个步骤：应用阶段-几何阶段-光栅化阶段<br>   <img src="/RenderPipeline/1.png" class="lazyload placeholder" data-srcset="/RenderPipeline/1.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="渲染管线抽象图"><br>    渲染管线粗略分为几个步骤：顶点数据的输入、顶点着色器、曲面细分过程、几何着色器、投影，裁剪剔除、屏幕映射， 光栅化、片段着色器以及混合测试<br>   <img src="/RenderPipeline/2.png" class="lazyload placeholder" data-srcset="/RenderPipeline/2.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="渲染管线详细图"></p><h3 id="应用阶段（Application-Stage）"><a href="#应用阶段（Application-Stage）" class="headerlink" title="应用阶段（Application Stage）"></a>应用阶段（Application Stage）</h3><p>这是一个由CPU主要负责的阶段，且完全由开发人员掌控。在这个阶段，CPU将决定递给GPU什么样的数据（譬如渲染目标场景中的灯光、场景的模型、摄像机的位置），有时候还会对这些数据进行处理（譬如只递给GPU可以被摄像机看见的元素，其他不可见的元素被剔除（culling）出去），并且告诉GPU这些数据的渲染状态（譬如纹理、材质、着色器等）。</p><p>我们同样用工业流水线进行类比，这一块相当于工厂的产品进口部门，采购员（CPU）联系发货单位（RAM）订购想要的原材料（数据），并经过一番精挑细选拿出自己满意的材料（数据处理，如剔除），把这些材料连同他们的加工方式（如应当使用的着色器）丢给工厂。值得注意的是，由于这一块采购员是与发货单位的商人而不是工厂里的工人交流， 所以他可以使用更复杂的语言（如高级程序语言）与商人讨价还价，而不是像在工厂中向工人发号施令时使用的指令（着色器语言）。</p><p>所做的工作： </p><h4 id="顶点数据的输入"><a href="#顶点数据的输入" class="headerlink" title="顶点数据的输入"></a>顶点数据的输入</h4><p>应用阶段的主要任务是把 顶点数据、shader、贴图、材质球、灯光以及一些设置等等传入GPU的过程，这个过程叫做 DrawCall<br>（1）把数据加载到显存：将数据加载到显存中能使GPU更快的访问这些数据，当把数据加载到显存后，便可以释放了数据，但一些数据仍需留在内存中，如CPU需要网格数据进行碰撞检测。<br>（2）设置渲染状态：渲染状态的一个通俗解释就是，定义了场景中的网格是怎样被渲染的。例如，使用哪个顶点着色器/片段着色器、光源属性、材质等。如果不设置渲染状态，那所有的网格将使用同一种渲染，显然这是不希望得到的结果。<br>（3）调用Draw Call：当所有的数据准备好后，CPU就需要调用一个渲染指令告诉GPU，按照上述设置进行渲染，这个渲染命令就是Draw Call。Draw Call命令仅仅指向被渲染的图元列表，而不包含任何材质信息</p><p>Unity DrawCall 内部分为 SetPassCall 和 Batch，<br>SetPassCall的作用是设置渲染管线的上下文，一般每一种Unity里的Material就是一个SetPassCall，<br>Batch就是每一次CPU向GPU打包发送顶点数据的批次，当我们优化性能的时候经常会用到（动态）合批，合批就是将拥有两个相同的材质（材质实例也要相同）的物体同时传入GPU进行处理。</p><ul><li><a href="/2024/03/22/graphics/Drawcall/" title="合批处理">合批处理</a></li></ul><h3 id="几何阶段（Geometry-Stage）"><a href="#几何阶段（Geometry-Stage）" class="headerlink" title="几何阶段（Geometry Stage）"></a>几何阶段（Geometry Stage）</h3><p>负责大部分多边形操作和顶点操作，将三维空间的数据转换为二维空间的数据。<br>这一个由GPU主导的阶段，也就是说，从这个阶段开始，我们进入了上文所说的“流水线”。几何阶段将把CPU在应用阶段发来的数据进行进一步处理，而这个阶段又可以进一步细分为若干个流水线阶段，可以类比理解为工厂流水线上进行的一道道工序。<br>流程图中展现了几何阶段中几个常见的渲染步骤（不同的图像应用接口存在着些许不同，这里以OpenGL为例），其中，绿色表示开发者可以完全编程控制的部分，虚线外框表示此阶段不是必需的，黄色表示开发者无法完全控制的部分（但可以进行一些配置），紫色表示开发者无法控制的阶段（已经由GPU固定实现）。</p><h4 id="顶点着色器"><a href="#顶点着色器" class="headerlink" title="顶点着色器"></a>顶点着色器</h4><p>顶点着色器的处理单位是顶点，但是每次处理都是独立的，因此无法创建或销毁任何一个顶点，也不能得到与其他顶点的关系<br>顶点着色器主要功能是进行坐标变换。将输入的局部坐标变换到世界坐标、观察坐标和裁剪坐标。<br>虽然我们也会在顶点着色器进行光照计算(称作高洛德着色)，然后经过光栅化插值得到各个片段的颜色，但这种得到的光照比较不自然，所以一般在片段着色器进行光照计算</p><h4 id="曲面细分着色器"><a href="#曲面细分着色器" class="headerlink" title="曲面细分着色器"></a>曲面细分着色器</h4><p>曲面细分是利用镶嵌化处理技术对三角面进行细分，以此来增加物体表面的三角面的数量，是渲染管线一个可选的阶段</p><h4 id="几何着色器"><a href="#几何着色器" class="headerlink" title="几何着色器"></a>几何着色器</h4><p>在这个阶段，开发者可以控制GPU对顶点进行增删改操作</p><h4 id="屏幕映射"><a href="#屏幕映射" class="headerlink" title="屏幕映射"></a>屏幕映射</h4><p>屏幕映射的任务就是将每个图元的x、y值变换到屏幕坐标系，对于z坐标不做任何处理（实际上屏幕坐标系和z坐标一起构成窗口坐标系），这些值会被一起传递到光栅化阶段<br>一般来说，屏幕坐标是2D的概念，只用于表示屏幕XY坐标，而窗口坐标是2.5D的概念，它还带有深度信息，也就是经过变换后的Z轴的信息。<br>使用齐次坐标的意义，其实就是为了正确记录下投影变换前(观察空间)中物体的深度信息，也就是Z坐标的值。</p><ol><li>投影</li></ol><p>GPU将顶点从摄像机观察空间转换到裁剪空间（又被称为齐次裁剪空间），为之后的剔除过程以及投射到二维平面做准备。<br>常见的投影方式有透视投影与正交投影。<br>在三维中原有的三个分量x、y、z上又额外增加了w=1分量，使得可以通过矩阵乘的方式为三维坐标实现平移的效果。</p><ol start="2"><li>裁剪</li></ol><p>只有当图元部分或全部位于视椎体内时，我们才会将它送到流水线的下个阶段，也就是光栅化阶段。对于部分位于视椎体的图元，位于外部的顶点将被裁剪掉，而且在视椎体与线段的交界处产生新的顶点。<br>在把不需要的顶点裁剪掉后，GPU需要把顶点映射到屏幕空间，这是一个从三维空间转换到二维空间的操作。<br>对于透视裁剪空间，GPU需要对裁剪空间中的顶点执行齐次除法（将齐次坐标系中的w分量除x、y、z分量），得到顶点的归一化的设备坐标（NDC）<br>通过透视除法后，我们得到了NDC坐标，获得NDC坐标是为了实现屏幕坐标的转换与硬件无关。<br>正交裁剪空间只需要把w分量去掉即可。<br>此时顶点的x、y坐标接近于在屏幕上所处的位置了，此时z分量不会被丢弃而是被写入了深度缓冲（z-buffer）</p><h3 id="光栅化阶段"><a href="#光栅化阶段" class="headerlink" title="光栅化阶段"></a>光栅化阶段</h3><p>决定每个渲染图元中哪些像素应该被绘制在屏幕上，它需要对上一阶段得到的逐顶点数据进行插值<br>到此，GPU也只是完成了渲染的一半工作，因为现在我们只是得到了一些顶点，他们还不是能被显示在屏幕上的像素。</p><h4 id="三角形设置（Triangle-Setup）"><a href="#三角形设置（Triangle-Setup）" class="headerlink" title="三角形设置（Triangle Setup）"></a>三角形设置（Triangle Setup）</h4><p>有些资料把这个过程称为图元组装（Primitive Assembly），不过个人认为叫做Primitive Assembly更为贴切。这个过程做的工作就是把顶点数据收集并组装为简单的基本体（线、点或三角形），通俗的说就是把相关的两个顶点“连连看”，有些能构成面，有些只是线，有些甚至没有与之配对的顶点只能当一个“单身狗”。</p><h4 id="三角形遍历（Triangle-Traversal）"><a href="#三角形遍历（Triangle-Traversal）" class="headerlink" title="三角形遍历（Triangle Traversal）"></a>三角形遍历（Triangle Traversal）</h4><p>这个过程将检验屏幕上的某个像素是否被一个三角形网格所覆盖，被覆盖的区域将生成一个片元（Fragment）</p><p>片元不是真正意义上的像素，而是包含了很多种状态的集合（譬如屏幕坐标、深度、法线、纹理等）<br>而片元的划分依据（像素块被覆盖到何种程度才被划分）不管怎么样都会产生锯齿，这就有许多抗锯齿的采样方式（比如MSAA）<br>片段着色器<br>片元着色器的输入是上一个阶段对顶点信息进行插值的结果（是根据从顶点着色器输出的数据插值得到的），而它的输出是像素颜色值<br>这个阶段我们能进行很多渲染技术，比如根据顶点法线或者UV计算颜色，接受阴影或者是进行纹理采样（纹理坐标是通过前述阶段的顶点数据插值得到的）</p><h4 id="逐片元计算"><a href="#逐片元计算" class="headerlink" title="逐片元计算"></a>逐片元计算</h4><p>对每个片元进行操作，将它们的颜色以某种形式合并，得到最终在屏幕上像素显示的颜色。主要的工作有两个：对片元进行测试（Test）并进行合并（Merge）。<br>测试步骤决定了片元最终会不会被显示出来，这个阶段是高度可配置的<br>如果一个片元通过了所有测试，就需要把这些片元的颜色值和颜色缓冲中已有的颜色值进行混合。</p><ol><li><p>裁切测试<br>在裁剪测试中，允许程序员开设一个裁剪框，只有在裁剪框内的片元才会被显示出来，在裁剪框外的片元皆被剔除。</p></li><li><p>透明度测试<br>在透明度测试中，允许程序员对片元的透明度值进行检测，仅仅允许透明度值达到设置的阈值后才可以会绘制。在OpenGL3.1后这个API被删除了，但你可以在片元着色器中实现类似的效果。</p></li><li><p>模板测试<br>模板测试通常用来限制渲染的区域，渲染阴影，轮廓渲染等<br>在模板测试中，GPU将读取片元的模板值与模板缓冲区的模板值进行比较，比较函数由开发者指定，如果比较不通过，这个片元将被舍弃</p></li><li><p>深度测试<br>现实生活中，近的物体会遮挡住远处的物体，深度缓冲就是用来实现这种效果的。</p></li></ol><p>GPU将读取片元的深度值（就是我们前面留下来的坐标z分量）与缓冲区的深度值进行比较，和模板测试一样，如何渲染物体之间的遮挡关系也是自定义的（可以让GPU把没有被遮挡的部分隐藏了，让被遮挡的部分显示出来的。）<br>大量的被遮挡片元直到深度测试阶段才会被剔除，而在此之前它们同样地被计算，这占用了GPU大量的资源。<br>因此有种优化技术是将深度测试提前（Early-Z）。但这带来了与透明度测试的冲突，例如某个片元甲虽然遮挡了另一个片元乙，但甲却是透明的，GPU应当渲染的是片元乙，这就产生了矛盾，这就是透明度测试会导致性能下降的原因</p><ol start="5"><li>合并<br>一个片元通过了所有测试，片元颜色就会被送到颜色缓冲区，到达了合并环节<br>合并有两种主要的方式，一种是直接进行颜色的替换，另一种是根据不透明度进行混合（Blend）<br>如果开启了混合，GPU会取出片元着色器得到的颜色（源颜色）和颜色缓冲区存在的颜色（目标颜色），之后按照设定的函数进行混合，可以设定透明度通道进行相加，相减还是相乘。<br>最后GPU会使用双重缓冲（Double Buffering）的策略，即屏幕上显示前置缓冲（Front Buffer），而渲染好的颜色先被送入后置缓冲（Back Buffer），再替换前置缓冲，以此避免在屏幕上显示正在光栅化的图元</li></ol><p>引用两位大佬的文章思路 <a href="https://zhuanlan.zhihu.com/p/137780634">1</a><a href="https://blog.csdn.net/jkkk_/article/details/126974823">2</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Grapics </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>基于ET的MMPORPG</title>
+      <link href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/"/>
+      <url>/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/</url>
+      
+        <content type="html"><![CDATA[<h3 id="基于ET的MMO"><a href="#基于ET的MMO" class="headerlink" title="基于ET的MMO"></a>基于ET的MMO</h3><p><a href="https://gitee.com/FengChen512/etmomrpg">gitee地址</a></p><h4 id="服务端导航数据"><a href="#服务端导航数据" class="headerlink" title="服务端导航数据"></a>服务端导航数据</h4><h4 id="分布式服务器"><a href="#分布式服务器" class="headerlink" title="分布式服务器"></a>分布式服务器</h4><h4 id="登录模块"><a href="#登录模块" class="headerlink" title="登录模块"></a>登录模块</h4><h4 id="网关处理"><a href="#网关处理" class="headerlink" title="网关处理"></a>网关处理</h4><h4 id="角色创建"><a href="#角色创建" class="headerlink" title="角色创建"></a>角色创建</h4><h4 id="排队服务器"><a href="#排队服务器" class="headerlink" title="排队服务器"></a>排队服务器</h4><h4 id="客户端ui"><a href="#客户端ui" class="headerlink" title="客户端ui"></a>客户端ui</h4><h4 id="touch-移动按钮-与摄像机跟随"><a href="#touch-移动按钮-与摄像机跟随" class="headerlink" title="touch 移动按钮 与摄像机跟随"></a>touch 移动按钮 与摄像机跟随</h4>]]></content>
+      
+      
+      <categories>
+          
+          <category> Demo </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>基于ET的双端战斗</title>
+      <link href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/"/>
+      <url>/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/</url>
+      
+        <content type="html"><![CDATA[<p><img src="/ETSkill/1.png" class="lazyload placeholder" data-srcset="/ETSkill/1.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="基于ET的双端战斗分布式架构" title="ET分布式架构"></p><h2 id="基于ET的战斗"><a href="#基于ET的战斗" class="headerlink" title="基于ET的战斗"></a>基于ET的战斗</h2><p><a href="https://gitee.com/FengChen512/etskill">gitee地址</a><br><a href="https://www.bilibili.com/video/BV1ct421J76n/">视频地址</a></p><h3 id="服务端："><a href="#服务端：" class="headerlink" title="服务端："></a>服务端：</h3><p>  1.战斗系统<br>    技能释放与技能生命周期<br>    技能配置<br>    创建技能<br>    技能释放<br>    释放结束与命中<br>    法球子弹<br>    战斗消息处理<br>  2.BUff系统<br>    Buff配置<br>    buff拥有者<br>    时间<br>    间隔<br>    定时器任务<br>    buff消息处理<br>    BuffAction<br>  3.野怪数值<br>    野怪配置<br>    野怪群配置<br>    生成与死亡<br>    定时器任务</p><h3 id="客户端："><a href="#客户端：" class="headerlink" title="客户端："></a>客户端：</h3><p>   1.战斗表型<br>   2.buff表现<br>   3.消息处理</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Demo </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>基于ET的放置网络游戏</title>
+      <link href="/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/"/>
+      <url>/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/</url>
+      
+        <content type="html"><![CDATA[<h2 id="基于ET的放置网络游戏"><a href="#基于ET的放置网络游戏" class="headerlink" title="基于ET的放置网络游戏"></a><a href="https://www.bilibili.com/video/BV1St421G7EP/?vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">基于ET的放置网络游戏</a></h2><p><a href="https://github.com/yushanga/waitinggame">gitee 地址</a><br>rider + vs +unity + mongodb + Dotween + ET6.0<br> 1.账号登录<br>   账号规定 （大小写+ 数字 ） 不可以重复<br>   密码加密<br>   本地保存</p><p> 2.区服管理<br>   不同区服<br> 3.账号角色管理<br>   账号 角色绑定<br>   一个账号 多个角色<br>   角色名称不可重复<br> 4.角色数据管理<br>   账号数据<br>   装备数据<br> 5.角色数值<br>    一级数值<br>    二级数值<br>    百分比数值<br> 6.战斗副本<br>   1.根据配置生成怪物数量<br>   2.根据怪物id 生成怪物<br>   3.伤害计算<br>   4.战斗漂字<br>   5.服务器战斗核算<br>     根据服务器最初数据和随机数种子进行战斗模拟计算<br>   6.<br> 7.个人装备模块<br>   装备数据<br>   装备属性</p><p> 8.任务模块<br>  任务id<br>  任务类型<br>  任务奖励<br>  任务<br> 9.背包模块<br>   item 装备<br>   item 售卖<br> 10.装备打造模块<br>   打造条件<br>   打造装备所需材料<br>   打造定时器</p><p> 缓存服务器<br> 定时数据存储 减少服务器性能压力</p><p> 世界聊天</p><p> 排行榜<br>  定时刷新排行榜<br>  根据等级进行排行榜<br>  等级变化回调 刷新该等级区域排行榜</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Demo </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>本人作品</title>
+      <link href="/2022/04/07/Demo/"/>
+      <url>/2022/04/07/Demo/</url>
+      
+        <content type="html"><![CDATA[<h2 id="作品展示"><a href="#作品展示" class="headerlink" title="作品展示"></a>作品展示</h2><h3 id="2020年10月-使用unity制作的射击游戏-视频展示"><a href="#2020年10月-使用unity制作的射击游戏-视频展示" class="headerlink" title="2020年10月 使用unity制作的射击游戏 视频展示"></a>2020年10月 <a href="https://www.bilibili.com/video/BV1bv411k7Mq/">使用unity制作的射击游戏 视频展示</a></h3><h3 id="2020年10月至2021年10月-山东聊城运河项目-给到山东聊城博物馆"><a href="#2020年10月至2021年10月-山东聊城运河项目-给到山东聊城博物馆" class="headerlink" title="2020年10月至2021年10月 山东聊城运河项目 给到山东聊城博物馆"></a>2020年10月至2021年10月 山东聊城运河项目 给到山东聊城博物馆</h3><h3 id="2021年-2月黄金矿工（成语版）视频展示"><a href="#2021年-2月黄金矿工（成语版）视频展示" class="headerlink" title="2021年 2月黄金矿工（成语版）视频展示"></a>2021年 2月<a href="https://www.bilibili.com/video/BV1v3411J7GM?spm_id_from=333.999.0.0">黄金矿工（成语版）视频展示</a></h3><h3 id="2021年-3月-仿照市面上很火的合成大西瓜-视频展示"><a href="#2021年-3月-仿照市面上很火的合成大西瓜-视频展示" class="headerlink" title="2021年 3月 仿照市面上很火的合成大西瓜 视频展示"></a>2021年 3月 <a href="https://www.bilibili.com/video/BV1S44y1P76X?spm_id_from=333.999.0.0">仿照市面上很火的合成大西瓜 视频展示</a></h3><p><a href="https://www.aliyundrive.com/s/bErzCvDwX6n">安卓app地址阿里云盘</a></p><h3 id="2021年三月-绝地生存-游戏"><a href="#2021年三月-绝地生存-游戏" class="headerlink" title="2021年三月  绝地生存 游戏"></a>2021年三月  绝地生存 游戏</h3><h3 id="2021年4月-爆炸男孩-视频展示"><a href="#2021年4月-爆炸男孩-视频展示" class="headerlink" title="2021年4月 爆炸男孩 视频展示"></a>2021年4月 <a href="https://www.bilibili.com/video/BV15S4y117mx?spm_id_from=333.999.0.0">爆炸男孩 视频展示</a></h3><p><a href="https://www.aliyundrive.com/s/9qFfVUQV6Ba">安卓app地址阿里云盘</a></p><h3 id="2021年5月校园消防"><a href="#2021年5月校园消防" class="headerlink" title="2021年5月校园消防"></a>2021年5月校园消防</h3><h3 id="2021年7月-玉山仿真虚拟实验"><a href="#2021年7月-玉山仿真虚拟实验" class="headerlink" title="2021年7月  玉山仿真虚拟实验"></a>2021年7月  玉山仿真虚拟实验</h3><p>以上没有办法展示的 我没找到</p><h2 id="实力展示"><a href="#实力展示" class="headerlink" title="实力展示"></a>实力展示</h2><h3 id="框架编写展示"><a href="#框架编写展示" class="headerlink" title="框架编写展示"></a>框架编写<a href="https://gitee.com/FengChen512/my-frams">展示</a></h3><p>   1.该框架有ui模块<br>   2.缓存池模块<br>   3.资源加载模块<br>   4.场景加载模块<br>   5.音乐管理模块<br>   6.管理基类模块（继承mono不继承mono）<br>   7.UI事件管理器<br>   8.输入管理模块</p><h3 id="Timeline模块展示"><a href="#Timeline模块展示" class="headerlink" title="Timeline模块展示"></a>Timeline模块<a href="https://www.aliyundrive.com/s/dFFd61Anakz">展示</a></h3><p>   1.自定义Timelin模板<br>   2.text的timeline模板<br>   3.string的timeline模板</p><h3 id="基于ET的双端战斗"><a href="#基于ET的双端战斗" class="headerlink" title="基于ET的双端战斗"></a>基于ET的双端战斗</h3><ul><li><a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/" title="双端战斗">双端战斗</a></li></ul><h3 id="基于ET的MMPORPG"><a href="#基于ET的MMPORPG" class="headerlink" title="基于ET的MMPORPG"></a>基于ET的MMPORPG</h3><ul><li><a href="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/" title="基于ET的MMPORPG">基于ET的MMPORPG</a></li></ul><h3 id="基于ET的放置类网络游戏开发展示"><a href="#基于ET的放置类网络游戏开发展示" class="headerlink" title="基于ET的放置类网络游戏开发展示"></a>基于ET的放置类网络游戏开发<a href="https://www.bilibili.com/video/BV1St421G7EP/?vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">展示</a></h3><ul><li><a href="/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/" title="基于ET的MMPORPG">基于ET的MMPORPG</a><p>使用rider + vs +unity + mongodb + Dotween + ET6.0  制作的双端放置类网络游戏开发</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Demo </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+  
+  
+</search>
