@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2026-06-26T03:22:17.880Z</updated>
+  <updated>2026-06-27T04:05:25.138Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,29 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Rider编译器破解</title>
-    <link href="http://example.com/2026/06/26/rider/"/>
-    <id>http://example.com/2026/06/26/rider/</id>
-    <published>2026-06-26T03:22:17.880Z</published>
-    <updated>2026-06-26T03:22:17.880Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;前阵子 IDEA 更新了最新 2021.3 版本，很多网友更新之后发现以前的激活教程都不能用了。大家不用担心，最新的教程已经有了！&lt;/p&gt;
-&lt;p&gt;网上有一位不知名的的大佬在 zhile 大佬的开源文件的基础上，进行了升级！&lt;/p&gt;
-&lt;p&gt;针对最新</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
   
   <entry>
     <title>大地图无缝加载与动态环境技术总结</title>
@@ -376,6 +353,31 @@
     
     
     <category term="Demo" scheme="http://example.com/categories/Demo/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Rider编译器破解</title>
+    <link href="http://example.com/2022/04/01/rider/"/>
+    <id>http://example.com/2022/04/01/rider/</id>
+    <published>2022-04-01T03:14:00.000Z</published>
+    <updated>2026-06-27T04:07:19.003Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;前阵子 IDEA 更新了最新 2021.3 版本，很多网友更新之后发现以前的激活教程都不能用了。大家不用担心，最新的教程已经有了！&lt;/p&gt;
+&lt;p&gt;网上有一位不知名的的大佬在 zhile 大佬的开源文件的基础上，进行了升级！&lt;/p&gt;
+&lt;p&gt;针对最新</summary>
+        
+      
+    
+    
+    
+    <category term="Learn" scheme="http://example.com/categories/Learn/"/>
     
     
   </entry>
