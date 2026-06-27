@@ -79,7 +79,7 @@
     <link href="http://example.com/2024/11/25/Learn/GeneratedCode/"/>
     <id>http://example.com/2024/11/25/Learn/GeneratedCode/</id>
     <published>2024-11-25T13:09:57.000Z</published>
-    <updated>2026-06-26T03:22:17.867Z</updated>
+    <updated>2026-06-27T04:03:15.729Z</updated>
     
     
       
@@ -95,6 +95,8 @@
     <category term="Learn" scheme="http://example.com/categories/Learn/"/>
     
     
+    <category term="自动化" scheme="http://example.com/tagsF/%E8%87%AA%E5%8A%A8%E5%8C%96/"/>
+    
   </entry>
   
   <entry>
@@ -102,7 +104,7 @@
     <link href="http://example.com/2024/09/05/Learn/BatterDev/"/>
     <id>http://example.com/2024/09/05/Learn/BatterDev/</id>
     <published>2024-09-05T13:46:00.000Z</published>
-    <updated>2026-06-26T10:05:19.305Z</updated>
+    <updated>2026-06-27T04:03:01.777Z</updated>
     
     
       
@@ -117,6 +119,8 @@
     
     <category term="Learn" scheme="http://example.com/categories/Learn/"/>
     
+    
+    <category term="战斗" scheme="http://example.com/tagsF/%E6%88%98%E6%96%97/"/>
     
   </entry>
   
@@ -171,7 +175,7 @@
     <link href="http://example.com/2024/04/06/Learn/UnityOPtim/"/>
     <id>http://example.com/2024/04/06/Learn/UnityOPtim/</id>
     <published>2024-04-06T10:13:57.000Z</published>
-    <updated>2026-06-26T10:04:57.106Z</updated>
+    <updated>2026-06-27T04:03:13.447Z</updated>
     
     
       
@@ -186,6 +190,8 @@
     
     <category term="Learn" scheme="http://example.com/categories/Learn/"/>
     
+    
+    <category term="性能优化" scheme="http://example.com/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
   </entry>
   
