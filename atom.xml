@@ -44,21 +44,33 @@
     <link href="http://example.com/2026/06/24/Learn/mapStreamLoad/"/>
     <id>http://example.com/2026/06/24/Learn/mapStreamLoad/</id>
     <published>2026-06-24T03:09:57.000Z</published>
-    <updated>2026-06-26T10:05:24.130Z</updated>
+    <updated>2026-06-27T03:59:27.383Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h3 id=&quot;大地图流式分块加载的作用&quot;&gt;&lt;a href=&quot;#大地图流式分块加载的作用&quot; class=&quot;headerlink&quot; title=&quot;大地图流式分块加载的作用&quot;&gt;&lt;/a&gt;大地图流式分块加载的作用&lt;/h3&gt;&lt;h4 id=&quot;为什么会出现-：&quot;&gt;&lt;a</summary>
+    <summary type="html">&lt;h2 id=&quot;一、大地图流式分块加载核心作用&quot;&gt;&lt;a href=&quot;#一、大地图流式分块加载核心作用&quot; class=&quot;headerlink&quot; title=&quot;一、大地图流式分块加载核心作用&quot;&gt;&lt;/a&gt;一、大地图流式分块加载核心作用&lt;/h2&gt;&lt;h3</summary>
         
       
     
     
     
-    <category term="Learn" scheme="http://example.com/categories/Learn/"/>
+    <category term="GameLearn" scheme="http://example.com/categories/GameLearn/"/>
     
+    
+    <category term="Unity" scheme="http://example.com/tagsF/Unity/"/>
+    
+    <category term="SLG" scheme="http://example.com/tagsF/SLG/"/>
+    
+    <category term="MMO" scheme="http://example.com/tagsF/MMO/"/>
+    
+    <category term="大地图流式加载" scheme="http://example.com/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
+    
+    <category term="AOI" scheme="http://example.com/tagsF/AOI/"/>
+    
+    <category term="寻路优化" scheme="http://example.com/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
     
   </entry>
   
