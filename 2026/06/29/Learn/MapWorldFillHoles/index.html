@@ -11,7 +11,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-  <title>归档 | Wind Dust</title>
+  <title>大地图填坑 | Wind Dust</title>
 
   <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://at.alicdn.com/t/font_1911880_c1nvbyezg17.css">
@@ -715,281 +715,707 @@
   
 </header>
         <!-- 内容区域 -->
-        <div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"></div>
-<div class="bg-light-floor-archive" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -3;"></div>
-<div class="archive-header" style="background-image:url('https://pic1.zhimg.com/80/v2-1414b3a4b205e19060db18a20d08723a_1440w.jpg?source=1940ef5c')">
-  <div class="archive-header-title">
-    archive
-  </div>
-  <div class="archive-header-desc">
+        
+ <!-- prismjs 代码高亮 -->
+ 
+
+
+<div class="bg-dark-floor" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -1;"></div>
+
+
+  <!-- 文章详情页顶部图片和标题 -->
+
+
+
+
+<div class="post-detail-header" id="thumbnail_canvas" style="background-repeat: no-repeat; background-size: cover; 
+  background-position: center center;position: relative;background-image:url('/medias/2.jpg')">
+  <div class="post-detail-header-mask"></div>
+  <canvas id="header_canvas"style="position:absolute;bottom:0;pointer-events:none;"></canvas>
   
-  <span class="title" id="archive-header-desc"></span>
+  <div class="post-detail-header_info-box">
+    <div class="title-box">
+      <span class="title">
+        大地图填坑
+      </span>
+    </div>
+    
+    
+      
+        <span class="post-detail-header_date">
+          <i class="fas fa-calendar"></i> 发表于：2026-06-29 |
+        </span>
+      
+
+      
+        <span class="post-detail-header_categories">
+          <i class="iconfont iconbookmark1"></i> 分类：
+          
+            <a href="/categories/GameLearn/" class="post-detail-header_category">
+              GameLearn
+            </a>
+          
+        </span>
+      
+
+      
+    
+  </div>
+  
+  
+    <script src="/js/bubble/bubble.js"></script>
+  
+</div>
+
+
+
+
+
+<div class="row justify-position" 
+  style="padding-top: 0px;">
+  <div class="main-content">
+    <article class="post post-detail">
+      <div class="post-content">
+        <h2 id="写在前面：一套经典但暗藏杀机的架构"><a href="#写在前面：一套经典但暗藏杀机的架构" class="headerlink" title="写在前面：一套经典但暗藏杀机的架构"></a>写在前面：一套经典但暗藏杀机的架构</h2><p>在 SLG 手游开发中，我们常会设定一套“看起来很稳”的大地图基础规格：</p>
+<ul>
+<li><strong>逻辑网格</strong>：<code>10000 × 10000</code>（1亿个格子）；</li>
+<li><strong>底图策略</strong>：Tilemap 全量常驻内存，不分块卸载；</li>
+<li><strong>实体加载</strong>：后端 AOI 控制，前端九宫格加载；</li>
+<li><strong>渲染分级</strong>：三档 LOD（精细模型 → 2D 图标 → 公共图标）。</li>
+</ul>
+<p>如果你也是初学者，或正打算用这套方案起步，请先按暂停键。<strong>这套架构在开服瞬间就会把内存、CPU 和网络带宽同时拉满</strong>。本文将从“填坑”视角，结合后端 AOI 选型、网络同步抗抖动、寻路分层及对象池边界治理，带你逐层拆解优化落地方案。</p>
+<span id="more"></span>
+
+<hr>
+<h2 id="一、后端-AOI-算法选型：九宫格-vs-十字链表"><a href="#一、后端-AOI-算法选型：九宫格-vs-十字链表" class="headerlink" title="一、后端 AOI 算法选型：九宫格 vs 十字链表"></a>一、后端 AOI 算法选型：九宫格 vs 十字链表</h2><p>后端 AOI（Area of Interest）是大地图同步的发动机。很多新人纠结于选型，其实核心就看两点：<strong>视野是否固定</strong> 和 <strong>移动频率是否变态</strong>。</p>
+<h3 id="1-1-原理对比"><a href="#1-1-原理对比" class="headerlink" title="1.1 原理对比"></a>1.1 原理对比</h3><table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">九宫格（Grid / 3×3）</th>
+<th align="left">十字链表（Dual Cross Linked List）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>数据结构</strong></td>
+<td align="left">二维坐标哈希/数组，直接定位格子</td>
+<td align="left">维护 X 轴和 Y 轴两个有序双向链表</td>
+</tr>
+<tr>
+<td align="left"><strong>插入/定位</strong></td>
+<td align="left"><code>O(1)</code> 直接坐标取模塞入</td>
+<td align="left"><code>O(N)</code> 需在链表中按坐标值插入</td>
+</tr>
+<tr>
+<td align="left"><strong>移动更新</strong></td>
+<td align="left">跨格子时，移除旧格 + 塞入新格</td>
+<td align="left">每次移动需在 X/Y 链表中调整节点位置</td>
+</tr>
+<tr>
+<td align="left"><strong>视野切换</strong></td>
+<td align="left"><strong>极快</strong>。直接取周边 8 邻格即可</td>
+<td align="left">需从链表头遍历到视野半径，略慢</td>
+</tr>
+<tr>
+<td align="left"><strong>适用场景</strong></td>
+<td align="left">视野固定（如 SLG 固定镜头）、对象进出视野频繁（MMO跑图）</td>
+<td align="left">对象移动频率极高、无固定格子概念（如弹幕游戏、星际争霸）</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-本项目为何选“九宫格”？"><a href="#1-2-本项目为何选“九宫格”？" class="headerlink" title="1.2 本项目为何选“九宫格”？"></a>1.2 本项目为何选“九宫格”？</h3><p>因为 <strong>SLG 的镜头视野相对固定</strong>（以主城或军队为中心），且玩家跑图时，<strong>实体进出视野（Enter/Leave）是最高频操作</strong>。九宫格配合哈希表，定位复杂度 O(1)，后端 CPU 开销远低于十字链表。</p>
+<h3 id="1-3-格子大小如何科学确定？"><a href="#1-3-格子大小如何科学确定？" class="headerlink" title="1.3 格子大小如何科学确定？"></a>1.3 格子大小如何科学确定？</h3><p>格子大小直接决定了 AOI 刷新的精度和频率。这里有一个黄金公式：</p>
+<blockquote>
+<p><strong>AOI 区块尺寸 = 玩家可视范围（Width × Height）</strong></p>
+</blockquote>
+<p>在本项目中，设定可视范围为 <code>30 × 20</code> 逻辑格，那么每个 AOI 区块（Chunk）就定为 <code>30 × 20</code>。这样做的好处是：<strong>只要镜头不动，玩家刚好落在当前区块内，视野边缘的实体正好被 9 个区块完美覆盖，没有任何冗余计算。</strong></p>
+<h3 id="1-4-核心难题：视野边缘“闪烁”与“反复横跳”"><a href="#1-4-核心难题：视野边缘“闪烁”与“反复横跳”" class="headerlink" title="1.4 核心难题：视野边缘“闪烁”与“反复横跳”"></a>1.4 核心难题：视野边缘“闪烁”与“反复横跳”</h3><p>原设是“跨过区块边界即刷新 AOI”。若玩家在边界线上<strong>反复横跳</strong>，后端每帧都要算九宫格，前端每帧都要增删实体，导致卡顿和带宽尖峰。</p>
+<h4 id="实战解决方案：动态层数（3-5-7层）-延迟卸载"><a href="#实战解决方案：动态层数（3-5-7层）-延迟卸载" class="headerlink" title="实战解决方案：动态层数（3/5/7层）+ 延迟卸载"></a>实战解决方案：动态层数（3/5/7层）+ 延迟卸载</h4><ol>
+<li><p><strong>根据移动速度动态调整层数</strong>：</p>
+<ul>
+<li>静止/低速（步兵）：加载 <strong>3×3</strong> 层。</li>
+<li>中速（骑兵/汽车）：加载 <strong>5×5</strong> 层。</li>
+<li>高速（飞行/传送）：加载 <strong>7×7</strong> 层。</li>
+<li><em>原理</em>：速度越快，预加载范围越大，避免高速移动时“加载跟不上”的白块穿帮。</li>
+</ul>
+</li>
+<li><p><strong>滞回区间（Hysteresis）+ 延迟卸载</strong>：</p>
+<ul>
+<li>触发线不是边界线，而是 <strong>“边界向内收缩 5 个逻辑格”</strong> 的内线。</li>
+<li>当角色离开旧区块时，<strong>前端不立即删除实体</strong>，而是放入“延迟销毁队列（Delay Queue）”保留 2~3 秒。如果玩家在边界抖动或立刻折返，直接捞出复用，视觉上零闪烁。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="二、同步机制：状态同步与“王者级”平滑插值"><a href="#二、同步机制：状态同步与“王者级”平滑插值" class="headerlink" title="二、同步机制：状态同步与“王者级”平滑插值"></a>二、同步机制：状态同步与“王者级”平滑插值</h2><h3 id="2-1-为什么选择状态同步，而非帧同步？"><a href="#2-1-为什么选择状态同步，而非帧同步？" class="headerlink" title="2.1 为什么选择状态同步，而非帧同步？"></a>2.1 为什么选择状态同步，而非帧同步？</h3><ul>
+<li><strong>帧同步</strong>：依赖确定性逻辑，适合格斗/MOBA，但反外挂弱，且 SLG 中大量的随机数（暴击、掉落）和复杂逻辑难以回滚。</li>
+<li><strong>状态同步（本项目选择）</strong>：<strong>服务器绝对权威</strong>。客户端只负责发送操作指令和接收最终位置/状态，所有移动、战斗结果均由服务器计算下发。<ul>
+<li><em>优点</em>：防作弊能力强（外挂修改客户端内存无效）。</li>
+<li><em>代价</em>：对网络抖动敏感，需要强大的客户端平滑算法。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-网络延迟与丢包处理：基于时间戳的定点移动"><a href="#2-2-网络延迟与丢包处理：基于时间戳的定点移动" class="headerlink" title="2.2 网络延迟与丢包处理：基于时间戳的定点移动"></a>2.2 网络延迟与丢包处理：基于时间戳的定点移动</h3><p>我们的移动逻辑不是自由移动，而是 <strong>“定点移动（A → B → C）”</strong>（类似率土之滨或万国觉醒的点选行军）。</p>
+<ul>
+<li><strong>数据包设计</strong>：每个移动指令携带 <code>&#123; 序号, 时间戳, 起点, 终点, 速度 &#125;</code>。</li>
+<li><strong>重连恢复</strong>：客户端断线重连后，根据服务器下发的<strong>最后时间戳 + 目标点 + 已过时间</strong>，直接计算出角色当前应处的位置，无需等待服务器重新下发全量快照。</li>
+</ul>
+<h3 id="2-3-平滑移动的“踩坑与封神”"><a href="#2-3-平滑移动的“踩坑与封神”" class="headerlink" title="2.3 平滑移动的“踩坑与封神”"></a>2.3 平滑移动的“踩坑与封神”</h3><p><strong>场景</strong>：从 A 点移动到 B 点。<br><strong>初期方案（抖动元凶）</strong>：直接用 <code>Transform.Lerp(currentPos, targetPos, speed * Time.deltaTime)</code>。由于网络包到达时间不均，<code>targetPos</code> 会突变，导致角色频繁“瞬移+回拉”，体验极差。</p>
+<h4 id="解决方案-1（王道——网络插值缓冲区-快照插值）"><a href="#解决方案-1（王道——网络插值缓冲区-快照插值）" class="headerlink" title="解决方案 1（王道——网络插值缓冲区 / 快照插值）"></a>解决方案 1（王道——网络插值缓冲区 / 快照插值）</h4><p><strong>这是游戏行业的标准解法（如守望先锋、王者荣耀）。</strong></p>
+<p>不要直接 Lerp 到最新的 <code>targetPos</code>。客户端维护一个<strong>延时缓冲区（Delay Buffer）</strong>，存储过去 <code>100ms~200ms</code> 的历史位置快照。</p>
+<p>在 <code>Update</code> 中，我们不取最新的数据，而是取缓冲区中 <strong>“80ms 前”</strong> 的那个静态位置进行 Lerp。因为过去的数据是静止不变的，插值过程绝对平滑，没有抖动。</p>
+<h4 id="解决方案-2（修正-Alpha-计算——指数平滑）"><a href="#解决方案-2（修正-Alpha-计算——指数平滑）" class="headerlink" title="解决方案 2（修正 Alpha 计算——指数平滑）"></a>解决方案 2（修正 Alpha 计算——指数平滑）</h4><p>如果项目历史包袱重，必须用追逐式 Lerp，请钳制 Alpha：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误的写法：依赖剧烈的 DeltaTime</span></span><br><span class="line"><span class="built_in">float</span> alpha = speed * Time.deltaTime; </span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确的写法：指数平滑，使 Alpha 变化平缓</span></span><br><span class="line"><span class="built_in">float</span> smooth = <span class="number">1</span> - Mathf.Pow(<span class="number">1</span> - speed, Time.deltaTime * <span class="number">30f</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="解决方案-3（物理惯性——SmoothDamp）"><a href="#解决方案-3（物理惯性——SmoothDamp）" class="headerlink" title="解决方案 3（物理惯性——SmoothDamp）"></a>解决方案 3（物理惯性——SmoothDamp）</h4><p><code>Vector3.SmoothDamp</code> 内部维护了速度向量 <code>ref velocity</code>，自带惯性过滤效果。它能自动削平高频抖动，效果比 Lerp 平滑一个档次。</p>
+<p><strong>最终权威建议</strong>：本项目落地采用 “快照插值（Snapshot Interpolation）”，配合 SmoothDamp 做最终视觉微调，完美解决拉扯感。</p>
+<hr>
+<h2 id="三、性能瓶颈定位与-Unity-Profiler-实战"><a href="#三、性能瓶颈定位与-Unity-Profiler-实战" class="headerlink" title="三、性能瓶颈定位与 Unity Profiler 实战"></a>三、性能瓶颈定位与 Unity Profiler 实战</h2><h3 id="3-1-工具使用"><a href="#3-1-工具使用" class="headerlink" title="3.1 工具使用"></a>3.1 工具使用</h3><ul>
+<li><strong>CPU 监控</strong>：紧盯 <code>GC.Alloc</code> 和 <code>Scriptable Render Pipeline</code>。</li>
+<li><strong>内存快照对比</strong>：在进出大地图前后抓取 Memory Profiler，重点看 <code>Texture</code> 和 <code>SerializedFile</code> 的残留。</li>
+</ul>
+<h3 id="3-2-最大优化点：数据流量异常与-FOV-切换"><a href="#3-2-最大优化点：数据流量异常与-FOV-切换" class="headerlink" title="3.2 最大优化点：数据流量异常与 FOV 切换"></a>3.2 最大优化点：数据流量异常与 FOV 切换</h3><p><strong>数据流量优化</strong>：</p>
+<ul>
+<li><strong>问题</strong>：全量推送实体数据，带宽爆炸。</li>
+<li><strong>解决</strong>：利用后端 AOI，只下发增量数据（Changed Data）。实体没变属性，只发 <code>EntityID</code> 和 位置/状态变更字段，而非全量 JSON。</li>
+</ul>
+<p><strong>FOV 视角切换（俯仰/缩放）优化</strong>：</p>
+<p>拉远看大世界全景时，若还加载精细模型，DrawCall 和三角面数会崩溃。</p>
+<p>策略：根据相机 FOV 或高度，切换数据请求粒度。</p>
+<ul>
+<li><strong>精细层（近）</strong>：请求地块、建筑、部队、特效全部数据。</li>
+<li><strong>中等层（中）</strong>：只请求地块颜色和部队数量（2D 图标）。</li>
+<li><strong>简略层（远）</strong>：只请求公共基础简略数据（如势力颜色区块）。</li>
+</ul>
+<p><strong>分块分层加载顺序</strong>：</p>
+<p>严格按依赖关系加载：<code>地块（Terrain） → 地块上的物体（Props） → 部队（Army） → 特效/装饰（VFX）</code>。</p>
+<p>前端表现：先显示低模/灰色占位块，1~2 秒后替换为精细模型/贴图（纹理流送）。</p>
+<p><strong>移动时的加载策略</strong>：</p>
+<p>不检测单个实体进出，而是以整个 AOI 区块（Chunk）为单位监听加载。只要区块在九宫格内，整块实体进入视野；离开九宫格，整块卸载。</p>
+<hr>
+<h2 id="四、寻路系统：宏观-A-微观-JPS-的分层艺术"><a href="#四、寻路系统：宏观-A-微观-JPS-的分层艺术" class="headerlink" title="四、寻路系统：宏观 A* + 微观 JPS 的分层艺术"></a>四、寻路系统：宏观 A* + 微观 JPS 的分层艺术</h2><p>在 <code>10000 × 10000</code> 的网格上直接跑 A*，CPU 直接冒烟。必须分层：</p>
+<h3 id="4-1-宏观层（Chunk-级路网）"><a href="#4-1-宏观层（Chunk-级路网）" class="headerlink" title="4.1 宏观层（Chunk 级路网）"></a>4.1 宏观层（Chunk 级路网）</h3><ul>
+<li>将地图划分为 <code>100 × 100</code> 的宏观大格子。</li>
+<li>每个大格子抽象为带权有向图的一个节点（权值代表通过代价，如山丘 &gt; 平原）。</li>
+<li>长距离行军（跨几十个 Chunk）：使用 A* 算出 “大格子 → 大格子” 的跳转路径。</li>
+</ul>
+<h3 id="4-2-微观层（本地-JPS-跳点搜索）"><a href="#4-2-微观层（本地-JPS-跳点搜索）" class="headerlink" title="4.2 微观层（本地 JPS 跳点搜索）"></a>4.2 微观层（本地 JPS 跳点搜索）</h3><ul>
+<li>当部队抵达目标大格子边缘时，开启局部精确寻路。</li>
+<li>在单个 <code>100 × 100</code> 的格子内，使用 <strong>JPS（Jump Point Search，跳点搜索）</strong>。</li>
+<li>JPS 是 A* 在栅格地图上的极致优化，它利用对称性裁剪大量无用节点，寻路速度是传统 A* 的 10~50 倍。只需算出“当前格子能不能走到出口”即可。</li>
+</ul>
+<hr>
+<h2 id="五、对象池的极致优化：应对瞬间波峰与边界抖动（面试高发区）"><a href="#五、对象池的极致优化：应对瞬间波峰与边界抖动（面试高发区）" class="headerlink" title="五、对象池的极致优化：应对瞬间波峰与边界抖动（面试高发区）"></a>五、对象池的极致优化：应对瞬间波峰与边界抖动（面试高发区）</h2><p>项目中所有地块、部队、特效均使用缓存池（Pool）复用。但这里有一个经典灵魂拷问：</p>
+<blockquote>
+<p>“假设池子里没对象了，你是选择 new 一个，还是阻塞等待？”</p>
+</blockquote>
+<h3 id="5-1-分帧-New（防止-GC-尖峰）"><a href="#5-1-分帧-New（防止-GC-尖峰）" class="headerlink" title="5.1 分帧 New（防止 GC 尖峰）"></a>5.1 分帧 New（防止 GC 尖峰）</h3><ul>
+<li><strong>策略</strong>：选择 new 一个，但<strong>绝不在一帧内 new 出成百上千个</strong>。</li>
+<li><strong>实现</strong>：给 <code>Pop</code> 方法增加每帧配额（例如每帧最多 new 5 个）。如果某帧请求量超过配额，剩余请求排队到下一帧处理。</li>
+<li><strong>效果</strong>：瞬间大量怪物复活（如开服抢城），GC 曲线依然平稳，不会出现令人窒息的卡顿。</li>
+</ul>
+<h3 id="5-2-回收时的动态平衡（LRU-延迟销毁队列）"><a href="#5-2-回收时的动态平衡（LRU-延迟销毁队列）" class="headerlink" title="5.2 回收时的动态平衡（LRU + 延迟销毁队列）"></a>5.2 回收时的动态平衡（LRU + 延迟销毁队列）</h3><p>单纯的 new 会导致池子无限膨胀，撑爆内存。为此设计一套缓存淘汰策略：</p>
+<ul>
+<li><p><strong>LRU（最近最少使用）淘汰</strong>：池子设定容量上限。当回收对象时，若池子已满，根据 LRU 策略标记出“最长时间未被使用的对象”进行释放。</p>
+</li>
+<li><p><strong>杀手锏：延迟销毁队列（Delay Queue）</strong>：</p>
+<ul>
+<li><strong>痛点</strong>：玩家在九宫格边界反复横跳时，对象刚被 LRU 销毁（Destroy），下一秒又因重新进格要 Instantiate，产生巨大的 CPU 开销和 GC。</li>
+<li><strong>解决方案</strong>：在 LRU 和真正销毁之间加一层“延迟销毁队列”。</li>
+<li>被 LRU 淘汰的对象不立刻 Destroy，而是在内存中保留 2<del>3 秒，放入延迟队列。如果在这 2</del>3 秒内被重新激活（重进视野），直接从延迟队列捞出复用。</li>
+<li>超过时间后，才真正调用 Destroy 交给 Unity 引擎。</li>
+<li><strong>结果</strong>：彻底解决了 AOI 边界反复横跳带来的性能抖动，帧率曲线是一条直线。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="六、开发者优先级速查表（投入产出比）"><a href="#六、开发者优先级速查表（投入产出比）" class="headerlink" title="六、开发者优先级速查表（投入产出比）"></a>六、开发者优先级速查表（投入产出比）</h2><table>
+<thead>
+<tr>
+<th align="center">优先级</th>
+<th align="left">优化项</th>
+<th align="left">预期收益</th>
+<th align="center">实现难度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>P0</strong>（致命，必做）</td>
+<td align="left">底图稀疏化 + 静态合批</td>
+<td align="left">内存↓60%，DrawCall↓90%</td>
+<td align="center">中</td>
+</tr>
+<tr>
+<td align="center"><strong>P0</strong>（致命，必做）</td>
+<td align="left">AOI 滞回区间 + 延迟销毁队列</td>
+<td align="left">服务器 CPU↓50%，边界抖动归零</td>
+<td align="center">低</td>
+</tr>
+<tr>
+<td align="center"><strong>P1</strong>（体验，强烈建议）</td>
+<td align="left">快照插值（Buffer）替代 Lerp</td>
+<td align="left">移动丝滑无拉扯，体验质变</td>
+<td align="center">中</td>
+</tr>
+<tr>
+<td align="center"><strong>P1</strong>（性能，强烈建议）</td>
+<td align="left">分层寻路（A*宏观 + JPS微观）</td>
+<td align="left">长距离寻路耗时↓80%</td>
+<td align="center">高</td>
+</tr>
+<tr>
+<td align="center"><strong>P2</strong>（优化，锦上添花）</td>
+<td align="left">分帧 New + LRU 缓存池治理</td>
+<td align="left">彻底杜绝 GC 尖峰，内存稳健</td>
+<td align="center">中</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p><code>10000×10000</code> 网格和九宫格 AOI 是 SLG 大地图的经典范式，但 <strong>“边界即触发”</strong> 和 <strong>“无脑 Lerp”</strong> 是最容易引爆的两个雷区。</p>
+</li>
+<li><p><strong>后端选型</strong>上，<strong>九宫格</strong> 适合视野固定的 MMO 跑图，配合动态层数（3/5/7）完美适配移动速度变化。</p>
+</li>
+<li><p><strong>网络同步</strong>上，放弃追逐式 Lerp，拥抱 <strong>快照插值（Snapshot Interpolation）</strong>，这是手游丝滑体验的基石。</p>
+</li>
+<li><p><strong>内存管理</strong>上，<strong>延迟销毁队列（Delay Queue）</strong> 是连接 LRU 和对象池的黄金桥梁，彻底杀死了边界抖动。</p>
+</li>
+<li><p><strong>给新人的终极建议</strong>：先写一个压测小工具——在 3×3 AOI 范围内动态生成 5000 个军队实体，并模拟在边界反复横跳。观察帧率和 GC 曲线。这两个指标，直接决定了你的项目是“上线即巅峰”还是“开服即维护”。</p>
+</li>
+</ul>
+<p>填坑不易，愿这篇实战笔记能帮你省下几个通宵的脱发时间。🚀</p>
+
+      </div>
+      <div class="post-tags-categories">
+        
+        <div class="tags">
+          
+            <a href="/tagsF/Unity/" class="">
+              Unity
+            </a>
+          
+            <a href="/tagsF/SLG/" class="">
+              SLG
+            </a>
+          
+            <a href="/tagsF/MMO/" class="">
+              MMO
+            </a>
+          
+            <a href="/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/" class="">
+              大地图流式加载
+            </a>
+          
+            <a href="/tagsF/AOI/" class="">
+              AOI
+            </a>
+          
+            <a href="/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/" class="">
+              寻路优化
+            </a>
+          
+            <a href="/tagsF/%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5/" class="">
+              网络同步
+            </a>
+          
+            <a href="/tagsF/%E5%AF%B9%E8%B1%A1%E6%B1%A0/" class="">
+              对象池
+            </a>
+          
+        </div>
+        
+      </div>
+      
+        <div class="copyright">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+    <strong>作者:  </strong>Wind Dust</a>
+    </li>
+    <li class="post-copyright-link">
+    <strong>文章链接:  </strong>
+    <a href="/2026/06/29/Learn/MapWorldFillHoles/" target="_blank" title="大地图填坑">http://example.com/2026/06/29/Learn/MapWorldFillHoles/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明:   </strong>
+      本网站所有文章除特别声明外,均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+      许可协议。转载请注明出处!
+    </li>
+  </ul>
+<div>
+      
+    </article>
+    <!-- 上一篇文章和下一篇文章 -->
+    
+      <!-- 文章详情页的上一页和下一页 -->
+<div class="post-nav">
+
+
+
+
+
+  
+  <div class="post-nav-next post-nav-item">
+    <div class="post-nav-img" style="background-size: cover; 
+      background-position: center center;">
+      <img class="lazyload lazyload placeholder" src="/medias/8.jpg" class="lazyload placeholder" data-srcset="/medias/8.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" src="" alt="">
+    </div>
+    <a href="/2026/06/24/Learn/mapStreamLoad/" class="post-nav-link">
+      <div class="title">
+        下一篇: <i class="fas fa-angle-right"></i>
+        <div class="title-text">从0到1：SLG手游大地图同步架构实战</div>
+      </div>
+      <!-- <div class="content">
+        写在前面：一套经典但暗藏杀机的架构在 SLG 手游开发中，我们常会设定一套“看起来很稳”的大地图基础规格：
+
+逻辑网格：
+      </div> -->
+    </a>
+  </div>
+
+</div>
+
+    
+    
+
+    <!-- 打赏 -->
+    
+      <div id="appDonate" class="post-donate">
+  <div id="donate_board" class="donate_bar center" ref="donate">
+    <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏" @click="showDialogDrawer()"></a>
+  </div>
+  <transition name="fade">
+    <div 
+      class="donate-box-mask"
+      v-cloak 
+      v-show="visible"
+      @click="cancelDialogDrawer()"
+    >
+    </div>
+  </transition>
+  <transition name="bounce">
+    <div class="donate-box" v-cloak v-show="visible">
+      <div class="donate-box_close">
+        <i class="fas fa-times" aria-hidden="true" @click="cancelDialogDrawer" pointer></i>
+      </div>
+      <div class="donate-box_title">
+        <h4>
+          你的赏识是我前进的动力
+        </h4>
+      </div>
+      <div class="donate-box_tab">
+        <div class="Alipay" pointer :class="{'active': tabActive === 'Alipay'}" @click="changeTabActive('Alipay')">
+          支付宝
+        </div>
+        <div class="WeChatpay" pointer :class="{'active': tabActive === 'WeChatpay'}" @click="changeTabActive('WeChatpay')">
+          微信
+        </div>
+      </div>
+      <div class="donate-box_img">
+        <div class="AlipayImg" v-show="tabActive === 'Alipay'">
+          <img src="/medias/zfb.jpg" class="lazyload placeholder" data-srcset="/medias/zfb.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="支付宝打赏" />
+        </div> 
+        <div class="WeChatpayImg" v-show="tabActive === 'WeChatpay'">
+          <img src="/medias/wx.jpg" class="lazyload placeholder" data-srcset="/medias/wx.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="微信打赏" />
+        </div>
+      </div>
+    </div>
+  </transition>
+</div>
+
+<script>
+  var body = document.body || document.documentElement || window;
+  var vm = new Vue({
+    el: '#appDonate',
+    data: {
+      visible: false,
+      tabActive: 'Alipay',
+      top: 0,
+    },
+    computed: {
+    },
+    mounted() {
+    },
+    methods: {
+      showDialogDrawer() {
+        this.visible = true;
+        // 防止页面滚动，只能让弹框滚动
+        // function getScroll() {
+        //   return {
+        //     left: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0,
+        //     top: window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
+        //   };
+        // }
+        this.top = $(document).scrollTop() // or getScroll().top
+        // console.log('aa', $('.main-content'));
+        body.style.cssText = 'overflow: hidden;';
+      },
+      cancelDialogDrawer() {
+        this.visible = false;
+        body.removeAttribute('style');
+        $(document).scrollTop(this.top)
+      },
+      changeTabActive(name) {
+        this.tabActive = name;
+      }
+    },
+    created() {}
+  })
+</script>
+    
+
+    <!-- 分享 -->
+    
+      <!-- https://github.com/overtrue/share.js -->
+<!-- 文章详情页的分享 -->
+<div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+
+<script src="/js/shareJs/social-share.min.js"></script>
+</script>
+
+<style>
+  .social-share {
+    margin: 20px 0;
+  }
+</style>
+
+
+    
+    
+    <!-- 评论 -->
+    <!-- 评论 -->
+
+  <div id="myComment">
+    
+      <div id="gitment-container"></div>
+
+    
+  </div>
+
+<!-- comment script in themes\hexo-theme-bamboo\layout\_partial\scripts\index.ejs -->
+
+
+  </div>
+
+  <!-- 目录 -->
+  <!-- 文章详情页右侧目录 -->
+
+  <div class="toc-aside">
+    <div class="toc-main">
+      <div class="toc-aside-title">
+        <i class="fas fa-list-ul" aria-hidden="true"></i><span>本文目录</span>
+        
+          <div class="toc-open-close">本文目录</div>
+        
+      </div>
+      <div class="toc-content">
+        <div class="toc"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 手机端目录按钮 -->
+  <div id="toc-mobile-btn">
+    <i class="fas fa-list-ul" aria-hidden="true"></i>
+  </div>
+
+
+<script>
+  function closeToc(init) {
+    $(".toc-aside").css({'width': 0, 'padding': 0, 'transition': init ?  'noe' : 'width 0.3s' });
+    $(".toc-content").css({'width': 0});
+    $(".toc-aside-title span, .toc-aside-title i").css({'display': 'none'});
+    $(".main-content").css({'width': '75%', 'margin': '10px auto'});
+  };
+  function openToc() {
+    $(".main-content").css({'width': '65%', 'margin-right': '10px', 'margin-left': 'calc(35% - 350px)'});
+    $(".toc-aside").css({'width': '300px', 'padding': '0 10px', 'transition': 'width 0.3s'});
+    $(".toc-content").css({'width': '300px'});
+    $(".toc-aside-title span, .toc-aside-title i").css({'display': 'inline-block'});
+  }
+  function openBtnClickFn () {
+    let openOrCloseBtn = $('.toc-aside .toc-aside-title .toc-open-close');
+    let open = eval('' || 'true');
+    openOrCloseBtn.click(function() {
+      if (open) {
+        closeToc();
+        open = false;
+      } else {
+        openToc();
+        open = true;
+      }
+    });
+  };
+  openBtnClickFn();
+  initCloseTocWidth(true);
+
+  function initCloseTocWidth(init) {
+    if (window.innerWidth >= 992) {
+      let isClose = false;
+      isClose && closeToc(init)
+    }
+  }
+
+  document.addEventListener('pjax:complete', function () {
+    $(".toc-aside").css({'transition': 'no'});
+  })
+  document.addEventListener('pjax:complete', function () {
+    openBtnClickFn();
+  })
+  
+</script>
+
+  <!-- 图片放大 Wrap images with fancybox support -->
+  <script src="/js/wrapImage.js"></script>
+</div>
+
+<!-- 文章详情页背景图 -->
+<div id="appBgSwiper" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;z-index: -2;"
+	:style="{'background-color': bgColor ? bgColor : 'transparent'}">
+	<transition-group tag="ul" :name="names">
+		<li v-for='(image,index) in img' :key='index' v-show="index === mark" class="bg-swiper-box">
+			<img :src="image" class="bg-swiper-img no-lazy">
+		</li>
+	</transition-group>
+</div>
+<script>
+	var vm = new Vue({
+		el: '#appBgSwiper',
+		data: {
+			names: '' || 'fade' || 'fade', // translate-fade fade
+			mark: 0,
+			img: [],
+			bgColor: '',
+			time: null
+		},
+		methods: {   //添加方法
+			change(i, m) {
+				if (i > m) {
+					// this.names = 'fade';
+				} else if (i < m) {
+					// this.names = 'fade';
+				} else {
+					return;
+				}
+				this.mark = i;
+			},
+			prev() {
+				// this.names = 'fade';
+				this.mark--;
+				if (this.mark === -1) {
+					this.mark = 3;
+					return
+				}
+			},
+			next() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			autoPlay() {
+				// this.names = 'fade';
+				this.mark++;
+				if (this.mark === this.img.length) {
+					this.mark = 0;
+					return
+				}
+			},
+			play() {
+				let bgImgDelay = '' || '180000'
+				let delay = parseInt(bgImgDelay) || 180000;
+				this.time = setInterval(this.autoPlay, delay);
+			},
+			enter() {
+				clearInterval(this.time);
+			},
+			leave() {
+				this.play();
+			}
+		},
+		created() {
+			this.play()
+		},
+		beforeDestroy() {
+			clearInterval(this.time);
+		},
+		mounted() {
+			let prop = '' || '';
+			let isImg = prop.includes('.bmp') || prop.includes('.jpg') || prop.includes('.png') || prop.includes('.tif') || prop.includes('.gif') || prop.includes('.pcx') || prop.includes('.tga') || prop.includes('.exif') || prop.includes('.fpx') || prop.includes('.psd') || prop.includes('.cdr') || prop.includes('.pcd') || prop.includes('.dxf') || prop.includes('.ufo') || prop.includes('.eps') || prop.includes('.ai') || prop.includes('.raw') || prop.includes('.WMF') || prop.includes('.webp') || prop.includes('.jpeg') || prop.includes('http://') || prop.includes('https://')
+			if (isImg) {
+				let img = prop.split(',');
+				let configRoot = '/'
+				let arrImg = [];
+				img.forEach(el => {
+					var Expression = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+					var objExp = new RegExp(Expression);
+
+					if (objExp.test(el)) {
+						// http or https
+						arrImg.push(el);
+					} else {
+						// 非http or https开头
+						// 本地文件
+						let firstStr = el.charAt(0);
+						if (firstStr == '/') {
+							el = el.substr(1); // 删除第一个字符 '/',因为 configRoot最后一个字符为 /
+						}
+						el = configRoot + el;
+						arrImg.push(el);
+					}
+				})
+				this.img = arrImg;
+			} else {
+				this.bgColor = prop;
+			}
+		}
+	})
+</script>
+
+<style>
+	.bg-swiper-box {
+		position: absolute;
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.bg-swiper-img {
+		object-fit: cover;
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+
+
+
   <script>
-  function typedFn() {
-    const el = '#archive-header-desc';
-    const type = 'archive';
-    let desc = '乾坤未定，你我皆是黑马'
-    var typed = new Typed(el, {
-      strings: [desc],
-      startDelay: 100,
-      typeSpeed: 100,
-      loop: true,
-      backSpeed: 50,
-      showCursor: true
-    });
-  }
-  typedFn();
-</script>
+  function loadMermaid() {
+    if (document.getElementsByClassName('mermaid').length) {
+      if (window.mermaidJsLoad) mermaid.init()
+      else {
+        loadScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(() => {
+          window.mermaidJsLoad = true
+          mermaid.initialize({
+            theme: 'default',
+          })
+          if ('true') {
+            mermaid.init();
+          }
+        })
+      }
+    }
+  };
+  document.addEventListener("DOMContentLoaded", function () {
+    loadMermaid();
+  })
+
+  document.addEventListener('pjax:complete', function () {
+    loadMermaid();
+  })
   
-  </div>
-  <div class="mask-box"></div>
-</div>
-
-<div class="archive-video">
-  <video class="full-video" autoplay loop muted>
-      <source style="width: 100%;height: 100vh;" src="/">
-  </video>
-  <div class="video-header-title">
-    archive
-  </div>
-  <div class="video-header-desc">
-  
-      <span class="title" id="archive-video-header-desc"></span>
-      <script>
-  function typedFn() {
-    const el = '#archive-video-header-desc';
-    const type = 'archive';
-    let desc = '乾坤未定，你我皆是黑马'
-    var typed = new Typed(el, {
-      strings: [desc],
-      startDelay: 100,
-      typeSpeed: 100,
-      loop: true,
-      backSpeed: 50,
-      showCursor: true
-    });
-  }
-  typedFn();
 </script>
-      
-  </div>
-  <div class="mask-box"></div>
-</div>
 
-<!-- hash算法 -->
-
-
-<div class="archive-main">
-  <section class="archive">
-    <div class="archive-content">
-      <ul class="post-archive">
-        
-        
-          
-            
-            <div class="year" data-aos="zoom-in-up">
-                <div class="bullet"></div>
-                <a href="/archives/2026">2026</a>
-            </div>
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2026/06/29/Learn/MapWorldFillHoles/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">06-29</span>
-              </div>
-              <a class="post-title" href="/2026/06/29/Learn/MapWorldFillHoles/">大地图填坑</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2026/06/24/Learn/mapStreamLoad/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="/medias/8.jpg" class="lazyload placeholder" data-srcset="/medias/8.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">06-24</span>
-              </div>
-              <a class="post-title" href="/2026/06/24/Learn/mapStreamLoad/">从0到1：SLG手游大地图同步架构实战</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2026/06/23/Learn/FirstLookWorldMap/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">06-23</span>
-              </div>
-              <a class="post-title" href="/2026/06/23/Learn/FirstLookWorldMap/">初始slg大地图</a>
-            </div>
-          </li>
-        
-          
-            
-            <div class="year" data-aos="zoom-in-up">
-                <div class="bullet"></div>
-                <a href="/archives/2024">2024</a>
-            </div>
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2024/11/25/Learn/GeneratedCode/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="/medias/5.jpg" class="lazyload placeholder" data-srcset="/medias/5.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">11-25</span>
-              </div>
-              <a class="post-title" href="/2024/11/25/Learn/GeneratedCode/">自动生成UI代码并绑定</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2024/09/05/Learn/BatterDev/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="/medias/7.jpg" class="lazyload placeholder" data-srcset="/medias/7.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">09-05</span>
-              </div>
-              <a class="post-title" href="/2024/09/05/Learn/BatterDev/">batterdev</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2024/08/10/Learn/Addressable/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="/medias/13.jpg" class="lazyload placeholder" data-srcset="/medias/13.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">08-10</span>
-              </div>
-              <a class="post-title" href="/2024/08/10/Learn/Addressable/">Addressable 学习</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="/medias/10.jpg" class="lazyload placeholder" data-srcset="/medias/10.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">06-02</span>
-              </div>
-              <a class="post-title" href="/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/">框架</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2024/04/06/Learn/UnityOPtim/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="/medias/14.jpg" class="lazyload placeholder" data-srcset="/medias/14.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">04-06</span>
-              </div>
-              <a class="post-title" href="/2024/04/06/Learn/UnityOPtim/">unity性能优化心得</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2024/04/01/Learn/UiToolKitLearn/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="/medias/4.jpg" class="lazyload placeholder" data-srcset="/medias/4.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">04-01</span>
-              </div>
-              <a class="post-title" href="/2024/04/01/Learn/UiToolKitLearn/">UitoolKit+ GraphView 开发 可视化节点编译器</a>
-            </div>
-          </li>
-        
-          
-          <li class="post-item" data-aos="fade-left">
-            
-            <div class="post-img-box">
-              <a href="/2024/03/22/graphics/Drawcall/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" src="/medias/13.jpg" class="lazyload placeholder" data-srcset="/medias/13.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                <span class="post-date">03-22</span>
-              </div>
-              <a class="post-title" href="/2024/03/22/graphics/Drawcall/">DrawCall</a>
-            </div>
-          </li>
-        
-      </ul>
-    </div>
-  </section>
-  <div class="w-70">
-    
-  <!-- <nav class="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">下一页</a>
-  </nav> -->
-  <div class="page-nav">
-    
-    <div class="page-info">
-        <div class="page-info-text">1 / 2</div>
-    </div>
-    
-      <a href="/archives/page/2/"
-         class="page-nav-next">
-          <span class="mr-5">下一页</span><i class="fas fa-angle-right"></i>
-      </a>
-      
-  </div>
-
-  </div>
-</div>
 
       </main>
     </div>

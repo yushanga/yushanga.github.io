@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2026-06-27T04:05:25.138Z</updated>
+  <updated>2026-06-29T09:37:33.627Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,18 +17,95 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>大地图无缝加载与动态环境技术总结</title>
+    <title>大地图填坑</title>
+    <link href="http://example.com/2026/06/29/Learn/MapWorldFillHoles/"/>
+    <id>http://example.com/2026/06/29/Learn/MapWorldFillHoles/</id>
+    <published>2026-06-29T09:09:57.000Z</published>
+    <updated>2026-06-29T09:37:33.627Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;写在前面：一套经典但暗藏杀机的架构&quot;&gt;&lt;a href=&quot;#写在前面：一套经典但暗藏杀机的架构&quot; class=&quot;headerlink&quot; title=&quot;写在前面：一套经典但暗藏杀机的架构&quot;&gt;&lt;/a&gt;写在前面：一套经典但暗藏杀机的架构&lt;/h2&gt;&lt;p&gt;在 SLG 手游开发中，我们常会设定一套“看起来很稳”的大地图基础规格：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;逻辑网格&lt;/strong&gt;：&lt;code&gt;10000 × 10000&lt;/code&gt;（1亿个格子）；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;底图策略&lt;/strong&gt;：Tilemap 全量常驻内存，不分块卸载；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实体加载&lt;/strong&gt;：后端 AOI 控制，前端九宫格加载；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;渲染分级&lt;/strong&gt;：三档 LOD（精细模型 → 2D 图标 → 公共图标）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果你也是初学者，或正打算用这套方案起步，请先按暂停键。&lt;strong&gt;这套架构在开服瞬间就会把内存、CPU 和网络带宽同时拉满&lt;/strong&gt;。本文将从“填坑”视角，结合后端 AOI 选型、网络同步抗抖动、寻路分层及对象池边界治理，带你逐层拆解优化落地方案。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="GameLearn" scheme="http://example.com/categories/GameLearn/"/>
+    
+    
+    <category term="Unity" scheme="http://example.com/tagsF/Unity/"/>
+    
+    <category term="SLG" scheme="http://example.com/tagsF/SLG/"/>
+    
+    <category term="MMO" scheme="http://example.com/tagsF/MMO/"/>
+    
+    <category term="大地图流式加载" scheme="http://example.com/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
+    
+    <category term="AOI" scheme="http://example.com/tagsF/AOI/"/>
+    
+    <category term="寻路优化" scheme="http://example.com/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
+    
+    <category term="网络同步" scheme="http://example.com/tagsF/%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5/"/>
+    
+    <category term="对象池" scheme="http://example.com/tagsF/%E5%AF%B9%E8%B1%A1%E6%B1%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>从0到1：SLG手游大地图同步架构实战</title>
     <link href="http://example.com/2026/06/24/Learn/mapStreamLoad/"/>
     <id>http://example.com/2026/06/24/Learn/mapStreamLoad/</id>
     <published>2026-06-24T03:09:57.000Z</published>
-    <updated>2026-06-27T04:05:25.138Z</updated>
+    <updated>2026-06-29T09:37:26.471Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;写在前面：一套经典但暗藏杀机的架构&quot;&gt;&lt;a href=&quot;#写在前面：一套经典但暗藏杀机的架构&quot; class=&quot;headerlink&quot; title=&quot;写在前面：一套经典但暗藏杀机的架构&quot;&gt;&lt;/a&gt;写在前面：一套经典但暗藏杀机的架构&lt;/h2&gt;&lt;p&gt;在 SLG 手游开发中，我们常会设定一套“看起来很稳”的大地图基础规格：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;逻辑网格&lt;/strong&gt;：&lt;code&gt;10000 × 10000&lt;/code&gt;（1亿个格子）；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;底图策略&lt;/strong&gt;：Tilemap 全量常驻内存，不分块卸载（图个省事）；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实体加载&lt;/strong&gt;：九宫格（&lt;code&gt;3×3&lt;/code&gt;）AOI，以镜头/主城为中心，跨 Chunk 边界触发刷新；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;渲染分级&lt;/strong&gt;：三档 LOD（精细模型 → 2D 图标 → 公共图标）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果你也是初学者，或正打算用这套方案起步，请先按暂停键。&lt;strong&gt;这套架构在开服瞬间就会把内存、CPU 和网络带宽同时拉满&lt;/strong&gt;。本文将从“填坑”视角，带你逐层拆解优化落地方案。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="GameLearn" scheme="http://example.com/categories/GameLearn/"/>
+    
+    
+    <category term="Unity" scheme="http://example.com/tagsF/Unity/"/>
+    
+    <category term="SLG" scheme="http://example.com/tagsF/SLG/"/>
+    
+    <category term="MMO" scheme="http://example.com/tagsF/MMO/"/>
+    
+    <category term="大地图流式加载" scheme="http://example.com/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
+    
+    <category term="AOI" scheme="http://example.com/tagsF/AOI/"/>
+    
+    <category term="寻路优化" scheme="http://example.com/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>初始slg大地图</title>
+    <link href="http://example.com/2026/06/23/Learn/FirstLookWorldMap/"/>
+    <id>http://example.com/2026/06/23/Learn/FirstLookWorldMap/</id>
+    <published>2026-06-23T03:09:57.000Z</published>
+    <updated>2026-06-29T09:37:28.588Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h2 id=&quot;一、大地图流式分块加载核心作用&quot;&gt;&lt;a href=&quot;#一、大地图流式分块加载核心作用&quot; class=&quot;headerlink&quot; title=&quot;一、大地图流式分块加载核心作用&quot;&gt;&lt;/a&gt;一、大地图流式分块加载核心作用&lt;/h2&gt;&lt;h3</summary>
+    <summary type="html">&lt;h2 id=&quot;看到的公司slg-架构&quot;&gt;&lt;a href=&quot;#看到的公司slg-架构&quot; class=&quot;headerlink&quot; title=&quot;看到的公司slg 架构&quot;&gt;&lt;/a&gt;看到的公司slg 架构&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;底图</summary>
         
       
     

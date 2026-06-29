@@ -1479,6 +1479,10 @@
 		
 			
 		
+			
+		
+			
+		
 	</div>
 </div>
 
@@ -1495,10 +1499,71 @@
         <div class="post-info">
           <div class="post-time">
             <i class="fas fa-clock" aria-hidden="true"></i>
+            <span class="post-time">2026-06-29</span>
+          </div>
+          <div class="post-title">
+            <a class="post-title-link" href="/2026/06/29/Learn/MapWorldFillHoles/">大地图填坑</a>
+          </div>
+          <div class="post-meta">
+            <div class="post-tags">
+              <!-- 文章详情页的标签 -->
+
+    <i class="iconfont icontag"></i>
+    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/AOI/" rel="tag">AOI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/MMO/" rel="tag">MMO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/SLG/" rel="tag">SLG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/Unity/" rel="tag">Unity</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/" rel="tag">大地图流式加载</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/%E5%AF%B9%E8%B1%A1%E6%B1%A0/" rel="tag">对象池</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/" rel="tag">寻路优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5/" rel="tag">网络同步</a></li></ul>
+
+            </div>
+            <div class="post-categories">
+              <!-- 文章详情页的分类 -->
+
+<div class="article-category">
+  <i class="iconfont iconbookmark1"></i>
+  <a class="article-category-link" href="/categories/GameLearn/">GameLearn</a>
+</div>
+
+
+            </div>
+          </div>
+          <div class="post-img-mobile">
+            <a href="/2026/06/29/Learn/MapWorldFillHoles/" style="background-size: cover; 
+              background-position: center center;">
+              <img class="lazyload lazyload placeholder" src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+            </a>
+          </div>
+          <div class="post-content">
+            <h2 id="写在前面：一套经典但暗藏杀机的架构"><a href="#写在前面：一套经典但暗藏杀机的架构" class="headerlink" title="写在前面：一套经典但暗藏杀机的架构"></a>写在前面：一套经典但暗藏杀机的架构</h2><p>在 SLG 手游开发中，我们常会设定一套“看起来很稳”的大地图基础规格：</p>
+<ul>
+<li><strong>逻辑网格</strong>：<code>10000 × 10000</code>（1亿个格子）；</li>
+<li><strong>底图策略</strong>：Tilemap 全量常驻内存，不分块卸载；</li>
+<li><strong>实体加载</strong>：后端 AOI 控制，前端九宫格加载；</li>
+<li><strong>渲染分级</strong>：三档 LOD（精细模型 → 2D 图标 → 公共图标）。</li>
+</ul>
+<p>如果你也是初学者，或正打算用这套方案起步，请先按暂停键。<strong>这套架构在开服瞬间就会把内存、CPU 和网络带宽同时拉满</strong>。本文将从“填坑”视角，结合后端 AOI 选型、网络同步抗抖动、寻路分层及对象池边界治理，带你逐层拆解优化落地方案。</p>
+          </div>
+        </div>
+        <div class="post-more">
+          <a href="/2026/06/29/Learn/MapWorldFillHoles/">
+            <i class="iconfont iconmore" pointer style="float: right;  " title="阅读更多"></i>
+          </a>
+        </div>
+      </div>
+      <div class="post-img">
+        <a href="/2026/06/29/Learn/MapWorldFillHoles/" style="background-size: cover; 
+          background-position: center center;">
+          <img class="lazyload lazyload placeholder" src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+        </a>
+      </div>
+    </article>
+  
+    
+    <article class="post reveal" style="   ">
+      <div class="post-main">
+        <div class="post-info">
+          <div class="post-time">
+            <i class="fas fa-clock" aria-hidden="true"></i>
             <span class="post-time">2026-06-24</span>
           </div>
           <div class="post-title">
-            <a class="post-title-link" href="/2026/06/24/Learn/mapStreamLoad/">大地图无缝加载与动态环境技术总结</a>
+            <a class="post-title-link" href="/2026/06/24/Learn/mapStreamLoad/">从0到1：SLG手游大地图同步架构实战</a>
           </div>
           <div class="post-meta">
             <div class="post-tags">
@@ -1522,23 +1587,86 @@
           <div class="post-img-mobile">
             <a href="/2026/06/24/Learn/mapStreamLoad/" style="background-size: cover; 
               background-position: center center;">
-              <img class="lazyload lazyload placeholder" src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+              <img class="lazyload lazyload placeholder" src="/medias/8.jpg" class="lazyload placeholder" data-srcset="/medias/8.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
             </a>
           </div>
           <div class="post-content">
-            一、大地图流式分块加载核心作用1.1 流式加载出现背景场景流式加载是解决超大沙盘地图，适配移动端、低端设备内存/显存/CPU 瓶颈的核心底层技术。若将整张地图资源全部常驻内存，会直接引发内存溢出、游戏闪退、频繁 GC 卡顿；但若资源加载逻辑
+            <h2 id="写在前面：一套经典但暗藏杀机的架构"><a href="#写在前面：一套经典但暗藏杀机的架构" class="headerlink" title="写在前面：一套经典但暗藏杀机的架构"></a>写在前面：一套经典但暗藏杀机的架构</h2><p>在 SLG 手游开发中，我们常会设定一套“看起来很稳”的大地图基础规格：</p>
+<ul>
+<li><strong>逻辑网格</strong>：<code>10000 × 10000</code>（1亿个格子）；</li>
+<li><strong>底图策略</strong>：Tilemap 全量常驻内存，不分块卸载（图个省事）；</li>
+<li><strong>实体加载</strong>：九宫格（<code>3×3</code>）AOI，以镜头/主城为中心，跨 Chunk 边界触发刷新；</li>
+<li><strong>渲染分级</strong>：三档 LOD（精细模型 → 2D 图标 → 公共图标）。</li>
+</ul>
+<p>如果你也是初学者，或正打算用这套方案起步，请先按暂停键。<strong>这套架构在开服瞬间就会把内存、CPU 和网络带宽同时拉满</strong>。本文将从“填坑”视角，带你逐层拆解优化落地方案。</p>
           </div>
         </div>
         <div class="post-more">
           <a href="/2026/06/24/Learn/mapStreamLoad/">
-            <i class="iconfont iconmore" pointer style="float: right;  " title="阅读更多"></i>
+            <i class="iconfont iconmore" pointer style="  " title="阅读更多"></i>
           </a>
         </div>
       </div>
       <div class="post-img">
         <a href="/2026/06/24/Learn/mapStreamLoad/" style="background-size: cover; 
           background-position: center center;">
-          <img class="lazyload lazyload placeholder" src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+          <img class="lazyload lazyload placeholder" src="/medias/8.jpg" class="lazyload placeholder" data-srcset="/medias/8.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+        </a>
+      </div>
+    </article>
+  
+    
+    <article class="post reveal" style="flex-direction: row-reverse;   ">
+      <div class="post-main">
+        <div class="post-info">
+          <div class="post-time">
+            <i class="fas fa-clock" aria-hidden="true"></i>
+            <span class="post-time">2026-06-23</span>
+          </div>
+          <div class="post-title">
+            <a class="post-title-link" href="/2026/06/23/Learn/FirstLookWorldMap/">初始slg大地图</a>
+          </div>
+          <div class="post-meta">
+            <div class="post-tags">
+              <!-- 文章详情页的标签 -->
+
+    <i class="iconfont icontag"></i>
+    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/AOI/" rel="tag">AOI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/MMO/" rel="tag">MMO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/SLG/" rel="tag">SLG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/Unity/" rel="tag">Unity</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/" rel="tag">大地图流式加载</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/" rel="tag">寻路优化</a></li></ul>
+
+            </div>
+            <div class="post-categories">
+              <!-- 文章详情页的分类 -->
+
+<div class="article-category">
+  <i class="iconfont iconbookmark1"></i>
+  <a class="article-category-link" href="/categories/GameLearn/">GameLearn</a>
+</div>
+
+
+            </div>
+          </div>
+          <div class="post-img-mobile">
+            <a href="/2026/06/23/Learn/FirstLookWorldMap/" style="background-size: cover; 
+              background-position: center center;">
+              <img class="lazyload lazyload placeholder" src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+            </a>
+          </div>
+          <div class="post-content">
+            看到的公司slg 架构
+底图 Tilemap：一张底图独立直接做tilemap背景，所有底图瓦片常驻内存，无分块卸载逻辑；
+动态实体（城堡、军队、资源点）：九宫格 AOI 加载，以镜头/玩家主城为中心加载 3×3（Aoi 30*30  没具
+          </div>
+        </div>
+        <div class="post-more">
+          <a href="/2026/06/23/Learn/FirstLookWorldMap/">
+            <i class="iconfont iconmore" pointer style="float: right;  " title="阅读更多"></i>
+          </a>
+        </div>
+      </div>
+      <div class="post-img">
+        <a href="/2026/06/23/Learn/FirstLookWorldMap/" style="background-size: cover; 
+          background-position: center center;">
+          <img class="lazyload lazyload placeholder" src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
         </a>
       </div>
     </article>
@@ -1920,109 +2048,6 @@ UIToolKi
       </div>
     </article>
   
-    
-    <article class="post reveal" style="flex-direction: row-reverse;   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2024-03-22</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2024/03/22/graphics/">关于图形学</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-<div class="article-category">
-  <i class="iconfont iconbookmark1"></i>
-  <a class="article-category-link" href="/categories/Grapics/">Grapics</a>
-</div>
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2024/03/22/graphics/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload lazyload placeholder" src="/medias/4.jpg" class="lazyload placeholder" data-srcset="/medias/4.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            渲染管线的理解
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2024/03/22/graphics/">
-            <i class="iconfont iconmore" pointer style="float: right;  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2024/03/22/graphics/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload lazyload placeholder" src="/medias/4.jpg" class="lazyload placeholder" data-srcset="/medias/4.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
-    
-    <article class="post reveal" style="   ">
-      <div class="post-main">
-        <div class="post-info">
-          <div class="post-time">
-            <i class="fas fa-clock" aria-hidden="true"></i>
-            <span class="post-time">2024-03-22</span>
-          </div>
-          <div class="post-title">
-            <a class="post-title-link" href="/2024/03/22/graphics/RenderPipeline/">渲染管线Render Pipeline个人理解总结</a>
-          </div>
-          <div class="post-meta">
-            <div class="post-tags">
-              <!-- 文章详情页的标签 -->
-
-            </div>
-            <div class="post-categories">
-              <!-- 文章详情页的分类 -->
-
-<div class="article-category">
-  <i class="iconfont iconbookmark1"></i>
-  <a class="article-category-link" href="/categories/Grapics/">Grapics</a>
-</div>
-
-
-            </div>
-          </div>
-          <div class="post-img-mobile">
-            <a href="/2024/03/22/graphics/RenderPipeline/" style="background-size: cover; 
-              background-position: center center;">
-              <img class="lazyload lazyload placeholder" src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-            </a>
-          </div>
-          <div class="post-content">
-            CPU与GPU的区别GPU的架构与CPU有极大的不同，这主要归因于两者不同的使用场合。试想一下，GPU面对3D游戏中成千上万的三角面，如果仅仅是跟Cpu一样逐一单个处理计算，损失的效率是极其惊人的。
-渲染管线（Render Pipeline
-          </div>
-        </div>
-        <div class="post-more">
-          <a href="/2024/03/22/graphics/RenderPipeline/">
-            <i class="iconfont iconmore" pointer style="  " title="阅读更多"></i>
-          </a>
-        </div>
-      </div>
-      <div class="post-img">
-        <a href="/2024/03/22/graphics/RenderPipeline/" style="background-size: cover; 
-          background-position: center center;">
-          <img class="lazyload lazyload placeholder" src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-        </a>
-      </div>
-    </article>
-  
 </section>
     <!-- 翻页 -->
     
@@ -2146,7 +2171,7 @@ UIToolKi
             <li><a class="flat-box"
               title="/categories/GameLearn/" href="/categories/GameLearn/"
               id="categoriesGameLearn"
-              ><div class='name'>GameLearn</div><div class='badge'>(1)</div></a></li>
+              ><div class='name'>GameLearn</div><div class='badge'>(3)</div></a></li>
           
             <li><a class="flat-box"
               title="/categories/Grapics/" href="/categories/Grapics/"
@@ -2176,7 +2201,7 @@ UIToolKi
 
 
     <div class='content'>
-    <a href="/tagsF/AOI/" style="font-size: 14px; color: #999">AOI</a> <a href="/tagsF/MMO/" style="font-size: 14px; color: #999">MMO</a> <a href="/tagsF/SLG/" style="font-size: 14px; color: #999">SLG</a> <a href="/tagsF/Unity/" style="font-size: 14px; color: #999">Unity</a> <a href="/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/" style="font-size: 14px; color: #999">大地图流式加载</a> <a href="/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">寻路优化</a> <a href="/tagsF/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">开发工具</a> <a href="/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">性能优化</a> <a href="/tagsF/%E6%88%98%E6%96%97/" style="font-size: 14px; color: #999">战斗</a> <a href="/tagsF/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 14px; color: #999">自动化</a>
+    <a href="/tagsF/AOI/" style="font-size: 24px; color: #555">AOI</a> <a href="/tagsF/MMO/" style="font-size: 24px; color: #555">MMO</a> <a href="/tagsF/SLG/" style="font-size: 24px; color: #555">SLG</a> <a href="/tagsF/Unity/" style="font-size: 24px; color: #555">Unity</a> <a href="/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/" style="font-size: 24px; color: #555">大地图流式加载</a> <a href="/tagsF/%E5%AF%B9%E8%B1%A1%E6%B1%A0/" style="font-size: 14px; color: #999">对象池</a> <a href="/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/" style="font-size: 24px; color: #555">寻路优化</a> <a href="/tagsF/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">开发工具</a> <a href="/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 14px; color: #999">性能优化</a> <a href="/tagsF/%E6%88%98%E6%96%97/" style="font-size: 14px; color: #999">战斗</a> <a href="/tagsF/%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5/" style="font-size: 14px; color: #999">网络同步</a> <a href="/tagsF/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 14px; color: #999">自动化</a>
     </div>
 </section>
 
@@ -2204,9 +2229,30 @@ UIToolKi
             
 
             <div class="post-img-box">
+              <a href="/2026/06/29/Learn/MapWorldFillHoles/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/2.jpg" class="lazyload placeholder" data-srcset="/medias/2.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">06-29</span>
+                
+              </div>
+              <a class="post-title" href="/2026/06/29/Learn/MapWorldFillHoles/">大地图填坑</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
               <a href="/2026/06/24/Learn/mapStreamLoad/" class="post-img " style="background-size: cover; 
                 background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/15.jpg" class="lazyload placeholder" data-srcset="/medias/15.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/8.jpg" class="lazyload placeholder" data-srcset="/medias/8.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
               </a>
             </div>
             <div class="post-date-title">
@@ -2215,7 +2261,28 @@ UIToolKi
                   <span class="post-date">06-24</span>
                 
               </div>
-              <a class="post-title" href="/2026/06/24/Learn/mapStreamLoad/">大地图无缝加载与动态环境技术总结</a>
+              <a class="post-title" href="/2026/06/24/Learn/mapStreamLoad/">从0到1：SLG手游大地图同步架构实战</a>
+            </div>
+          </div>
+        
+          <div class="aside-list-item">
+            
+            
+            
+
+            <div class="post-img-box">
+              <a href="/2026/06/23/Learn/FirstLookWorldMap/" class="post-img " style="background-size: cover; 
+                background-position: center center;">
+                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+              </a>
+            </div>
+            <div class="post-date-title">
+              <div>
+                
+                  <span class="post-date">06-23</span>
+                
+              </div>
+              <a class="post-title" href="/2026/06/23/Learn/FirstLookWorldMap/">初始slg大地图</a>
             </div>
           </div>
         
@@ -2261,48 +2328,6 @@ UIToolKi
             </div>
           </div>
         
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2024/08/10/Learn/Addressable/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/13.jpg" class="lazyload placeholder" data-srcset="/medias/13.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">08-10</span>
-                
-              </div>
-              <a class="post-title" href="/2024/08/10/Learn/Addressable/">Addressable 学习</a>
-            </div>
-          </div>
-        
-          <div class="aside-list-item">
-            
-            
-            
-
-            <div class="post-img-box">
-              <a href="/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/" class="post-img " style="background-size: cover; 
-                background-position: center center;">
-                <img class="lazyload lazyload placeholder" style="width:100%;height:100%;object-fit:cover;" data-src="/medias/10.jpg" class="lazyload placeholder" data-srcset="/medias/10.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
-              </a>
-            </div>
-            <div class="post-date-title">
-              <div>
-                
-                  <span class="post-date">06-02</span>
-                
-              </div>
-              <a class="post-title" href="/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/">框架</a>
-            </div>
-          </div>
-        
       </div>
     </div>
   </section>
@@ -2310,7 +2335,7 @@ UIToolKi
     
   <section class="widget side_archives">
     
-    <header><a style="color: red" href='/archives/'><i class="fas fa-archive fa-fw" aria-hidden="true"></i><span class='name'>归档</span></a></header><div class="content"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/06/"><span class="card-archive-list-date">六月 2026</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/11/"><span class="card-archive-list-date">十一月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/09/"><span class="card-archive-list-date">九月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/04/"><span class="card-archive-list-date">四月 2024</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/03/"><span class="card-archive-list-date">三月 2024</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/04/"><span class="card-archive-list-date">四月 2022</span><span class="card-archive-list-count">3</span></a></li></ul></div>
+    <header><a style="color: red" href='/archives/'><i class="fas fa-archive fa-fw" aria-hidden="true"></i><span class='name'>归档</span></a></header><div class="content"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/06/"><span class="card-archive-list-date">六月 2026</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/11/"><span class="card-archive-list-date">十一月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/09/"><span class="card-archive-list-date">九月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/04/"><span class="card-archive-list-date">四月 2024</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/03/"><span class="card-archive-list-date">三月 2024</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/04/"><span class="card-archive-list-date">四月 2022</span><span class="card-archive-list-count">3</span></a></li></ul></div>
   </section>
 
     <section class="widget side_webinfo">
@@ -2327,7 +2352,7 @@ UIToolKi
       
         <div class="webinfo-item">
           <div>文章数目：</div>
-          <div>15 篇</div>
+          <div>17 篇</div>
         </div>
       
 
@@ -2370,8 +2395,8 @@ UIToolKi
         <div class="webinfo-item">
           <div>最后活动时间：</div>
           
-            <div id="last-update" style="display: none;">Sat Jun 27 2026 12:10:50 GMT+0800 (中国标准时间)</div>
-            <div id="last-update-show">2026-06-27 日</div>
+            <div id="last-update" style="display: none;">Mon Jun 29 2026 17:41:15 GMT+0800 (中国标准时间)</div>
+            <div id="last-update-show">2026-06-29 日</div>
           
         </div>
         
@@ -2421,7 +2446,7 @@ UIToolKi
           try {
             document.getElementById('last-update-show').innerHTML = timeago(new Date(lastUpDate));
           } catch (error) {
-            document.getElementById('last-update-show').innerHTML = '2026-06-27 日';
+            document.getElementById('last-update-show').innerHTML = '2026-06-29 日';
           }
         </script>
         
