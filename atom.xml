@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2026-06-29T09:37:33.627Z</updated>
+  <updated>2026-06-29T09:43:52.891Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,17 +21,16 @@
     <link href="http://example.com/2026/06/29/Learn/MapWorldFillHoles/"/>
     <id>http://example.com/2026/06/29/Learn/MapWorldFillHoles/</id>
     <published>2026-06-29T09:09:57.000Z</published>
-    <updated>2026-06-29T09:37:33.627Z</updated>
+    <updated>2026-06-29T09:43:52.891Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;写在前面：一套经典但暗藏杀机的架构&quot;&gt;&lt;a href=&quot;#写在前面：一套经典但暗藏杀机的架构&quot; class=&quot;headerlink&quot; title=&quot;写在前面：一套经典但暗藏杀机的架构&quot;&gt;&lt;/a&gt;写在前面：一套经典但暗藏杀机的架构&lt;/h2&gt;&lt;p&gt;在 SLG 手游开发中，我们常会设定一套“看起来很稳”的大地图基础规格：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;逻辑网格&lt;/strong&gt;：&lt;code&gt;10000 × 10000&lt;/code&gt;（1亿个格子）；&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;底图策略&lt;/strong&gt;：Tilemap 全量常驻内存，不分块卸载；&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;实体加载&lt;/strong&gt;：后端 AOI 控制，前端九宫格加载；&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;渲染分级&lt;/strong&gt;：三档 LOD（精细模型 → 2D 图标 → 公共图标）。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;如果你也是初学者，或正打算用这套方案起步，请先按暂停键。&lt;strong&gt;这套架构在开服瞬间就会把内存、CPU 和网络带宽同时拉满&lt;/strong&gt;。本文将从“填坑”视角，结合后端 AOI 选型、网络同步抗抖动、寻路分层及对象池边界治理，带你逐层拆解优化落地方案。&lt;/p&gt;</summary>
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;一、后端-AOI-算法选型：九宫格-vs-十字链表&quot;&gt;&lt;a href=&quot;#一、后端-AOI-算法选型：九宫格-vs-十字链表&quot; class=&quot;headerlink&quot; title=&quot;一、后端 AOI 算法选型：九宫格 vs 十字链表&quot;&gt;&lt;/a&gt;一、后端 AOI</summary>
+        
+      
     
     
     

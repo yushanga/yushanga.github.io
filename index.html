@@ -1530,14 +1530,12 @@
             </a>
           </div>
           <div class="post-content">
-            <h2 id="写在前面：一套经典但暗藏杀机的架构"><a href="#写在前面：一套经典但暗藏杀机的架构" class="headerlink" title="写在前面：一套经典但暗藏杀机的架构"></a>写在前面：一套经典但暗藏杀机的架构</h2><p>在 SLG 手游开发中，我们常会设定一套“看起来很稳”的大地图基础规格：</p>
-<ul>
-<li><strong>逻辑网格</strong>：<code>10000 × 10000</code>（1亿个格子）；</li>
-<li><strong>底图策略</strong>：Tilemap 全量常驻内存，不分块卸载；</li>
-<li><strong>实体加载</strong>：后端 AOI 控制，前端九宫格加载；</li>
-<li><strong>渲染分级</strong>：三档 LOD（精细模型 → 2D 图标 → 公共图标）。</li>
-</ul>
-<p>如果你也是初学者，或正打算用这套方案起步，请先按暂停键。<strong>这套架构在开服瞬间就会把内存、CPU 和网络带宽同时拉满</strong>。本文将从“填坑”视角，结合后端 AOI 选型、网络同步抗抖动、寻路分层及对象池边界治理，带你逐层拆解优化落地方案。</p>
+            一、后端 AOI 算法选型：九宫格 vs 十字链表后端 AOI（Area of Interest）是大地图同步的发动机。很多新人纠结于选型，其实核心就看两点：视野是否固定 和 移动频率是否变态。
+1.1 原理对比
+
+
+特性
+九宫格（Grid
           </div>
         </div>
         <div class="post-more">
@@ -2395,7 +2393,7 @@ UIToolKi
         <div class="webinfo-item">
           <div>最后活动时间：</div>
           
-            <div id="last-update" style="display: none;">Mon Jun 29 2026 17:41:15 GMT+0800 (中国标准时间)</div>
+            <div id="last-update" style="display: none;">Mon Jun 29 2026 17:44:03 GMT+0800 (中国标准时间)</div>
             <div id="last-update-show">2026-06-29 日</div>
           
         </div>
