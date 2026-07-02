@@ -81,7 +81,7 @@
         
     
 
-<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Wind Dust" type="application/atom+xml">
+<meta name="generator" content="Hexo 8.1.2"><link rel="alternate" href="/atom.xml" title="Wind Dust" type="application/atom+xml">
 </head>
 
   
@@ -795,12 +795,12 @@
             </a>
           </div>
           <div class="post-content">
-            一、后端 AOI 算法选型：九宫格 vs 十字链表后端 AOI（Area of Interest）是大地图同步的发动机。很多新人纠结于选型，其实核心就看两点：视野是否固定 和 移动频率是否变态。
-1.1 原理对比
+            后端 AOI 算法选型：九宫格 vs 十字链表后端 AOI（Area of Interest）是大地图同步的发动机。很多新人纠结于选型，其实核心就看两点：视野是否固定 和 移动频率是否变态。
+原理对比
 
 
 特性
-九宫格（Grid
+九宫格（Grid &#x2F
           </div>
         </div>
         <div class="post-more">
@@ -858,10 +858,19 @@
 <ul>
 <li><strong>逻辑网格</strong>：<code>10000 × 10000</code>（1亿个格子）；</li>
 <li><strong>底图策略</strong>：Tilemap 全量常驻内存，不分块卸载（图个省事）；</li>
-<li><strong>实体加载</strong>：九宫格（<code>3×3</code>）AOI，以镜头/主城为中心，跨 Chunk 边界触发刷新；</li>
+<li><strong>实体加载</strong>：九宫格（<code>3×3</code>）AOI，以镜头&#x2F;主城为中心，跨 Chunk 边界触发刷新；</li>
 <li><strong>渲染分级</strong>：三档 LOD（精细模型 → 2D 图标 → 公共图标）。</li>
 </ul>
 <p>如果你也是初学者，或正打算用这套方案起步，请先按暂停键。<strong>这套架构在开服瞬间就会把内存、CPU 和网络带宽同时拉满</strong>。本文将从“填坑”视角，带你逐层拆解优化落地方案。</p>
+<blockquote>
+<p>读完本文，你会搞懂：</p>
+<ul>
+<li>为什么 <code>10000×10000</code> 网格不能直接存数组？</li>
+<li>为什么九宫格 AOI 在缩放时会导致“反复横跳”？</li>
+<li>为什么行军线跨 Chunk 会断，以及如何让它不断？</li>
+<li>如何在内存、性能、画质三者之间找到平衡点？</li>
+</ul>
+</blockquote>
           </div>
         </div>
         <div class="post-more">
@@ -917,7 +926,7 @@
           <div class="post-content">
             看到的公司slg 架构
 底图 Tilemap：一张底图独立直接做tilemap背景，所有底图瓦片常驻内存，无分块卸载逻辑；
-动态实体（城堡、军队、资源点）：九宫格 AOI 加载，以镜头/玩家主城为中心加载 3×3（Aoi 30*30  没具
+动态实体（城堡、军队、资源点）：九宫格 AOI 加载，以镜头&#x2F;玩家主城为中心加载 3×3（Aoi 30*3
           </div>
         </div>
         <div class="post-more">
