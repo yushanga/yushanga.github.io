@@ -881,6 +881,13 @@
 <li><strong>单元测试</strong>：集成到 CI 流程，自动校验所有面板绑定完整性。</li>
 </ul>
 <hr>
+<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>也有一些痛点 想更便捷一些的 可以不find 而是再编译器的时候find 然后在组件中只记录引用 这样生成的分布式代码awke就不需要这种 FInd</p>
+<h3 id="分布式类Find取消优化方案"><a href="#分布式类Find取消优化方案" class="headerlink" title="分布式类Find取消优化方案"></a>分布式类Find取消优化方案</h3><p>在生成代码时，不仅声明 <code>[SerializeField]</code> 字段，还利用编辑器 API <strong>直接为预制体（或场景）中的字段赋值</strong>，将控件引用序列化到资产中。这样 <code>Awake</code> 中完全无需查找，直接使用字段即可。</p>
+<h3 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h3><ol>
+<li><strong>修改生成模板</strong>：字段添加 <code>[SerializeField]</code> 属性，去除 <code>Awake</code> 方法。</li>
+<li><strong>生成后处理</strong>：代码生成完成后，使用 <code>PrefabUtility</code> 或 <code>SerializedObject</code> 将扫描到的组件赋值给对应字段，并保存预制体。</li>
+<li><strong>回退机制</strong>：提供开关，让用户选择“运行时 Find”或“序列化引用”模式。</li>
+</ol>
 <p><strong>本方案已在实际项目中稳定运行，有效提升了 UI 开发效率，降低维护成本。</strong> 如需详细代码实现或定制化扩展，欢迎进一步交流。</p>
 
       </div>
