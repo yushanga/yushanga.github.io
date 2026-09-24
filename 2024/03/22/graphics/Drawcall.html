@@ -1,0 +1,337 @@
+<hr>
+<h2 id="title-UGUI-合批（DrawCall）原理与优化笔记date-2024-03-22-21-47-40updated-2026-09-24-00-00-00categories-Graphicstags-UGUI-DrawCall-合批-性能优化-Unity-Rebuild-Rebatch"><a href="#title-UGUI-合批（DrawCall）原理与优化笔记date-2024-03-22-21-47-40updated-2026-09-24-00-00-00categories-Graphicstags-UGUI-DrawCall-合批-性能优化-Unity-Rebuild-Rebatch" class="headerlink" title="title: UGUI 合批（DrawCall）原理与优化笔记date: 2024-03-22 21:47:40updated: 2026-09-24 00:00:00categories:  - Graphicstags:  - UGUI  - DrawCall  - 合批  - 性能优化  - Unity  - Rebuild  - Rebatch"></a>title: UGUI 合批（DrawCall）原理与优化笔记<br>date: 2024-03-22 21:47:40<br>updated: 2026-09-24 00:00:00<br>categories:<br>  - Graphics<br>tags:<br>  - UGUI<br>  - DrawCall<br>  - 合批<br>  - 性能优化<br>  - Unity<br>  - Rebuild<br>  - Rebatch</h2><blockquote>
+<p>这篇笔记最早写于 2024.03，当时是从 Unity 分享课和求职面试的角度整理的。<br>2026.09 回看时，很多理解已经不一样了。<br>所以保留 2403 的原始认知作为主体，在每一段下面用 <strong>2609 批注</strong> 的方式补充、修正、优化。</p>
+<p>阅读方式：先看正文（2403 的认知），再看下面的 <code>2609 批注</code>。</p>
+</blockquote>
+<hr>
+<h2 id="一、合批处理在-UGUI-中会有一些不同"><a href="#一、合批处理在-UGUI-中会有一些不同" class="headerlink" title="一、合批处理在 UGUI 中会有一些不同"></a>一、合批处理在 UGUI 中会有一些不同</h2><h3 id="2403-原文"><a href="#2403-原文" class="headerlink" title="2403 原文"></a>2403 原文</h3><p>先获得一个按 <code>Hierarchy</code> 顺序的列表，计算每个物体的深度。</p>
+<ol>
+<li>深度从 <code>0</code> 开始递增。如果世界包围盒 Z 轴不为 <code>0</code>（或 <code>isCanvasInjectionIndex</code>），则需独占一个批次，同时独占一个深度。即等于之前所有物体最大深度 <code>+1</code>，后一个物体深度需要 <code>+1</code>。</li>
+<li>对一般物体的深度，会判断是否可跟之前的物件共享深度，走接下来的流程。<ul>
+<li>2.1 先按格子（默认大小是 <code>120</code>，根据包围盒再计算）划分出多个格子。（只是为了加速求交）</li>
+<li>2.2 计算物体包围相交哪些格子，再跟格子中已有的物体进行包围盒相交判断。<ul>
+<li>如果不相交则使用当前深度；</li>
+<li>如果相交且可合批，则使用相交物体中最大的深度；</li>
+<li>如果相交且不可合批，则使用相交物体中最大的深度 <code>+1</code>。</li>
+<li>合批条件：无独占批次 + 材质相同 + 贴图相同 + 裁剪开关和裁剪矩形相同 + 贴图 A8 格式一致（<code>kTexFormatAlpha8</code>）。</li>
+</ul>
+</li>
+<li>2.3 将该物体加入所有相交的格子中。若遇到独占深度的物体，则格子数据清空。即后续物件不跟之前的物件共享深度。</li>
+</ul>
+</li>
+</ol>
+<p>排序：按照 <code>深度 → 材质 → 贴图 → 层级顺序</code> 优先级排序。</p>
+<p>合批：对排序后的列表，从头开始一个一个检测是否能与前面的物体合批。合批条件：无独占批次（只判断 <code>isCanvasInjectionIndex</code>）+ 材质相同 + 贴图相同 + 裁剪开关和裁剪矩形相同 + 贴图 A8 格式一致（<code>kTexFormatAlpha8</code>），非 <code>SubBatch</code> 只判断前两个条件，一般情况下 UI 的材质都一样。</p>
+<p>在 Unity 的 Shader 中会将这些数据存到一些通道里：<code>POSITION</code>、<code>NORMAL</code>、<code>COLOR</code>、<code>TANGENT</code>、<code>TEXCOORD</code>。</p>
+<blockquote>
+<p>UGUI 批处理原文链接：<br><a href="https://blog.csdn.net/hankangwen/article/details/122667647">https://blog.csdn.net/hankangwen/article/details/122667647</a></p>
+</blockquote>
+<h3 id="2609-批注"><a href="#2609-批注" class="headerlink" title="2609 批注"></a>2609 批注</h3><p>这段描述的是 UGUI <strong>内部如何决定哪些 Graphic 可以共享同一个 depth &#x2F; batch</strong>。当时是把它当成一套“流程”记下来的，现在回看，更重要的是抓住它的<strong>本质</strong>：</p>
+<p><strong>1. 合批的顺序是“先排序，再贪心合批”，不是先合批再排序。</strong></p>
+<p>这一点 2403 时其实没完全吃透。当时容易误以为 UGUI 会主动去找能合的物体合在一起，实际上它是：</p>
+<ul>
+<li>先按 <code>Hierarchy</code> 顺序收集 Graphic；</li>
+<li>根据包围盒相交关系算出每个物体的 depth；</li>
+<li>按 <code>depth → 材质 → 贴图 → 层级</code> 排序；</li>
+<li>然后从头到尾<strong>贪心</strong>地检测“这个能不能和前面那个合”。</li>
+</ul>
+<p>贪心的意思是：一旦断了，后面即使条件满足也回不去。所以“中间插一个不同图集的元素”代价很大——它会把前后彻底切成两个批次。</p>
+<p><strong>2. 深度计算的核心是“包围盒相交”，格子只是为了加速。</strong></p>
+<p>2403 时把“格子大小 120”当成一个知识点记下来了，但现在看，格子大小本身不重要，它只是<strong>空间划分加速</strong>的手段，类似四叉树&#x2F;网格。真正决定 depth 的是：</p>
+<ul>
+<li>两个物体的包围盒是否相交；</li>
+<li>相交的话，能不能合批。</li>
+</ul>
+<p>不相交 → 可以共享深度；相交且可合批 → 取相交物体最大深度；相交且不可合批 → 最大深度 +1。</p>
+<p><strong>3. 合批条件里，工程上真正重要的是前几个。</strong></p>
+<p>2403 把 <code>kTexFormatAlpha8</code>、<code>SubBatch</code> 这些都记下来了，但实际项目中，最常打断合批的只有：</p>
+<ul>
+<li><strong>不同图集</strong></li>
+<li><strong>不同材质</strong></li>
+<li><strong>Mask &#x2F; RectMask2D</strong></li>
+<li><strong>中间插入了不一样的元素</strong></li>
+</ul>
+<p><code>kTexFormatAlpha8</code> 属于底层细节，日常优化优先级很低。<code>SubBatch</code> 更是普通 UI 开发几乎不用关心的概念。</p>
+<p><strong>4. Shader 通道那部分，2403 只是“知道”，2609 要知道“为什么”。</strong></p>
+<p>UGUI 会把顶点数据打包进 <code>POSITION</code>、<code>NORMAL</code>、<code>COLOR</code>、<code>TANGENT</code>、<code>TEXCOORD</code> 这些通道。为什么？因为 UGUI 用的是一套通用顶点格式，为了塞下 UV、顶点色、裁剪矩形等额外数据，会复用一些通道。比如：</p>
+<ul>
+<li><code>TEXCOORD0</code> 存 UV；</li>
+<li><code>COLOR</code> 存顶点色；</li>
+<li><code>TANGENT</code> &#x2F; <code>NORMAL</code> 有时被复用来存裁剪矩形等额外信息。</li>
+</ul>
+<p>这些在写自定义 UGUI Shader 时才会真正用到，日常优化不必深究。</p>
+<p><strong>一句话修正：</strong></p>
+<blockquote>
+<p>2403 记的是“流程和条件”，2609 要抓的是“排序 + 贪心合批”这个本质，以及“哪些条件在工程上真正重要”。</p>
+</blockquote>
+<hr>
+<h2 id="二、UGUI-合批的注意事项"><a href="#二、UGUI-合批的注意事项" class="headerlink" title="二、UGUI 合批的注意事项"></a>二、UGUI 合批的注意事项</h2><h3 id="2403-原文-1"><a href="#2403-原文-1" class="headerlink" title="2403 原文"></a>2403 原文</h3><p>首先合批的原理：同一 <code>Canvas</code> 下，同一材质，同一图片或者是图集。</p>
+<h4 id="UGUI-的排序"><a href="#UGUI-的排序" class="headerlink" title="UGUI 的排序"></a>UGUI 的排序</h4><p>首先 UGUI 的排序渲染方式：</p>
+<ul>
+<li>Canvas 的渲染层级</li>
+<li>UI 的深度渲染层级</li>
+<li>index 深度</li>
+<li>材质的渲染层级</li>
+<li>Hierarchy 次序（textureID 排序）</li>
+</ul>
+<p>UGUI 都是先进行排序，后进行合批。<br>排序的顺序取决于 <code>index 深度</code>（box 是否遮盖的关系）、<code>材质 ID</code>、<code>textureID</code> 排序。</p>
+<h4 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h4><ol>
+<li>所有有可能打断合批的层移动到最下边图层，避免 UI 元素重叠。</li>
+<li>拆分多个同级或者嵌套的 Canvas，减少 Canvas 的 rebatch 复杂度。</li>
+<li>动静分离。</li>
+<li>Canvas 尽量使用 <code>Overlay</code> 模式减少 Camera 的性能开销。</li>
+</ol>
+<h3 id="2609-批注-1"><a href="#2609-批注-1" class="headerlink" title="2609 批注"></a>2609 批注</h3><p><strong>1. “同一 Canvas + 同一材质 + 同一图片&#x2F;图集”只是表象。</strong></p>
+<p>本质是：<strong>同一 Batch 内不能切换渲染状态</strong>。材质、贴图、裁剪状态、Stencil 状态任意一个变了，就得新 DrawCall。所以“合批”不是 UGUI 主动去合并，而是<strong>尽量不让渲染状态切换</strong>，让它们自然落入同一个 Batch。</p>
+<p><strong>2. 排序那几条，2403 是背下来的，2609 要知道开发者能影响什么。</strong></p>
+<ul>
+<li>Canvas 的渲染层级 → <code>Sort Order</code>、<code>Render Mode</code>、<code>Sorting Layer</code>；</li>
+<li>UI 的深度渲染层级 → 由包围盒相交算出的 depth；</li>
+<li>index 深度 → <code>Hierarchy</code> 中的先后顺序；</li>
+<li>材质的渲染层级 → 材质 ID 参与排序；</li>
+<li>Hierarchy 次序 → 同深度同材质下按 textureID 排序。</li>
+</ul>
+<p>开发者真正能影响的是：<strong>层级、父子关系、图集划分</strong>。其他都是 UGUI 内部行为。</p>
+<p><strong>3. 四条建议，每一条都能说出“为什么”和“代价”。</strong></p>
+<table>
+<thead>
+<tr>
+<th>建议</th>
+<th>2403 的理解</th>
+<th>2609 的修正</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>打断合批的层移到最下边</td>
+<td>避免 UI 元素重叠</td>
+<td>合批是贪心的，中间插一个不同图集就会断。移到最下面只是减少打断概率，不是根治</td>
+</tr>
+<tr>
+<td>拆分多个 Canvas</td>
+<td>减少 rebatch 复杂度</td>
+<td>一个 Canvas 脏了会触发整个 Canvas 的 Rebuild + Rebatch。拆分是为了缩小脏区域，代价是 Canvas 数量增加，可能增加 DrawCall</td>
+</tr>
+<tr>
+<td>动静分离</td>
+<td>优化手段</td>
+<td>动态元素频繁触发 Graphic Rebuild，静态元素不该陪跑。但要注意：同 Canvas 下动静分离才有意义，拆 Canvas 本身也有开销</td>
+</tr>
+<tr>
+<td>Canvas 用 Overlay</td>
+<td>减少 Camera 开销</td>
+<td>Overlay 省掉 Camera 相关开销，但代价是不能和 3D 内容穿插，是权衡不是绝对</td>
+</tr>
+</tbody></table>
+<p><strong>4. 2403 没提到、2609 要补的两条：</strong></p>
+<ul>
+<li><strong><code>RectMask2D</code> 比 <code>Mask</code> 更轻</strong>：<code>Mask</code> 会引入额外材质 + Stencil 状态，直接打断合批；<code>RectMask2D</code> 只做矩形裁剪，不产生额外 DrawCall。能用 <code>RectMask2D</code> 就别用 <code>Mask</code>。</li>
+<li><strong><code>SetActive</code> 代价大</strong>：它同时触发 Layout + Graphic Rebuild，还会标记 Canvas 脏。能改 <code>CanvasGroup.alpha</code> 或移出屏幕，就别频繁 <code>SetActive</code>。</li>
+</ul>
+<p><strong>一句话修正：</strong></p>
+<blockquote>
+<p>2403 记的是“建议”，2609 要知道每条建议对应的底层规则、代价、以及适用边界。</p>
+</blockquote>
+<hr>
+<h2 id="三、UGUI-核心底层原理"><a href="#三、UGUI-核心底层原理" class="headerlink" title="三、UGUI 核心底层原理"></a>三、UGUI 核心底层原理</h2><h3 id="2403-原文-2"><a href="#2403-原文-2" class="headerlink" title="2403 原文"></a>2403 原文</h3><p>说点特别的，为什么写这个：</p>
+<ol>
+<li>上面的合批是因为在 Unity 分享课上面进行看到的。</li>
+<li>为什么写这个，是因为最近求职，因为自己是中高级的，之前都是业务，拼 UI，所以偶尔碰到资深面试官，都会进行询问对应 Unity UGUI 的一些东西，所以由此而来。</li>
+</ol>
+<p>首先我就说说我对这个的理解吧：</p>
+<ol>
+<li>UGUI 渲染是 <code>Hierarchy</code> 从上到下从左到右遍历，每个 <code>Canvas</code> 独立收集所有 <code>Graphic</code> 组件，根据材质和图集贪心合批，生成 <code>DrawCall</code>。</li>
+<li>分为两个阶段：一个是 Build（构建），一个是 Batch（CPU → GPU 的过程）。</li>
+<li>Rebuild 分两个阶段：Layout 阶段是有布局组件时重新计算位置大小；Graphic 阶段是顶点数据变化时重新生成 Mesh。</li>
+<li>Rebatch 是合批被打断 —— Canvas 下从上到下贪心合批，中间如果有不同图集或不同材质的 Image，就会打断合批，产生新的 <code>DrawCall</code>。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>做什么</th>
+<th>什么时候触发</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Layout 阶段</td>
+<td>重新计算布局（位置 &#x2F; 大小）</td>
+<td>有布局组件（LayoutGroup &#x2F; ContentSizeFitter）时才触发</td>
+</tr>
+<tr>
+<td>Graphic 阶段</td>
+<td>重新生成 Mesh（顶点数据）</td>
+<td>Image 改了 Sprite &#x2F; 颜色 &#x2F; 位置时触发</td>
+</tr>
+</tbody></table>
+<p>所以所谓的什么 DC、什么动静分离，这种其实就是从原理规范所衍生出来的规范，避免底层规则触发。</p>
+<p>Rebatch 是合批被打断 —— 不同图集、不同材质、Mask 都会打断合批。优化手段就是功能区分图集、图集打包、动静分离。</p>
+<h4 id="什么打断合批"><a href="#什么打断合批" class="headerlink" title="什么打断合批"></a>什么打断合批</h4><ul>
+<li>不同图集</li>
+<li>不同材质</li>
+<li>Mask &#x2F; RectMask2D</li>
+<li>中间插了一个不一样的元素</li>
+</ul>
+<h4 id="什么会造成-Rebuild"><a href="#什么会造成-Rebuild" class="headerlink" title="什么会造成 Rebuild"></a>什么会造成 Rebuild</h4><p><strong>SetActive 为什么触发 Rebuild？</strong></p>
+<p><code>SetActive(false)</code> 会触发整个子树 <code>OnDisable</code>，<code>SetActive(true)</code> 触发 <code>OnEnable</code>，同时标记 Canvas 脏数据，触发完整 Rebuild（Layout + Graphic 都重新算）。</p>
+<p>综上所述，其实就好比很多时候的东西，其实应该都是先读懂底层，才知道架构在上面的方法为什么可以实现优化，优化了什么东西。</p>
+<h3 id="2609-批注-2"><a href="#2609-批注-2" class="headerlink" title="2609 批注"></a>2609 批注</h3><p><strong>1. “Rebuild ≠ Rebatch” 是这条分界线，2403 摸到了，2609 要划清。</strong></p>
+<ul>
+<li><strong>Rebuild</strong> 是“数据变了，要重新算”：<ul>
+<li>Layout Rebuild：布局变了（位置 &#x2F; 大小）；</li>
+<li>Graphic Rebuild：顶点变了（Mesh 重生成）。</li>
+</ul>
+</li>
+<li><strong>Rebatch</strong> 是“合批断了，要重新组 Batch”：<ul>
+<li>即使顶点没变，只要排序结果变了，也可能触发 Rebatch。</li>
+</ul>
+</li>
+</ul>
+<p>所以“改个颜色”可能只触发 Graphic Rebuild，而“插入一个不同图集的元素”会直接打断合批。两者不是一回事。</p>
+<p><strong>2. 触发表格，2609 要补细节。</strong></p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>做什么</th>
+<th>什么时候触发</th>
+<th>2609 补充</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Layout 阶段</td>
+<td>重新计算布局</td>
+<td>有布局组件时</td>
+<td>嵌套布局组件是重灾区，会连锁触发子节点重建</td>
+</tr>
+<tr>
+<td>Graphic 阶段</td>
+<td>重新生成 Mesh</td>
+<td>Image 改 Sprite &#x2F; 颜色 &#x2F; 位置</td>
+<td>改颜色只触发 Graphic Rebuild，不一定打断合批</td>
+</tr>
+<tr>
+<td>Rebatch</td>
+<td>重新组 Batch</td>
+<td>排序结果变化、渲染状态切换</td>
+<td>即使顶点没变，插入不同图集元素也会触发</td>
+</tr>
+</tbody></table>
+<p><strong>3. 打断合批的原因，2403 列了现象，2609 要说清机制。</strong></p>
+<table>
+<thead>
+<tr>
+<th>原因</th>
+<th>2403</th>
+<th>2609</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不同图集</td>
+<td>知道会打断</td>
+<td>渲染状态切换，必须新 DrawCall</td>
+</tr>
+<tr>
+<td>不同材质</td>
+<td>知道会打断</td>
+<td>Shader &#x2F; 参数不同，必须新 DrawCall</td>
+</tr>
+<tr>
+<td>Mask &#x2F; RectMask2D</td>
+<td>知道会打断</td>
+<td>Mask 引入额外材质 + Stencil，RectMask2D 只做矩形裁剪更轻</td>
+</tr>
+<tr>
+<td>中间插入不同元素</td>
+<td>知道会打断</td>
+<td>合批是贪心的，断了后面回不去</td>
+</tr>
+<tr>
+<td>独占批次物体</td>
+<td>知道会独占深度</td>
+<td>如 RenderTexture、自定义材质、嵌套 Canvas</td>
+</tr>
+</tbody></table>
+<p><strong>4. SetActive 的代价，2403 只说了一半。</strong></p>
+<p>2403 说它触发完整 Rebuild（Layout + Graphic）。2609 要补：</p>
+<ul>
+<li>它还会标记 Canvas 脏，触发 Rebatch；</li>
+<li><code>OnDisable</code> &#x2F; <code>OnEnable</code> 本身还会触发用户脚本逻辑；</li>
+<li>频繁 <code>SetActive</code> 是 UI 卡顿的常见原因。</li>
+</ul>
+<p>替代方案：改 <code>CanvasGroup.alpha</code>、移出屏幕、改 <code>localScale</code> 等，视具体需求而定。</p>
+<p><strong>5. 2403 说“先读懂底层”，2609 要加一句“读底层是为了推导规则”。</strong></p>
+<p>比如：</p>
+<ul>
+<li>为什么 <code>Mask</code> 会打断合批？→ 因为它引入了额外的材质 &#x2F; Stencil 状态；</li>
+<li>为什么 <code>RectMask2D</code> 比 <code>Mask</code> 更轻？→ 因为它不产生额外 DrawCall，只做矩形裁剪；</li>
+<li>为什么 <code>SetActive</code> 代价大？→ 因为它同时触发 Layout + Graphic Rebuild，还会标记 Canvas 脏。</li>
+</ul>
+<p>这些都不是“口诀”，而是可以从原理推出来的结论。</p>
+<p><strong>一句话修正：</strong></p>
+<blockquote>
+<p>2403 知道 Rebuild 和 Rebatch 是两回事，2609 要知道它们各自的触发条件、代价、以及如何避免。</p>
+</blockquote>
+<hr>
+<h2 id="四、认知升级总结"><a href="#四、认知升级总结" class="headerlink" title="四、认知升级总结"></a>四、认知升级总结</h2><h3 id="2403-的总结"><a href="#2403-的总结" class="headerlink" title="2403 的总结"></a>2403 的总结</h3><p>先读懂底层，才知道架构在上面的方法为什么可以实现优化、优化了什么东西。</p>
+<h3 id="2609-的修正"><a href="#2609-的修正" class="headerlink" title="2609 的修正"></a>2609 的修正</h3><p>2403 的总结是对的，但还停留在“知道要读底层”的阶段。现在会再加一句：</p>
+<blockquote>
+<p>读底层不是为了背规则，而是为了在遇到新问题时，能自己推导出规则。</p>
+</blockquote>
+<p>具体到 UGUI 合批，认知升级体现在：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>2403</th>
+<th>2609</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>出发点</td>
+<td>从规则出发</td>
+<td>从机制出发</td>
+</tr>
+<tr>
+<td>关注点</td>
+<td>知道有这个规则，会用它</td>
+<td>知道它为什么这样，还能推出其他用法</td>
+</tr>
+<tr>
+<td>优化方式</td>
+<td>背建议：合图集、动静分离、拆 Canvas</td>
+<td>先问瓶颈是 Rebuild 还是 Rebatch，再决定手段</td>
+</tr>
+<tr>
+<td>遇到新问题</td>
+<td>查资料、问人</td>
+<td>能从原理推导出结论</td>
+</tr>
+<tr>
+<td>对规则的态度</td>
+<td>规则说不能这样，那就别这样</td>
+<td>规则背后的约束是什么，能不能绕过或换一种方式</td>
+</tr>
+<tr>
+<td>对代价的认知</td>
+<td>知道有代价</td>
+<td>知道代价多大、在什么条件下可接受</td>
+</tr>
+</tbody></table>
+<h3 id="可迁移的追问"><a href="#可迁移的追问" class="headerlink" title="可迁移的追问"></a>可迁移的追问</h3><p>2403 时不会问、2609 时会问的问题：</p>
+<ul>
+<li>为什么 <code>Mask</code> 会打断合批？→ 引入额外材质 &#x2F; Stencil 状态。</li>
+<li>为什么 <code>RectMask2D</code> 比 <code>Mask</code> 更轻？→ 不产生额外 DrawCall，只做矩形裁剪。</li>
+<li>为什么 <code>SetActive</code> 代价大？→ 同时触发 Layout + Graphic Rebuild，还会标记 Canvas 脏。</li>
+<li>Canvas 的 <code>willRenderCanvases</code> 在哪一步调用？→ 由 <code>CanvasUpdateRegistry</code> 调度。</li>
+<li><code>CanvasRenderer</code> 和 <code>CanvasBatch</code> 什么关系？→ <code>CanvasRenderer</code> 是数据载体，<code>CanvasBatch</code> 是合批结果。</li>
+</ul>
+<p><strong>一句话：</strong></p>
+<blockquote>
+<p>2403 是“知道”，2609 是“理解 + 迁移”。</p>
+</blockquote>
+<hr>
+<p><strong>参考链接</strong></p>
+<ul>
+<li><a href="https://blog.csdn.net/hankangwen/article/details/122667647">UGUI 批处理原文</a></li>
+<li><a href="https://www.bilibili.com/video/BV1he4y1P7n9/?spm_id_from=333.788&vd_source=a5fa4de9ed1cd49df33b6b0358c8e74f">Bilibili 视频</a></li>
+</ul>

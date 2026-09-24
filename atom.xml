@@ -18,11 +18,11 @@
     </author>
     <category term="技术分享" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"/>
     <category term="Unity开发" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/Unity%E5%BC%80%E5%8F%91/"/>
+    <category term="性能优化" scheme="http://example.com/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     <category term="Unity" scheme="http://example.com/tagsF/Unity/"/>
     <category term="ECS" scheme="http://example.com/tagsF/ECS/"/>
     <category term="游戏开发" scheme="http://example.com/tagsF/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
     <category term="架构设计" scheme="http://example.com/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
-    <category term="性能优化" scheme="http://example.com/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     <category term="DOTS" scheme="http://example.com/tagsF/DOTS/"/>
     <id>http://example.com/2026/07/02/Learn/FirstECS/</id>
     <link href="http://example.com/2026/07/02/Learn/FirstECS/"/>
@@ -208,11 +208,11 @@
       <name>Wind Dust</name>
     </author>
     <category term="Graphics" scheme="http://example.com/categories/Graphics/"/>
-    <category term="Unity" scheme="http://example.com/tagsF/Unity/"/>
-    <category term="性能优化" scheme="http://example.com/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     <category term="UGUI" scheme="http://example.com/tagsF/UGUI/"/>
     <category term="DrawCall" scheme="http://example.com/tagsF/DrawCall/"/>
     <category term="合批" scheme="http://example.com/tagsF/%E5%90%88%E6%89%B9/"/>
+    <category term="性能优化" scheme="http://example.com/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    <category term="Unity" scheme="http://example.com/tagsF/Unity/"/>
     <category term="Rebuild" scheme="http://example.com/tagsF/Rebuild/"/>
     <category term="Rebatch" scheme="http://example.com/tagsF/Rebatch/"/>
     <id>http://example.com/2024/03/22/graphics/Drawcall/</id>
@@ -251,7 +251,7 @@
       <![CDATA[<h2 id="CPU与GPU的区别"><a href="#CPU与GPU的区别" class="headerlink"]]>
     </summary>
     <title>渲染管线Render Pipeline个人理解总结</title>
-    <updated>2026-06-26T03:22:17.870Z</updated>
+    <updated>2026-09-24T07:17:06.736Z</updated>
   </entry>
   <entry>
     <author>
@@ -276,10 +276,10 @@
     <link href="http://example.com/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/"/>
     <published>2024-03-22T05:47:40.000Z</published>
     <summary>
-      <![CDATA[<p><img src="/ETSkill/1.png" class="lazyload placeholder" data-srcset="/ETSkill/1.png"]]>
+      <![CDATA[<p><img src="/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/1.png" class="lazyload placeholder"]]>
     </summary>
     <title>基于ET的双端战斗</title>
-    <updated>2026-06-26T03:22:17.761Z</updated>
+    <updated>2026-09-24T07:17:06.750Z</updated>
   </entry>
   <entry>
     <author>
