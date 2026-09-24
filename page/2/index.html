@@ -1351,11 +1351,14 @@
             <span class="post-time">2024-03-22</span>
           </div>
           <div class="post-title">
-            <a class="post-title-link" href="/2024/03/22/graphics/Drawcall/">DrawCall</a>
+            <a class="post-title-link" href="/2024/03/22/graphics/Drawcall/">UGUI 合批（DrawCall）原理与优化笔记</a>
           </div>
           <div class="post-meta">
             <div class="post-tags">
               <!-- 文章详情页的标签 -->
+
+    <i class="iconfont icontag"></i>
+    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/DrawCall/" rel="tag">DrawCall</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/Rebatch/" rel="tag">Rebatch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/Rebuild/" rel="tag">Rebuild</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/UGUI/" rel="tag">UGUI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/Unity/" rel="tag">Unity</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/%E5%90%88%E6%89%B9/" rel="tag">合批</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li></ul>
 
             </div>
             <div class="post-categories">
@@ -1363,7 +1366,7 @@
 
 <div class="article-category">
   <i class="iconfont iconbookmark1"></i>
-  <a class="article-category-link" href="/categories/Grapics/">Grapics</a>
+  <a class="article-category-link" href="/categories/Graphics/">Graphics</a>
 </div>
 
 
@@ -1372,11 +1375,13 @@
           <div class="post-img-mobile">
             <a href="/2024/03/22/graphics/Drawcall/" style="background-size: cover; 
               background-position: center center;">
-              <img class="lazyload lazyload placeholder" src="/medias/13.jpg" class="lazyload placeholder" data-srcset="/medias/13.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+              <img class="lazyload lazyload placeholder" src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
             </a>
           </div>
           <div class="post-content">
-            合批处理在UGUI中会有一些不同先获得一个按Hierarchy的顺序的列表计算每个物体的深度。1 深度从0开始递增。如果世界包围盒Z轴不为0（或isCanvasInjectionIndex），则需独占一个批次，同时独占一个深度。即等于之前所
+            
+这篇笔记最早写于 2024.03，当时是从 Unity 分享课和求职面试的角度整理的。2026.09 回看时，很多理解已经不一样了。所以保留 2403 的原始认知作为主体，在每一段下面用 2609 批注 的方式补充、修正、优化。
+阅读方式
           </div>
         </div>
         <div class="post-more">
@@ -1388,7 +1393,7 @@
       <div class="post-img">
         <a href="/2024/03/22/graphics/Drawcall/" style="background-size: cover; 
           background-position: center center;">
-          <img class="lazyload lazyload placeholder" src="/medias/13.jpg" class="lazyload placeholder" data-srcset="/medias/13.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+          <img class="lazyload lazyload placeholder" src="/medias/1.jpg" class="lazyload placeholder" data-srcset="/medias/1.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
         </a>
       </div>
     </article>
@@ -1886,9 +1891,14 @@
               ><div class='name'>GameLearn</div><div class='badge'>(3)</div></a></li>
           
             <li><a class="flat-box"
+              title="/categories/Graphics/" href="/categories/Graphics/"
+              id="categoriesGraphics"
+              ><div class='name'>Graphics</div><div class='badge'>(1)</div></a></li>
+          
+            <li><a class="flat-box"
               title="/categories/Grapics/" href="/categories/Grapics/"
               id="categoriesGrapics"
-              ><div class='name'>Grapics</div><div class='badge'>(3)</div></a></li>
+              ><div class='name'>Grapics</div><div class='badge'>(2)</div></a></li>
           
             <li><a class="flat-box"
               title="/categories/Learn/" href="/categories/Learn/"
@@ -1923,7 +1933,7 @@
 
 
     <div class='content'>
-    <a href="/tagsF/AOI/" style="font-size: 20.67px; color: #6c6c6c">AOI</a> <a href="/tagsF/C/" style="font-size: 14px; color: #999">C#</a> <a href="/tagsF/DOTS/" style="font-size: 14px; color: #999">DOTS</a> <a href="/tagsF/ECS/" style="font-size: 14px; color: #999">ECS</a> <a href="/tagsF/Lua/" style="font-size: 14px; color: #999">Lua</a> <a href="/tagsF/MMO/" style="font-size: 20.67px; color: #6c6c6c">MMO</a> <a href="/tagsF/SLG/" style="font-size: 20.67px; color: #6c6c6c">SLG</a> <a href="/tagsF/Unity/" style="font-size: 24px; color: #555">Unity</a> <a href="/tagsF/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/" style="font-size: 14px; color: #999">代码生成</a> <a href="/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/" style="font-size: 20.67px; color: #6c6c6c">大地图流式加载</a> <a href="/tagsF/%E5%AF%B9%E8%B1%A1%E6%B1%A0/" style="font-size: 14px; color: #999">对象池</a> <a href="/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/" style="font-size: 20.67px; color: #6c6c6c">寻路优化</a> <a href="/tagsF/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">开发工具</a> <a href="/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 17.33px; color: #828282">性能优化</a> <a href="/tagsF/%E6%88%98%E6%96%97/" style="font-size: 14px; color: #999">战斗</a> <a href="/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">架构设计</a> <a href="/tagsF/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" style="font-size: 14px; color: #999">游戏开发</a> <a href="/tagsF/%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5/" style="font-size: 14px; color: #999">网络同步</a> <a href="/tagsF/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 14px; color: #999">自动化</a>
+    <a href="/tagsF/AOI/" style="font-size: 19px; color: #777">AOI</a> <a href="/tagsF/C/" style="font-size: 14px; color: #999">C#</a> <a href="/tagsF/DOTS/" style="font-size: 14px; color: #999">DOTS</a> <a href="/tagsF/DrawCall/" style="font-size: 14px; color: #999">DrawCall</a> <a href="/tagsF/ECS/" style="font-size: 14px; color: #999">ECS</a> <a href="/tagsF/Lua/" style="font-size: 14px; color: #999">Lua</a> <a href="/tagsF/MMO/" style="font-size: 19px; color: #777">MMO</a> <a href="/tagsF/Rebatch/" style="font-size: 14px; color: #999">Rebatch</a> <a href="/tagsF/Rebuild/" style="font-size: 14px; color: #999">Rebuild</a> <a href="/tagsF/SLG/" style="font-size: 19px; color: #777">SLG</a> <a href="/tagsF/UGUI/" style="font-size: 14px; color: #999">UGUI</a> <a href="/tagsF/Unity/" style="font-size: 24px; color: #555">Unity</a> <a href="/tagsF/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/" style="font-size: 14px; color: #999">代码生成</a> <a href="/tagsF/%E5%90%88%E6%89%B9/" style="font-size: 14px; color: #999">合批</a> <a href="/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/" style="font-size: 19px; color: #777">大地图流式加载</a> <a href="/tagsF/%E5%AF%B9%E8%B1%A1%E6%B1%A0/" style="font-size: 14px; color: #999">对象池</a> <a href="/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/" style="font-size: 19px; color: #777">寻路优化</a> <a href="/tagsF/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" style="font-size: 14px; color: #999">开发工具</a> <a href="/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 19px; color: #777">性能优化</a> <a href="/tagsF/%E6%88%98%E6%96%97/" style="font-size: 14px; color: #999">战斗</a> <a href="/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">架构设计</a> <a href="/tagsF/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" style="font-size: 14px; color: #999">游戏开发</a> <a href="/tagsF/%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5/" style="font-size: 14px; color: #999">网络同步</a> <a href="/tagsF/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 14px; color: #999">自动化</a>
     </div>
 </section>
 
@@ -2117,8 +2127,8 @@
         <div class="webinfo-item">
           <div>最后活动时间：</div>
           
-            <div id="last-update" style="display: none;">Fri Jul 03 2026 18:40:22 GMT+0800 (中国标准时间)</div>
-            <div id="last-update-show">2026-07-03 日</div>
+            <div id="last-update" style="display: none;">Thu Sep 24 2026 14:57:47 GMT+0800 (中国标准时间)</div>
+            <div id="last-update-show">2026-09-24 日</div>
           
         </div>
         
@@ -2168,7 +2178,7 @@
           try {
             document.getElementById('last-update-show').innerHTML = timeago(new Date(lastUpDate));
           } catch (error) {
-            document.getElementById('last-update-show').innerHTML = '2026-07-03 日';
+            document.getElementById('last-update-show').innerHTML = '2026-09-24 日';
           }
         </script>
         

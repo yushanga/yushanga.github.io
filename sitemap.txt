@@ -1,6 +1,7 @@
+http://example.com/2024/03/22/graphics/Drawcall/
+http://example.com/2026/06/24/Learn/mapStreamLoad/
 http://example.com/2024/11/25/Learn/GeneratedCode/
 http://example.com/2022/04/07/Demo/
-http://example.com/2026/06/24/Learn/mapStreamLoad/
 http://example.com/2026/07/02/Learn/FirstECS/
 http://example.com/2026/06/23/Learn/FirstLookWorldMap/
 http://example.com/2026/06/29/Learn/MapWorldFillHoles/
@@ -15,7 +16,6 @@ http://example.com/friends/index.html
 http://example.com/about/index.html
 http://example.com/2024/03/22/graphics/RenderPipeline/
 http://example.com/2024/03/22/graphics/
-http://example.com/2024/03/22/graphics/Drawcall/
 http://example.com/2024/04/01/Learn/UiToolKitLearn/
 http://example.com/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/
 http://example.com/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/
@@ -41,9 +41,15 @@ http://example.com/tagsF/%E5%AF%B9%E8%B1%A1%E6%B1%A0/
 http://example.com/tagsF/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/
 http://example.com/tagsF/C/
 http://example.com/tagsF/Lua/
+http://example.com/tagsF/UGUI/
+http://example.com/tagsF/DrawCall/
+http://example.com/tagsF/%E5%90%88%E6%89%B9/
+http://example.com/tagsF/Rebuild/
+http://example.com/tagsF/Rebatch/
 http://example.com/categories/Demo/
 http://example.com/categories/Grapics/
 http://example.com/categories/Learn/
 http://example.com/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/
 http://example.com/categories/GameLearn/
 http://example.com/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/Unity%E5%BC%80%E5%8F%91/
+http://example.com/categories/Graphics/
