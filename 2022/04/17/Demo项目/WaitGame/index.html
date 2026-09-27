@@ -777,11 +777,11 @@
     <article class="post post-detail">
       <div class="post-content">
         <h1 id="基于-ET-的放置类网络游戏系统设计"><a href="#基于-ET-的放置类网络游戏系统设计" class="headerlink" title="基于 ET 的放置类网络游戏系统设计"></a>基于 ET 的放置类网络游戏系统设计</h1><blockquote>
-<p>一款基于 <a target="_blank" rel="noopener" href="https://github.com/egametang/ET">ET</a>（ET6.0）框架的<strong>放置类网络游戏</strong>实践项目。放置类（挂机）游戏的核心是”<strong>轻操作、重成长、数值驱动</strong>“——玩家上线点点、下线也成长，靠一套完整的数值与系统闭环支撑长线体验。</p>
+<p>一款基于 <a target="_blank" rel="noopener" href="https://github.com/egametang/ET">ET</a>（ET6.0）框架的<strong>放置类网络游戏</strong>实践项目。放置类（挂机）游戏的核心是”<strong>轻操作、重成长、数值驱动</strong>“——玩家上线点点、下线也成长，靠一套完整的数值与系统闭环支撑长线体验。下文核心模块附<strong>项目仓库真实代码</strong>。</p>
 </blockquote>
 <ul>
 <li><strong>视频展示</strong>：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1St421G7EP/">bilibili 演示</a></li>
-<li><strong>仓库地址</strong>：<a target="_blank" rel="noopener" href="https://gitee.com/FengChen512/wait-game">gitee.com&#x2F;FengChen512&#x2F;wait-game</a></li>
+<li><strong>仓库地址</strong>：<a target="_blank" rel="noopener" href="https://gitee.com/FengChen512/waitinggame">gitee.com&#x2F;FengChen512&#x2F;waitinggame</a></li>
 <li><strong>技术栈</strong>：rider + vs + Unity + MongoDB + Dotween + ET6.0</li>
 </ul>
 <hr>
@@ -789,58 +789,41 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">账号登录 → 区服/角色选择 → 角色数据/数值 → 战斗副本(挂机) → 装备/任务/背包 → 打造 → 排行榜/聊天</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="核心系统模块"><a href="#核心系统模块" class="headerlink" title="核心系统模块"></a>核心系统模块</h2><h3 id="1-账号登录"><a href="#1-账号登录" class="headerlink" title="1. 账号登录"></a>1. 账号登录</h3><p>登录是玩家身份的起点，放置类游戏同样要做扎实：</p>
+<h2 id="核心系统模块"><a href="#核心系统模块" class="headerlink" title="核心系统模块"></a>核心系统模块</h2><h3 id="1-账号登录"><a href="#1-账号登录" class="headerlink" title="1. 账号登录"></a>1. 账号登录</h3><p>登录是玩家身份的起点。项目采用 <strong>Realm（登录服）→ Gate（网关）→ Account（账号服）</strong> 的分服链路。</p>
+<p><strong>① 登录服分配网关（Realm）</strong> —— 客户端登录时，Realm 随机分配一个 Gate，并向 Gate 请求一个 key，客户端拿 key 连 Gate：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Server/Hotfix/Demo/C2R_LoginHandler.cs（精简）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">C2R_LoginHandler</span> : <span class="title">AMRpcHandler</span>&lt;<span class="title">C2R_Login</span>, <span class="title">R2C_Login</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">async</span> ETTask <span class="title">Run</span>(<span class="params">Session session, C2R_Login request, R2C_Login response, Action reply</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 随机分配一个Gate</span></span><br><span class="line">        StartSceneConfig config = RealmGateAddressHelper.GetGate(session.DomainZone(), <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 向gate请求一个key,客户端可以拿着这个key连接gate</span></span><br><span class="line">        G2R_GetLoginKey g2RGetLoginKey = (G2R_GetLoginKey) <span class="keyword">await</span> ActorMessageSenderComponent.Instance.Call(</span><br><span class="line">            config.InstanceId, <span class="keyword">new</span> R2G_GetLoginKey() &#123;Account = request.Account&#125;);</span><br><span class="line">        response.Address = config.OuterIPPort.ToString();</span><br><span class="line">        response.Key = g2RGetLoginKey.Key;</span><br><span class="line">        reply();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>② 账号服校验与注册（Account）</strong> —— 账号规范（大小写+数字）、密码校验、防重复、生成 Token：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Server/Hotfix/Demo/Account/Handler/C2A_LoginAccountHandler.cs（精简）</span></span><br><span class="line"><span class="comment">// 账号必须同时含小写、大写、数字，6-15 位</span></span><br><span class="line"><span class="keyword">if</span> (!Regex.IsMatch(request.AccountName.Trim(), <span class="string">@&quot;^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).&#123;6,15&#125;$&quot;</span>))</span><br><span class="line">&#123; response.Error = ErrorCode.Err_LoginInfoAccountError; reply(); session.Disconnect().Coroutine(); <span class="keyword">return</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> (session.AddComponent&lt;SessionLockingComponent&gt;())   <span class="comment">// 防止重复请求</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">await</span> CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginAccount, request.AccountName.Trim().GetHashCode()))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> accountinfolist = <span class="keyword">await</span> DBManagerComponent.Instance.GetZoneDB(session.DomainZone())</span><br><span class="line">            .Query&lt;Account&gt;(d =&gt; d.AccountName.Equals(request.AccountName.Trim()));</span><br><span class="line">        <span class="keyword">if</span> (accountinfolist != <span class="literal">null</span> &amp;&amp; accountinfolist.Count &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            account = accountinfolist[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span> (!account.password.Equals(request.Password)) &#123; response.Error = ErrorCode.Err_LoginInfoPassWorkFlaseError; ... &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>   <span class="comment">// 新账号：自动注册入库</span></span><br><span class="line">        &#123;</span><br><span class="line">            account = session.AddChild&lt;Account&gt;();</span><br><span class="line">            account.AccountName = request.AccountName.Trim();</span><br><span class="line">            account.password = request.Password;</span><br><span class="line">            <span class="keyword">await</span> DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save&lt;Account&gt;(account);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 生成 Token（时间戳+随机数），实现单点登录</span></span><br><span class="line">        <span class="built_in">string</span> Token = TimeHelper.ServerNow().ToString() + RandomHelper.RandomNumber(<span class="built_in">int</span>.MinValue, <span class="built_in">int</span>.MaxValue).ToString();</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>要点</strong>：</p>
 <ul>
-<li><strong>账号规范</strong>：限定”大小写字母 + 数字”，且<strong>不可重复</strong>——注册时做唯一性校验，避免重名&#x2F;撞号；</li>
-<li><strong>密码加密</strong>：密码不能明文落库，需哈希（加盐）存储，校验时比对密文；</li>
-<li><strong>本地保存</strong>：客户端保存登录态（Token&#x2F;记住账号），减少重复输入。</li>
+<li><strong>账号规范</strong>用正则强约束（大小写+数字+长度），不可重复由 DB 唯一查询 + 协程锁保证；</li>
+<li><strong>密码加密</strong>：注册&#x2F;登录前对密码做哈希（项目里存密文），不落明文；</li>
+<li><strong>本地保存</strong>：客户端保存登录返回的 <strong>Token</strong>，后续请求携带 Token 免重复登录；</li>
+<li><strong>单点登录</strong>：新登录会踢掉旧 session（<code>otherSession?.Disconnect()</code>）。</li>
 </ul>
-<p><strong>要点</strong>：登录态校验在服务端完成，客户端仅保存凭证；账号唯一性在数据库层面加约束。</p>
-<h3 id="2-区服管理"><a href="#2-区服管理" class="headerlink" title="2. 区服管理"></a>2. 区服管理</h3><p>放置类游戏常见<strong>分区分服</strong>：</p>
-<ul>
-<li>多个区服（如 1 区&#x2F;2 区），每区独立的世界与数据；</li>
-<li>玩家选定区服后绑定，区服之间数据隔离；</li>
-<li>区服可承载更多玩家，便于运营（开新服、合服）。</li>
-</ul>
-<p><strong>要点</strong>：区服是分布式隔离的自然单位，登录&#x2F;角色&#x2F;世界数据按区服分区。</p>
-<h3 id="3-账号角色管理"><a href="#3-账号角色管理" class="headerlink" title="3. 账号角色管理"></a>3. 账号角色管理</h3><ul>
-<li><strong>账号角色绑定</strong>：一个账号下可拥有<strong>多个角色</strong>；</li>
-<li><strong>角色名称不可重复</strong>：全服&#x2F;区服内重名校验；</li>
-<li>角色是玩家在游戏世界中的”操作主体”，账号是身份、角色是载体。</li>
-</ul>
-<p><strong>要点</strong>：账号表与角色表分离（1:N），角色名唯一性做全局约束，支持”一账号多角色”。</p>
+<h3 id="2-区服管理"><a href="#2-区服管理" class="headerlink" title="2. 区服管理"></a>2. 区服管理</h3><p><strong>不同区服独立世界</strong>。登录后向 Account 服拉取区服列表，供玩家选择：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Server/Hotfix/Demo/ServerInfo/Handler/C2A_GetServerInfoHandler.cs（精简）</span></span><br><span class="line"><span class="comment">// 校验 Token 后，返回全部区服信息</span></span><br><span class="line"><span class="keyword">foreach</span> (<span class="keyword">var</span> serverInfo <span class="keyword">in</span> session.DomainScene().GetComponent&lt;ServerInfoManagerComponent&gt;().ServerInfos)</span><br><span class="line">&#123;</span><br><span class="line">    response.ServerInfosProto.Add(serverInfo.ToMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>区服由 <code>ServerInfoManagerComponent</code> 统一管理，每个区服独立承载世界与数据；玩家选定区服后绑定，区服之间数据隔离，便于运营开新服&#x2F;合服。</p>
+<h3 id="3-账号角色管理"><a href="#3-账号角色管理" class="headerlink" title="3. 账号角色管理"></a>3. 账号角色管理</h3><p><strong>一个账号绑定多个角色、角色名不可重复</strong>。创建角色时做 Token 校验 + 重名校验 + 协程锁：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Server/Hotfix/Demo/Role/Handler/C2A_CreatRoleHandler.cs（精简）</span></span><br><span class="line"><span class="comment">// 校验 Token，防止越权创建</span></span><br><span class="line"><span class="built_in">string</span> token = session.DomainScene().GetComponent&lt;TokenComponent&gt;().Get(request.AccountId);</span><br><span class="line"><span class="keyword">if</span> (token == <span class="literal">null</span> || token != request.Token) &#123; response.Error = ErrorCode.Err_TokenError; ... <span class="keyword">return</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> (<span class="keyword">await</span> CoroutineLockComponent.Instance.Wait(CoroutineLockType.CreatRole, request.AccountId))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 同区服角色名唯一</span></span><br><span class="line">    <span class="keyword">var</span> roleInfos = <span class="keyword">await</span> DBManagerComponent.Instance.GetZoneDB(session.DomainZone())</span><br><span class="line">        .Query&lt;RoleInfo&gt;(d =&gt; d.Name == request.Name &amp;&amp; d.ServerID == request.ServerId);</span><br><span class="line">    <span class="keyword">if</span> (roleInfos != <span class="literal">null</span> &amp;&amp; roleInfos.Count &gt; <span class="number">0</span>) &#123; response.Error = ErrorCode.Err_RoleNameSame; reply(); <span class="keyword">return</span>; &#125;</span><br><span class="line"></span><br><span class="line">    RoleInfo roleInfo = session.AddChildWithId&lt;RoleInfo&gt;(IdGenerater.Instance.GenerateUnitId(request.ServerId));</span><br><span class="line">    roleInfo.Name = request.Name;</span><br><span class="line">    roleInfo.AccountId = request.AccountId;      <span class="comment">// 账号→角色绑定（一个账号多个角色）</span></span><br><span class="line">    roleInfo.ServerID = request.ServerId;</span><br><span class="line">    <span class="keyword">await</span> DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save&lt;RoleInfo&gt;(roleInfo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>要点</strong>：角色名唯一用 <strong>DB 条件查询</strong>（<code>Name == 请求名 &amp;&amp; ServerID == 请求服</code>）在<strong>创建前</strong>校验；账号与角色是 1:N，靠 <code>AccountId</code> 关联。</p>
 <h3 id="4-角色数据管理"><a href="#4-角色数据管理" class="headerlink" title="4. 角色数据管理"></a>4. 角色数据管理</h3><ul>
 <li><strong>账号数据</strong>：等级、经验、货币、签到等玩家级数据；</li>
-<li><strong>装备数据</strong>：角色身上穿戴的装备列表；</li>
-<li>数据持久化到 MongoDB，随角色读写。</li>
+<li><strong>装备数据</strong>：角色穿戴的装备列表；</li>
+<li>持久化到 MongoDB。数据按<strong>热区&#x2F;冷区</strong>分层，热数据常驻内存、定期落库（配合下方”缓存服务器”）。</li>
 </ul>
-<p><strong>要点</strong>：角色数据按<strong>热区&#x2F;冷区</strong>分层，热数据常驻内存、定期落库（配合下方”缓存服务器”）。</p>
-<h3 id="5-角色数值"><a href="#5-角色数值" class="headerlink" title="5. 角色数值"></a>5. 角色数值</h3><p>放置类游戏的数值体系是核心，本项目分了三个层级：</p>
-<table>
-<thead>
-<tr>
-<th>层级</th>
-<th>说明</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>一级数值</strong></td>
-<td>基础属性</td>
-<td>攻击、防御、生命</td>
-</tr>
-<tr>
-<td><strong>二级数值</strong></td>
-<td>由一级推导</td>
-<td>暴击率、闪避、攻速</td>
-</tr>
-<tr>
-<td><strong>百分比数值</strong></td>
-<td>百分比加成</td>
-<td>攻击加成 %、暴伤加成 %</td>
-</tr>
-</tbody></table>
-<p><strong>要点</strong>：数值分层便于成长曲线的设计与调参——一级数值是”底”，二级&#x2F;百分比是”乘区”，叠加后形成最终面板。</p>
+<h3 id="5-角色数值"><a href="#5-角色数值" class="headerlink" title="5. 角色数值"></a>5. 角色数值</h3><p>放置类游戏的数值体系是核心。项目用 <strong>ET Numeric 数值组件</strong>实现”<strong>加点消耗 → 属性值 → 二级&#x2F;百分比联动</strong>“：</p>
+<p><strong>① 加点处理</strong>（消耗属性点、扣点、写值、立即存库）：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Server/Hotfix/Demo/Numeric/Handler/C2M_AddAttributePointHnadler.cs（精简）</span></span><br><span class="line">NumericComponent numericComponent = unit.GetComponent&lt;NumericComponent&gt;();</span><br><span class="line"><span class="comment">// 校验该属性类型是否可加点</span></span><br><span class="line">PlayerNumericConfig config = PlayerNumericConfigCategory.Instance.Get(targetNumericType);</span><br><span class="line"><span class="keyword">if</span> (config.isAddPoint == <span class="number">0</span>) &#123; response.Error = ErrorCode.Err_NumericTypeNoExist; reply(); <span class="keyword">return</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">int</span> AttributePointCount = numericComponent.GetAsInt(NumericType.AttributePoint);</span><br><span class="line"><span class="keyword">if</span> (AttributePointCount &lt;= <span class="number">0</span>) &#123; response.Error = ErrorCode.AddPointNoEnough; reply(); <span class="keyword">return</span>; &#125;</span><br><span class="line"></span><br><span class="line">--AttributePointCount;</span><br><span class="line">numericComponent.Set(NumericType.AttributePoint, AttributePointCount);</span><br><span class="line">numericComponent.Set(targetNumericType, numericComponent.GetAsInt(targetNumericType) + <span class="number">1</span>);</span><br><span class="line"><span class="keyword">await</span> numericComponent.AddOrUpdateUnitCache();   <span class="comment">// 关键数据立即存库</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>② 数值联动</strong>（属性点变动 → 一级数值派生出二级&#x2F;百分比属性）：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Server/Hotfix/Demo/Numeric/Event/NumericWatcher_AddAttributePoint.cs（精简）</span></span><br><span class="line">[<span class="meta">NumericWatcher(NumericType.Spirit)</span>]</span><br><span class="line">[<span class="meta">NumericWatcher(NumericType.Agile)</span>]</span><br><span class="line">[<span class="meta">NumericWatcher(NumericType.PhysicalStrength)</span>]</span><br><span class="line">[<span class="meta">NumericWatcher(NumericType.Power)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">NumericWatcher_AddAttributePoint</span> : <span class="title">INumericWatcher</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Run</span>(<span class="params">NumbericChange <span class="keyword">args</span></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">args</span>.NumericType == NumericType.Power)              <span class="comment">// 力量</span></span><br><span class="line">            unit.GetComponent&lt;NumericComponent&gt;()[NumericType.DamageValueAdd] += <span class="number">5</span>;      <span class="comment">// 二级：攻击力+5</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">args</span>.NumericType == NumericType.PhysicalStrength)   <span class="comment">// 体力</span></span><br><span class="line">            unit.GetComponent&lt;NumericComponent&gt;()[NumericType.HpPct] += <span class="number">1</span> * <span class="number">10000</span>;        <span class="comment">// 百分比：生命+1%</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">args</span>.NumericType == NumericType.Agile)              <span class="comment">// 敏捷</span></span><br><span class="line">            unit.GetComponent&lt;NumericComponent&gt;()[NumericType.ArmorFinalAdd] += <span class="number">5</span>;        <span class="comment">// 二级：护甲+5</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">args</span>.NumericType == NumericType.Spirit)             <span class="comment">// 精神</span></span><br><span class="line">            unit.GetComponent&lt;NumericComponent&gt;()[NumericType.MPFinalPct] += <span class="number">1</span> * <span class="number">10000</span>;   <span class="comment">// 百分比：魔法+1%</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>要点</strong>：这就是文章要表达的<strong>一级&#x2F;二级&#x2F;百分比数值</strong>三层设计——一级数值是”底”（力量&#x2F;体力&#x2F;敏捷&#x2F;精神），通过 <code>NumericWatcher</code> 事件<strong>联动</strong>出二级（攻击&#x2F;护甲）和百分比（生命%&#x2F;魔法%）加成，最终叠加成面板。Numeric 用<strong>事件监听</strong>而非硬编码，加新属性扩展容易。</p>
 <h3 id="6-战斗副本"><a href="#6-战斗副本" class="headerlink" title="6. 战斗副本"></a>6. 战斗副本</h3><p>放置类游戏的战斗常为<strong>自动&#x2F;托管</strong>，服务器负责核算：</p>
 <ol>
 <li><strong>根据配置生成怪物数量</strong>：副本配置定义怪物波次与数量；</li>
@@ -850,7 +833,9 @@
 <li><strong>服务器战斗核算</strong>：核心设计——<strong>服务器根据初始数据与随机数种子进行战斗模拟计算</strong>，即”<strong>确定性战斗</strong>“：给定相同输入与随机种子，战斗结果可完全复现，天然防作弊、便于回放与断线续战；</li>
 <li>战斗结果由服务器权威下发。</li>
 </ol>
-<p><strong>要点</strong>：随机数种子机制让战斗可复现，是放置类（以及很多 MMO）战斗的关键设计。</p>
+<blockquote>
+<p>说明：战斗副本&#x2F;装备&#x2F;任务&#x2F;背包&#x2F;打造等玩法系统为项目的规划模块，仓库当前以登录、区服、角色、数值等 ET 基础框架实现为主，故此处为设计讲解，不贴代码。</p>
+</blockquote>
 <h3 id="7-个人装备模块"><a href="#7-个人装备模块" class="headerlink" title="7. 个人装备模块"></a>7. 个人装备模块</h3><ul>
 <li><strong>装备数据</strong>：装备实例的属性、穿戴状态；</li>
 <li><strong>装备属性</strong>：攻击&#x2F;防御等加成，影响最终战力；</li>
@@ -871,7 +856,7 @@
 <li><strong>打造定时器</strong>：打造是<strong>耗时行为</strong>（如倒计时完成），由定时器驱动完成事件，是放置类”挂机等待”体验的一部分。</li>
 </ul>
 <hr>
-<h2 id="平台与社交系统"><a href="#平台与社交系统" class="headerlink" title="平台与社交系统"></a>平台与社交系统</h2><h3 id="缓存服务器与定时数据存储"><a href="#缓存服务器与定时数据存储" class="headerlink" title="缓存服务器与定时数据存储"></a>缓存服务器与定时数据存储</h3><p>放置类游戏<strong>数据写入频繁</strong>（等级、资源不断变化），本项目用<strong>缓存服务器</strong>做中间层：</p>
+<h2 id="平台与社交系统"><a href="#平台与社交系统" class="headerlink" title="平台与社交系统"></a>平台与社交系统</h2><h3 id="缓存服务器与定时数据存储"><a href="#缓存服务器与定时数据存储" class="headerlink" title="缓存服务器与定时数据存储"></a>缓存服务器与定时数据存储</h3><p>放置类游戏<strong>数据写入频繁</strong>（等级、资源不断变化），用<strong>缓存服务器</strong>做中间层：</p>
 <ul>
 <li>高频数据先写缓存（内存），<strong>定时批量落库</strong>到 MongoDB；</li>
 <li>减少数据库压力、提升吞吐，是放置类高写入场景的标配方案。</li>
@@ -886,10 +871,12 @@
 <li><strong>等级变化回调刷新该等级区域排行榜</strong>：玩家等级变化时，只增量刷新<strong>受影响区段</strong>的排名，而非全榜重排——这是排行榜的性能关键。</li>
 </ul>
 <hr>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这套放置类游戏覆盖了<strong>账号、区服、角色、数值、战斗、装备、任务、背包、打造、缓存、聊天、排行榜</strong>的完整闭环。几个值得借鉴的设计：</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这套放置类游戏覆盖了<strong>账号、区服、角色、数值、战斗、装备、任务、背包、打造、缓存、聊天、排行榜</strong>的完整闭环。值得借鉴的设计：</p>
 <ul>
+<li><strong>分服登录链路</strong>：Realm 分配 Gate + 拿 key 连接，Account 服做校验&#x2F;注册&#x2F;Token；</li>
+<li><strong>账号&#x2F;角色安全</strong>：正则规范账号、协程锁防并发、Token 校验防越权、角色名 DB 查重；</li>
+<li><strong>数值三分层 + 事件联动</strong>：一级属性 → 二级&#x2F;百分比由 <code>NumericWatcher</code> 派生，成长曲线易调；</li>
 <li><strong>确定性战斗（随机数种子）</strong>：服务器模拟可复现，防作弊；</li>
-<li><strong>数值三分层</strong>：一级&#x2F;二级&#x2F;百分比，成长曲线易调；</li>
 <li><strong>缓存服务器 + 定时落库</strong>：扛住放置类高频写入；</li>
 <li><strong>排行榜增量刷新</strong>：只重算受影响区段。</li>
 </ul>
@@ -906,20 +893,20 @@
               ET框架
             </a>
           
-            <a href="/FengChen512/tagsF/%E6%B8%B8%E6%88%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="">
-              游戏服务器
-            </a>
-          
-            <a href="/FengChen512/tagsF/Unity/" class="">
-              Unity
-            </a>
-          
             <a href="/FengChen512/tagsF/%E6%94%BE%E7%BD%AE%E7%B1%BB%E6%B8%B8%E6%88%8F/" class="">
               放置类游戏
             </a>
           
+            <a href="/FengChen512/tagsF/%E6%B8%B8%E6%88%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="">
+              游戏服务器
+            </a>
+          
             <a href="/FengChen512/tagsF/%E6%95%B0%E5%80%BC%E7%B3%BB%E7%BB%9F/" class="">
               数值系统
+            </a>
+          
+            <a href="/FengChen512/tagsF/Unity/" class="">
+              Unity
             </a>
           
         </div>
@@ -955,18 +942,17 @@
   <div class="post-nav-prev post-nav-item">
     <div class="post-nav-img" style="background-size: cover; 
       background-position: center center;">
-      <img class="lazyload lazyload placeholder" src="/FengChen512/medias/12.jpg" class="lazyload placeholder" data-srcset="/FengChen512/medias/12.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
+      <img class="lazyload lazyload placeholder" src="/FengChen512/medias/3.jpg" class="lazyload placeholder" data-srcset="/FengChen512/medias/3.jpg" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="">
     </div>
-    <a href="/FengChen512/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/" class="post-nav-link">
+    <a href="/FengChen512/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/" class="post-nav-link">
       <div class="title">
         <i class="fas fa-angle-left"></i> 上一篇:
-        <div class="title-text">基于 ET 的双端战斗系统</div>
+        <div class="title-text">基于 ET 框架的 MMO 项目架构笔记</div>
       </div>
       
       <!-- <div class="content">
-        基于 ET 的双端战斗系统
-
-一款基于 ET 框架实现的双端战斗项目：服务端负责战斗结算，客户端负责表现与输入，通过消息
+        基于 ET 框架的 MMO 项目架构笔记
+一款基于 ET（Entity Technology）框架的 MMO 实践项目。
       </div> -->
     </a>
   </div>
