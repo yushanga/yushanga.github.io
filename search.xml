@@ -22,11 +22,11 @@
             
             <tag> Unity </tag>
             
+            <tag> 架构设计 </tag>
+            
             <tag> ECS </tag>
             
             <tag> 游戏开发 </tag>
-            
-            <tag> 架构设计 </tag>
             
             <tag> 性能优化 </tag>
             
@@ -55,11 +55,11 @@
       
         <tags>
             
+            <tag> MMO </tag>
+            
             <tag> Unity </tag>
             
             <tag> SLG </tag>
-            
-            <tag> MMO </tag>
             
             <tag> 大地图流式加载 </tag>
             
@@ -94,11 +94,11 @@
       
         <tags>
             
+            <tag> MMO </tag>
+            
             <tag> Unity </tag>
             
             <tag> SLG </tag>
-            
-            <tag> MMO </tag>
             
             <tag> 大地图流式加载 </tag>
             
@@ -129,11 +129,11 @@
       
         <tags>
             
+            <tag> MMO </tag>
+            
             <tag> Unity </tag>
             
             <tag> SLG </tag>
-            
-            <tag> MMO </tag>
             
             <tag> 大地图流式加载 </tag>
             
@@ -222,13 +222,13 @@
             
             <tag> Unity </tag>
             
-            <tag> 架构设计 </tag>
-            
             <tag> 框架 </tag>
             
             <tag> 定时器 </tag>
             
             <tag> 红点系统 </tag>
+            
+            <tag> 架构设计 </tag>
             
         </tags>
       
@@ -318,11 +318,11 @@
     
     
     <entry>
-      <title>渲染管线Render Pipeline个人理解总结</title>
-      <link href="/FengChen512/2024/03/22/graphics/RenderPipeline/"/>
-      <url>/FengChen512/2024/03/22/graphics/RenderPipeline/</url>
+      <title>关于图形学</title>
+      <link href="/FengChen512/2024/03/22/graphics/"/>
+      <url>/FengChen512/2024/03/22/graphics/</url>
       
-        <content type="html"><![CDATA[<h2 id="CPU与GPU的区别"><a href="#CPU与GPU的区别" class="headerlink" title="CPU与GPU的区别"></a>CPU与GPU的区别</h2><p>GPU的架构与CPU有极大的不同，这主要归因于两者不同的使用场合。试想一下，GPU面对3D游戏中成千上万的三角面，如果仅仅是跟Cpu一样逐一单个处理计算，损失的效率是极其惊人的。</p><h2 id="渲染管线（Render-Pipeline）"><a href="#渲染管线（Render-Pipeline）" class="headerlink" title="渲染管线（Render Pipeline）"></a>渲染管线（Render Pipeline）</h2><p>在渲染流程中，CPU与GPU正如上文一样通力合作渲染图像。在运算过程中，CPU如同进货的卡车不断地将要处理的数据丢给GPU，GPU工厂调动一个个如工人一般的计算单元对这些数据进行简单的处理，最后组装出产品——图像。</p><h2 id="渲染管线流程"><a href="#渲染管线流程" class="headerlink" title="渲染管线流程"></a>渲染管线流程</h2><p>   渲染管线粗略分为几个步骤：应用阶段-几何阶段-光栅化阶段<br>   <img src="/FengChen512/2024/03/22/graphics/RenderPipeline/1.png" class="lazyload placeholder" data-srcset="/FengChen512/2024/03/22/graphics/RenderPipeline/1.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="渲染管线抽象图"><br>    渲染管线粗略分为几个步骤：顶点数据的输入、顶点着色器、曲面细分过程、几何着色器、投影，裁剪剔除、屏幕映射， 光栅化、片段着色器以及混合测试<br>   <img src="/FengChen512/2024/03/22/graphics/RenderPipeline/2.png" class="lazyload placeholder" data-srcset="/FengChen512/2024/03/22/graphics/RenderPipeline/2.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="渲染管线详细图"></p><h3 id="应用阶段（Application-Stage）"><a href="#应用阶段（Application-Stage）" class="headerlink" title="应用阶段（Application Stage）"></a>应用阶段（Application Stage）</h3><p>这是一个由CPU主要负责的阶段，且完全由开发人员掌控。在这个阶段，CPU将决定递给GPU什么样的数据（譬如渲染目标场景中的灯光、场景的模型、摄像机的位置），有时候还会对这些数据进行处理（譬如只递给GPU可以被摄像机看见的元素，其他不可见的元素被剔除（culling）出去），并且告诉GPU这些数据的渲染状态（譬如纹理、材质、着色器等）。</p><p>我们同样用工业流水线进行类比，这一块相当于工厂的产品进口部门，采购员（CPU）联系发货单位（RAM）订购想要的原材料（数据），并经过一番精挑细选拿出自己满意的材料（数据处理，如剔除），把这些材料连同他们的加工方式（如应当使用的着色器）丢给工厂。值得注意的是，由于这一块采购员是与发货单位的商人而不是工厂里的工人交流， 所以他可以使用更复杂的语言（如高级程序语言）与商人讨价还价，而不是像在工厂中向工人发号施令时使用的指令（着色器语言）。</p><p>所做的工作： </p><h4 id="顶点数据的输入"><a href="#顶点数据的输入" class="headerlink" title="顶点数据的输入"></a>顶点数据的输入</h4><p>应用阶段的主要任务是把 顶点数据、shader、贴图、材质球、灯光以及一些设置等等传入GPU的过程，这个过程叫做 DrawCall<br>（1）把数据加载到显存：将数据加载到显存中能使GPU更快的访问这些数据，当把数据加载到显存后，便可以释放了数据，但一些数据仍需留在内存中，如CPU需要网格数据进行碰撞检测。<br>（2）设置渲染状态：渲染状态的一个通俗解释就是，定义了场景中的网格是怎样被渲染的。例如，使用哪个顶点着色器&#x2F;片段着色器、光源属性、材质等。如果不设置渲染状态，那所有的网格将使用同一种渲染，显然这是不希望得到的结果。<br>（3）调用Draw Call：当所有的数据准备好后，CPU就需要调用一个渲染指令告诉GPU，按照上述设置进行渲染，这个渲染命令就是Draw Call。Draw Call命令仅仅指向被渲染的图元列表，而不包含任何材质信息</p><p>Unity DrawCall 内部分为 SetPassCall 和 Batch，<br>SetPassCall的作用是设置渲染管线的上下文，一般每一种Unity里的Material就是一个SetPassCall，<br>Batch就是每一次CPU向GPU打包发送顶点数据的批次，当我们优化性能的时候经常会用到（动态）合批，合批就是将拥有两个相同的材质（材质实例也要相同）的物体同时传入GPU进行处理。</p><ul><li><a href="/FengChen512/2024/03/22/graphics/Drawcall/" title="UGUI 合批（DrawCall）原理与优化笔记">合批处理</a></li></ul><h3 id="几何阶段（Geometry-Stage）"><a href="#几何阶段（Geometry-Stage）" class="headerlink" title="几何阶段（Geometry Stage）"></a>几何阶段（Geometry Stage）</h3><p>负责大部分多边形操作和顶点操作，将三维空间的数据转换为二维空间的数据。<br>这一个由GPU主导的阶段，也就是说，从这个阶段开始，我们进入了上文所说的“流水线”。几何阶段将把CPU在应用阶段发来的数据进行进一步处理，而这个阶段又可以进一步细分为若干个流水线阶段，可以类比理解为工厂流水线上进行的一道道工序。<br>流程图中展现了几何阶段中几个常见的渲染步骤（不同的图像应用接口存在着些许不同，这里以OpenGL为例），其中，绿色表示开发者可以完全编程控制的部分，虚线外框表示此阶段不是必需的，黄色表示开发者无法完全控制的部分（但可以进行一些配置），紫色表示开发者无法控制的阶段（已经由GPU固定实现）。</p><h4 id="顶点着色器"><a href="#顶点着色器" class="headerlink" title="顶点着色器"></a>顶点着色器</h4><p>顶点着色器的处理单位是顶点，但是每次处理都是独立的，因此无法创建或销毁任何一个顶点，也不能得到与其他顶点的关系<br>顶点着色器主要功能是进行坐标变换。将输入的局部坐标变换到世界坐标、观察坐标和裁剪坐标。<br>虽然我们也会在顶点着色器进行光照计算(称作高洛德着色)，然后经过光栅化插值得到各个片段的颜色，但这种得到的光照比较不自然，所以一般在片段着色器进行光照计算</p><h4 id="曲面细分着色器"><a href="#曲面细分着色器" class="headerlink" title="曲面细分着色器"></a>曲面细分着色器</h4><p>曲面细分是利用镶嵌化处理技术对三角面进行细分，以此来增加物体表面的三角面的数量，是渲染管线一个可选的阶段</p><h4 id="几何着色器"><a href="#几何着色器" class="headerlink" title="几何着色器"></a>几何着色器</h4><p>在这个阶段，开发者可以控制GPU对顶点进行增删改操作</p><h4 id="屏幕映射"><a href="#屏幕映射" class="headerlink" title="屏幕映射"></a>屏幕映射</h4><p>屏幕映射的任务就是将每个图元的x、y值变换到屏幕坐标系，对于z坐标不做任何处理（实际上屏幕坐标系和z坐标一起构成窗口坐标系），这些值会被一起传递到光栅化阶段<br>一般来说，屏幕坐标是2D的概念，只用于表示屏幕XY坐标，而窗口坐标是2.5D的概念，它还带有深度信息，也就是经过变换后的Z轴的信息。<br>使用齐次坐标的意义，其实就是为了正确记录下投影变换前(观察空间)中物体的深度信息，也就是Z坐标的值。</p><ol><li>投影</li></ol><p>GPU将顶点从摄像机观察空间转换到裁剪空间（又被称为齐次裁剪空间），为之后的剔除过程以及投射到二维平面做准备。<br>常见的投影方式有透视投影与正交投影。<br>在三维中原有的三个分量x、y、z上又额外增加了w&#x3D;1分量，使得可以通过矩阵乘的方式为三维坐标实现平移的效果。</p><ol start="2"><li>裁剪</li></ol><p>只有当图元部分或全部位于视椎体内时，我们才会将它送到流水线的下个阶段，也就是光栅化阶段。对于部分位于视椎体的图元，位于外部的顶点将被裁剪掉，而且在视椎体与线段的交界处产生新的顶点。<br>在把不需要的顶点裁剪掉后，GPU需要把顶点映射到屏幕空间，这是一个从三维空间转换到二维空间的操作。<br>对于透视裁剪空间，GPU需要对裁剪空间中的顶点执行齐次除法（将齐次坐标系中的w分量除x、y、z分量），得到顶点的归一化的设备坐标（NDC）<br>通过透视除法后，我们得到了NDC坐标，获得NDC坐标是为了实现屏幕坐标的转换与硬件无关。<br>正交裁剪空间只需要把w分量去掉即可。<br>此时顶点的x、y坐标接近于在屏幕上所处的位置了，此时z分量不会被丢弃而是被写入了深度缓冲（z-buffer）</p><h3 id="光栅化阶段"><a href="#光栅化阶段" class="headerlink" title="光栅化阶段"></a>光栅化阶段</h3><p>决定每个渲染图元中哪些像素应该被绘制在屏幕上，它需要对上一阶段得到的逐顶点数据进行插值<br>到此，GPU也只是完成了渲染的一半工作，因为现在我们只是得到了一些顶点，他们还不是能被显示在屏幕上的像素。</p><h4 id="三角形设置（Triangle-Setup）"><a href="#三角形设置（Triangle-Setup）" class="headerlink" title="三角形设置（Triangle Setup）"></a>三角形设置（Triangle Setup）</h4><p>有些资料把这个过程称为图元组装（Primitive Assembly），不过个人认为叫做Primitive Assembly更为贴切。这个过程做的工作就是把顶点数据收集并组装为简单的基本体（线、点或三角形），通俗的说就是把相关的两个顶点“连连看”，有些能构成面，有些只是线，有些甚至没有与之配对的顶点只能当一个“单身狗”。</p><h4 id="三角形遍历（Triangle-Traversal）"><a href="#三角形遍历（Triangle-Traversal）" class="headerlink" title="三角形遍历（Triangle Traversal）"></a>三角形遍历（Triangle Traversal）</h4><p>这个过程将检验屏幕上的某个像素是否被一个三角形网格所覆盖，被覆盖的区域将生成一个片元（Fragment）</p><p>片元不是真正意义上的像素，而是包含了很多种状态的集合（譬如屏幕坐标、深度、法线、纹理等）<br>而片元的划分依据（像素块被覆盖到何种程度才被划分）不管怎么样都会产生锯齿，这就有许多抗锯齿的采样方式（比如MSAA）<br>片段着色器<br>片元着色器的输入是上一个阶段对顶点信息进行插值的结果（是根据从顶点着色器输出的数据插值得到的），而它的输出是像素颜色值<br>这个阶段我们能进行很多渲染技术，比如根据顶点法线或者UV计算颜色，接受阴影或者是进行纹理采样（纹理坐标是通过前述阶段的顶点数据插值得到的）</p><h4 id="逐片元计算"><a href="#逐片元计算" class="headerlink" title="逐片元计算"></a>逐片元计算</h4><p>对每个片元进行操作，将它们的颜色以某种形式合并，得到最终在屏幕上像素显示的颜色。主要的工作有两个：对片元进行测试（Test）并进行合并（Merge）。<br>测试步骤决定了片元最终会不会被显示出来，这个阶段是高度可配置的<br>如果一个片元通过了所有测试，就需要把这些片元的颜色值和颜色缓冲中已有的颜色值进行混合。</p><ol><li><p>裁切测试<br>在裁剪测试中，允许程序员开设一个裁剪框，只有在裁剪框内的片元才会被显示出来，在裁剪框外的片元皆被剔除。</p></li><li><p>透明度测试<br>在透明度测试中，允许程序员对片元的透明度值进行检测，仅仅允许透明度值达到设置的阈值后才可以会绘制。在OpenGL3.1后这个API被删除了，但你可以在片元着色器中实现类似的效果。</p></li><li><p>模板测试<br>模板测试通常用来限制渲染的区域，渲染阴影，轮廓渲染等<br>在模板测试中，GPU将读取片元的模板值与模板缓冲区的模板值进行比较，比较函数由开发者指定，如果比较不通过，这个片元将被舍弃</p></li><li><p>深度测试<br>现实生活中，近的物体会遮挡住远处的物体，深度缓冲就是用来实现这种效果的。</p></li></ol><p>GPU将读取片元的深度值（就是我们前面留下来的坐标z分量）与缓冲区的深度值进行比较，和模板测试一样，如何渲染物体之间的遮挡关系也是自定义的（可以让GPU把没有被遮挡的部分隐藏了，让被遮挡的部分显示出来的。）<br>大量的被遮挡片元直到深度测试阶段才会被剔除，而在此之前它们同样地被计算，这占用了GPU大量的资源。<br>因此有种优化技术是将深度测试提前（Early-Z）。但这带来了与透明度测试的冲突，例如某个片元甲虽然遮挡了另一个片元乙，但甲却是透明的，GPU应当渲染的是片元乙，这就产生了矛盾，这就是透明度测试会导致性能下降的原因</p><ol start="5"><li>合并<br>一个片元通过了所有测试，片元颜色就会被送到颜色缓冲区，到达了合并环节<br>合并有两种主要的方式，一种是直接进行颜色的替换，另一种是根据不透明度进行混合（Blend）<br>如果开启了混合，GPU会取出片元着色器得到的颜色（源颜色）和颜色缓冲区存在的颜色（目标颜色），之后按照设定的函数进行混合，可以设定透明度通道进行相加，相减还是相乘。<br>最后GPU会使用双重缓冲（Double Buffering）的策略，即屏幕上显示前置缓冲（Front Buffer），而渲染好的颜色先被送入后置缓冲（Back Buffer），再替换前置缓冲，以此避免在屏幕上显示正在光栅化的图元</li></ol><p>引用两位大佬的文章思路 <a href="https://zhuanlan.zhihu.com/p/137780634">1</a><a href="https://blog.csdn.net/jkkk_/article/details/126974823">2</a></p>]]></content>
+        <content type="html"><![CDATA[<h1 id><a href="#" class="headerlink" title></a><a href="/FengChen512/2024/03/22/graphics/RenderPipeline/" title="渲染管线Render Pipeline个人理解总结">渲染管线的理解</a></h1>]]></content>
       
       
       <categories>
@@ -337,11 +337,11 @@
     
     
     <entry>
-      <title>关于图形学</title>
-      <link href="/FengChen512/2024/03/22/graphics/"/>
-      <url>/FengChen512/2024/03/22/graphics/</url>
+      <title>渲染管线Render Pipeline个人理解总结</title>
+      <link href="/FengChen512/2024/03/22/graphics/RenderPipeline/"/>
+      <url>/FengChen512/2024/03/22/graphics/RenderPipeline/</url>
       
-        <content type="html"><![CDATA[<h1 id><a href="#" class="headerlink" title></a><a href="/FengChen512/2024/03/22/graphics/RenderPipeline/" title="渲染管线Render Pipeline个人理解总结">渲染管线的理解</a></h1>]]></content>
+        <content type="html"><![CDATA[<h2 id="CPU与GPU的区别"><a href="#CPU与GPU的区别" class="headerlink" title="CPU与GPU的区别"></a>CPU与GPU的区别</h2><p>GPU的架构与CPU有极大的不同，这主要归因于两者不同的使用场合。试想一下，GPU面对3D游戏中成千上万的三角面，如果仅仅是跟Cpu一样逐一单个处理计算，损失的效率是极其惊人的。</p><h2 id="渲染管线（Render-Pipeline）"><a href="#渲染管线（Render-Pipeline）" class="headerlink" title="渲染管线（Render Pipeline）"></a>渲染管线（Render Pipeline）</h2><p>在渲染流程中，CPU与GPU正如上文一样通力合作渲染图像。在运算过程中，CPU如同进货的卡车不断地将要处理的数据丢给GPU，GPU工厂调动一个个如工人一般的计算单元对这些数据进行简单的处理，最后组装出产品——图像。</p><h2 id="渲染管线流程"><a href="#渲染管线流程" class="headerlink" title="渲染管线流程"></a>渲染管线流程</h2><p>   渲染管线粗略分为几个步骤：应用阶段-几何阶段-光栅化阶段<br>   <img src="/FengChen512/2024/03/22/graphics/RenderPipeline/1.png" class="lazyload placeholder" data-srcset="/FengChen512/2024/03/22/graphics/RenderPipeline/1.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="渲染管线抽象图"><br>    渲染管线粗略分为几个步骤：顶点数据的输入、顶点着色器、曲面细分过程、几何着色器、投影，裁剪剔除、屏幕映射， 光栅化、片段着色器以及混合测试<br>   <img src="/FengChen512/2024/03/22/graphics/RenderPipeline/2.png" class="lazyload placeholder" data-srcset="/FengChen512/2024/03/22/graphics/RenderPipeline/2.png" srcset="https://img2.baidu.com/it/u=2037979560,2772131037&fm=26&fmt=auto&gp=0.jpg" alt="渲染管线详细图"></p><h3 id="应用阶段（Application-Stage）"><a href="#应用阶段（Application-Stage）" class="headerlink" title="应用阶段（Application Stage）"></a>应用阶段（Application Stage）</h3><p>这是一个由CPU主要负责的阶段，且完全由开发人员掌控。在这个阶段，CPU将决定递给GPU什么样的数据（譬如渲染目标场景中的灯光、场景的模型、摄像机的位置），有时候还会对这些数据进行处理（譬如只递给GPU可以被摄像机看见的元素，其他不可见的元素被剔除（culling）出去），并且告诉GPU这些数据的渲染状态（譬如纹理、材质、着色器等）。</p><p>我们同样用工业流水线进行类比，这一块相当于工厂的产品进口部门，采购员（CPU）联系发货单位（RAM）订购想要的原材料（数据），并经过一番精挑细选拿出自己满意的材料（数据处理，如剔除），把这些材料连同他们的加工方式（如应当使用的着色器）丢给工厂。值得注意的是，由于这一块采购员是与发货单位的商人而不是工厂里的工人交流， 所以他可以使用更复杂的语言（如高级程序语言）与商人讨价还价，而不是像在工厂中向工人发号施令时使用的指令（着色器语言）。</p><p>所做的工作： </p><h4 id="顶点数据的输入"><a href="#顶点数据的输入" class="headerlink" title="顶点数据的输入"></a>顶点数据的输入</h4><p>应用阶段的主要任务是把 顶点数据、shader、贴图、材质球、灯光以及一些设置等等传入GPU的过程，这个过程叫做 DrawCall<br>（1）把数据加载到显存：将数据加载到显存中能使GPU更快的访问这些数据，当把数据加载到显存后，便可以释放了数据，但一些数据仍需留在内存中，如CPU需要网格数据进行碰撞检测。<br>（2）设置渲染状态：渲染状态的一个通俗解释就是，定义了场景中的网格是怎样被渲染的。例如，使用哪个顶点着色器&#x2F;片段着色器、光源属性、材质等。如果不设置渲染状态，那所有的网格将使用同一种渲染，显然这是不希望得到的结果。<br>（3）调用Draw Call：当所有的数据准备好后，CPU就需要调用一个渲染指令告诉GPU，按照上述设置进行渲染，这个渲染命令就是Draw Call。Draw Call命令仅仅指向被渲染的图元列表，而不包含任何材质信息</p><p>Unity DrawCall 内部分为 SetPassCall 和 Batch，<br>SetPassCall的作用是设置渲染管线的上下文，一般每一种Unity里的Material就是一个SetPassCall，<br>Batch就是每一次CPU向GPU打包发送顶点数据的批次，当我们优化性能的时候经常会用到（动态）合批，合批就是将拥有两个相同的材质（材质实例也要相同）的物体同时传入GPU进行处理。</p><ul><li><a href="/FengChen512/2024/03/22/graphics/Drawcall/" title="UGUI 合批（DrawCall）原理与优化笔记">合批处理</a></li></ul><h3 id="几何阶段（Geometry-Stage）"><a href="#几何阶段（Geometry-Stage）" class="headerlink" title="几何阶段（Geometry Stage）"></a>几何阶段（Geometry Stage）</h3><p>负责大部分多边形操作和顶点操作，将三维空间的数据转换为二维空间的数据。<br>这一个由GPU主导的阶段，也就是说，从这个阶段开始，我们进入了上文所说的“流水线”。几何阶段将把CPU在应用阶段发来的数据进行进一步处理，而这个阶段又可以进一步细分为若干个流水线阶段，可以类比理解为工厂流水线上进行的一道道工序。<br>流程图中展现了几何阶段中几个常见的渲染步骤（不同的图像应用接口存在着些许不同，这里以OpenGL为例），其中，绿色表示开发者可以完全编程控制的部分，虚线外框表示此阶段不是必需的，黄色表示开发者无法完全控制的部分（但可以进行一些配置），紫色表示开发者无法控制的阶段（已经由GPU固定实现）。</p><h4 id="顶点着色器"><a href="#顶点着色器" class="headerlink" title="顶点着色器"></a>顶点着色器</h4><p>顶点着色器的处理单位是顶点，但是每次处理都是独立的，因此无法创建或销毁任何一个顶点，也不能得到与其他顶点的关系<br>顶点着色器主要功能是进行坐标变换。将输入的局部坐标变换到世界坐标、观察坐标和裁剪坐标。<br>虽然我们也会在顶点着色器进行光照计算(称作高洛德着色)，然后经过光栅化插值得到各个片段的颜色，但这种得到的光照比较不自然，所以一般在片段着色器进行光照计算</p><h4 id="曲面细分着色器"><a href="#曲面细分着色器" class="headerlink" title="曲面细分着色器"></a>曲面细分着色器</h4><p>曲面细分是利用镶嵌化处理技术对三角面进行细分，以此来增加物体表面的三角面的数量，是渲染管线一个可选的阶段</p><h4 id="几何着色器"><a href="#几何着色器" class="headerlink" title="几何着色器"></a>几何着色器</h4><p>在这个阶段，开发者可以控制GPU对顶点进行增删改操作</p><h4 id="屏幕映射"><a href="#屏幕映射" class="headerlink" title="屏幕映射"></a>屏幕映射</h4><p>屏幕映射的任务就是将每个图元的x、y值变换到屏幕坐标系，对于z坐标不做任何处理（实际上屏幕坐标系和z坐标一起构成窗口坐标系），这些值会被一起传递到光栅化阶段<br>一般来说，屏幕坐标是2D的概念，只用于表示屏幕XY坐标，而窗口坐标是2.5D的概念，它还带有深度信息，也就是经过变换后的Z轴的信息。<br>使用齐次坐标的意义，其实就是为了正确记录下投影变换前(观察空间)中物体的深度信息，也就是Z坐标的值。</p><ol><li>投影</li></ol><p>GPU将顶点从摄像机观察空间转换到裁剪空间（又被称为齐次裁剪空间），为之后的剔除过程以及投射到二维平面做准备。<br>常见的投影方式有透视投影与正交投影。<br>在三维中原有的三个分量x、y、z上又额外增加了w&#x3D;1分量，使得可以通过矩阵乘的方式为三维坐标实现平移的效果。</p><ol start="2"><li>裁剪</li></ol><p>只有当图元部分或全部位于视椎体内时，我们才会将它送到流水线的下个阶段，也就是光栅化阶段。对于部分位于视椎体的图元，位于外部的顶点将被裁剪掉，而且在视椎体与线段的交界处产生新的顶点。<br>在把不需要的顶点裁剪掉后，GPU需要把顶点映射到屏幕空间，这是一个从三维空间转换到二维空间的操作。<br>对于透视裁剪空间，GPU需要对裁剪空间中的顶点执行齐次除法（将齐次坐标系中的w分量除x、y、z分量），得到顶点的归一化的设备坐标（NDC）<br>通过透视除法后，我们得到了NDC坐标，获得NDC坐标是为了实现屏幕坐标的转换与硬件无关。<br>正交裁剪空间只需要把w分量去掉即可。<br>此时顶点的x、y坐标接近于在屏幕上所处的位置了，此时z分量不会被丢弃而是被写入了深度缓冲（z-buffer）</p><h3 id="光栅化阶段"><a href="#光栅化阶段" class="headerlink" title="光栅化阶段"></a>光栅化阶段</h3><p>决定每个渲染图元中哪些像素应该被绘制在屏幕上，它需要对上一阶段得到的逐顶点数据进行插值<br>到此，GPU也只是完成了渲染的一半工作，因为现在我们只是得到了一些顶点，他们还不是能被显示在屏幕上的像素。</p><h4 id="三角形设置（Triangle-Setup）"><a href="#三角形设置（Triangle-Setup）" class="headerlink" title="三角形设置（Triangle Setup）"></a>三角形设置（Triangle Setup）</h4><p>有些资料把这个过程称为图元组装（Primitive Assembly），不过个人认为叫做Primitive Assembly更为贴切。这个过程做的工作就是把顶点数据收集并组装为简单的基本体（线、点或三角形），通俗的说就是把相关的两个顶点“连连看”，有些能构成面，有些只是线，有些甚至没有与之配对的顶点只能当一个“单身狗”。</p><h4 id="三角形遍历（Triangle-Traversal）"><a href="#三角形遍历（Triangle-Traversal）" class="headerlink" title="三角形遍历（Triangle Traversal）"></a>三角形遍历（Triangle Traversal）</h4><p>这个过程将检验屏幕上的某个像素是否被一个三角形网格所覆盖，被覆盖的区域将生成一个片元（Fragment）</p><p>片元不是真正意义上的像素，而是包含了很多种状态的集合（譬如屏幕坐标、深度、法线、纹理等）<br>而片元的划分依据（像素块被覆盖到何种程度才被划分）不管怎么样都会产生锯齿，这就有许多抗锯齿的采样方式（比如MSAA）<br>片段着色器<br>片元着色器的输入是上一个阶段对顶点信息进行插值的结果（是根据从顶点着色器输出的数据插值得到的），而它的输出是像素颜色值<br>这个阶段我们能进行很多渲染技术，比如根据顶点法线或者UV计算颜色，接受阴影或者是进行纹理采样（纹理坐标是通过前述阶段的顶点数据插值得到的）</p><h4 id="逐片元计算"><a href="#逐片元计算" class="headerlink" title="逐片元计算"></a>逐片元计算</h4><p>对每个片元进行操作，将它们的颜色以某种形式合并，得到最终在屏幕上像素显示的颜色。主要的工作有两个：对片元进行测试（Test）并进行合并（Merge）。<br>测试步骤决定了片元最终会不会被显示出来，这个阶段是高度可配置的<br>如果一个片元通过了所有测试，就需要把这些片元的颜色值和颜色缓冲中已有的颜色值进行混合。</p><ol><li><p>裁切测试<br>在裁剪测试中，允许程序员开设一个裁剪框，只有在裁剪框内的片元才会被显示出来，在裁剪框外的片元皆被剔除。</p></li><li><p>透明度测试<br>在透明度测试中，允许程序员对片元的透明度值进行检测，仅仅允许透明度值达到设置的阈值后才可以会绘制。在OpenGL3.1后这个API被删除了，但你可以在片元着色器中实现类似的效果。</p></li><li><p>模板测试<br>模板测试通常用来限制渲染的区域，渲染阴影，轮廓渲染等<br>在模板测试中，GPU将读取片元的模板值与模板缓冲区的模板值进行比较，比较函数由开发者指定，如果比较不通过，这个片元将被舍弃</p></li><li><p>深度测试<br>现实生活中，近的物体会遮挡住远处的物体，深度缓冲就是用来实现这种效果的。</p></li></ol><p>GPU将读取片元的深度值（就是我们前面留下来的坐标z分量）与缓冲区的深度值进行比较，和模板测试一样，如何渲染物体之间的遮挡关系也是自定义的（可以让GPU把没有被遮挡的部分隐藏了，让被遮挡的部分显示出来的。）<br>大量的被遮挡片元直到深度测试阶段才会被剔除，而在此之前它们同样地被计算，这占用了GPU大量的资源。<br>因此有种优化技术是将深度测试提前（Early-Z）。但这带来了与透明度测试的冲突，例如某个片元甲虽然遮挡了另一个片元乙，但甲却是透明的，GPU应当渲染的是片元乙，这就产生了矛盾，这就是透明度测试会导致性能下降的原因</p><ol start="5"><li>合并<br>一个片元通过了所有测试，片元颜色就会被送到颜色缓冲区，到达了合并环节<br>合并有两种主要的方式，一种是直接进行颜色的替换，另一种是根据不透明度进行混合（Blend）<br>如果开启了混合，GPU会取出片元着色器得到的颜色（源颜色）和颜色缓冲区存在的颜色（目标颜色），之后按照设定的函数进行混合，可以设定透明度通道进行相加，相减还是相乘。<br>最后GPU会使用双重缓冲（Double Buffering）的策略，即屏幕上显示前置缓冲（Front Buffer），而渲染好的颜色先被送入后置缓冲（Back Buffer），再替换前置缓冲，以此避免在屏幕上显示正在光栅化的图元</li></ol><p>引用两位大佬的文章思路 <a href="https://zhuanlan.zhihu.com/p/137780634">1</a><a href="https://blog.csdn.net/jkkk_/article/details/126974823">2</a></p>]]></content>
       
       
       <categories>
@@ -372,15 +372,15 @@
       
         <tags>
             
-            <tag> Unity </tag>
+            <tag> ET框架 </tag>
             
             <tag> MMO </tag>
-            
-            <tag> ET框架 </tag>
             
             <tag> 分布式 </tag>
             
             <tag> 游戏服务器 </tag>
+            
+            <tag> Unity </tag>
             
         </tags>
       
@@ -405,9 +405,9 @@
       
         <tags>
             
-            <tag> Unity </tag>
-            
             <tag> ET框架 </tag>
+            
+            <tag> Unity </tag>
             
             <tag> 战斗系统 </tag>
             
@@ -428,7 +428,7 @@
       <link href="/FengChen512/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/"/>
       <url>/FengChen512/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/</url>
       
-        <content type="html"><![CDATA[<h1 id="基于-ET-的放置类网络游戏系统设计"><a href="#基于-ET-的放置类网络游戏系统设计" class="headerlink" title="基于 ET 的放置类网络游戏系统设计"></a>基于 ET 的放置类网络游戏系统设计</h1><blockquote><p>一款基于 <a href="https://github.com/egametang/ET">ET</a>（ET6.0）框架的<strong>放置类网络游戏</strong>实践项目。放置类（挂机）游戏的核心是”<strong>轻操作、重成长、数值驱动</strong>“——玩家上线点点、下线也成长，靠一套完整的数值与系统闭环支撑长线体验。</p></blockquote><ul><li><strong>视频展示</strong>：<a href="https://www.bilibili.com/video/BV1St421G7EP/">bilibili 演示</a></li><li><strong>仓库地址</strong>：<a href="https://github.com/yushanga/waitinggame">github.com&#x2F;yushanga&#x2F;waitinggame</a></li><li><strong>技术栈</strong>：rider + vs + Unity + MongoDB + Dotween + ET6.0</li></ul><hr><h2 id="项目概述"><a href="#项目概述" class="headerlink" title="项目概述"></a>项目概述</h2><p>放置类游戏的系统盘根错节：账号、区服、角色、数值、战斗、装备、任务、背包、打造、聊天、排行榜环环相扣。本文从<strong>玩家生命周期</strong>出发，梳理这套放置类网络游戏的核心系统设计。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">账号登录 → 区服/角色选择 → 角色数据/数值 → 战斗副本(挂机) → 装备/任务/背包 → 打造 → 排行榜/聊天</span><br></pre></td></tr></table></figure><hr><h2 id="核心系统模块"><a href="#核心系统模块" class="headerlink" title="核心系统模块"></a>核心系统模块</h2><h3 id="1-账号登录"><a href="#1-账号登录" class="headerlink" title="1. 账号登录"></a>1. 账号登录</h3><p>登录是玩家身份的起点，放置类游戏同样要做扎实：</p><ul><li><strong>账号规范</strong>：限定”大小写字母 + 数字”，且<strong>不可重复</strong>——注册时做唯一性校验，避免重名&#x2F;撞号；</li><li><strong>密码加密</strong>：密码不能明文落库，需哈希（加盐）存储，校验时比对密文；</li><li><strong>本地保存</strong>：客户端保存登录态（Token&#x2F;记住账号），减少重复输入。</li></ul><p><strong>要点</strong>：登录态校验在服务端完成，客户端仅保存凭证；账号唯一性在数据库层面加约束。</p><h3 id="2-区服管理"><a href="#2-区服管理" class="headerlink" title="2. 区服管理"></a>2. 区服管理</h3><p>放置类游戏常见<strong>分区分服</strong>：</p><ul><li>多个区服（如 1 区&#x2F;2 区），每区独立的世界与数据；</li><li>玩家选定区服后绑定，区服之间数据隔离；</li><li>区服可承载更多玩家，便于运营（开新服、合服）。</li></ul><p><strong>要点</strong>：区服是分布式隔离的自然单位，登录&#x2F;角色&#x2F;世界数据按区服分区。</p><h3 id="3-账号角色管理"><a href="#3-账号角色管理" class="headerlink" title="3. 账号角色管理"></a>3. 账号角色管理</h3><ul><li><strong>账号角色绑定</strong>：一个账号下可拥有<strong>多个角色</strong>；</li><li><strong>角色名称不可重复</strong>：全服&#x2F;区服内重名校验；</li><li>角色是玩家在游戏世界中的”操作主体”，账号是身份、角色是载体。</li></ul><p><strong>要点</strong>：账号表与角色表分离（1:N），角色名唯一性做全局约束，支持”一账号多角色”。</p><h3 id="4-角色数据管理"><a href="#4-角色数据管理" class="headerlink" title="4. 角色数据管理"></a>4. 角色数据管理</h3><ul><li><strong>账号数据</strong>：等级、经验、货币、签到等玩家级数据；</li><li><strong>装备数据</strong>：角色身上穿戴的装备列表；</li><li>数据持久化到 MongoDB，随角色读写。</li></ul><p><strong>要点</strong>：角色数据按<strong>热区&#x2F;冷区</strong>分层，热数据常驻内存、定期落库（配合下方”缓存服务器”）。</p><h3 id="5-角色数值"><a href="#5-角色数值" class="headerlink" title="5. 角色数值"></a>5. 角色数值</h3><p>放置类游戏的数值体系是核心，本项目分了三个层级：</p><table><thead><tr><th>层级</th><th>说明</th><th>示例</th></tr></thead><tbody><tr><td><strong>一级数值</strong></td><td>基础属性</td><td>攻击、防御、生命</td></tr><tr><td><strong>二级数值</strong></td><td>由一级推导</td><td>暴击率、闪避、攻速</td></tr><tr><td><strong>百分比数值</strong></td><td>百分比加成</td><td>攻击加成 %、暴伤加成 %</td></tr></tbody></table><p><strong>要点</strong>：数值分层便于成长曲线的设计与调参——一级数值是”底”，二级&#x2F;百分比是”乘区”，叠加后形成最终面板。</p><h3 id="6-战斗副本"><a href="#6-战斗副本" class="headerlink" title="6. 战斗副本"></a>6. 战斗副本</h3><p>放置类游戏的战斗常为<strong>自动&#x2F;托管</strong>，服务器负责核算：</p><ol><li><strong>根据配置生成怪物数量</strong>：副本配置定义怪物波次与数量；</li><li><strong>根据怪物 id 生成怪物</strong>：读取怪物配置实例化；</li><li><strong>伤害计算</strong>：攻防公式结算；</li><li><strong>战斗漂字</strong>：客户端表现伤害数字；</li><li><strong>服务器战斗核算</strong>：核心设计——<strong>服务器根据初始数据与随机数种子进行战斗模拟计算</strong>，即”<strong>确定性战斗</strong>“：给定相同输入与随机种子，战斗结果可完全复现，天然防作弊、便于回放与断线续战；</li><li>战斗结果由服务器权威下发。</li></ol><p><strong>要点</strong>：随机数种子机制让战斗可复现，是放置类（以及很多 MMO）战斗的关键设计。</p><h3 id="7-个人装备模块"><a href="#7-个人装备模块" class="headerlink" title="7. 个人装备模块"></a>7. 个人装备模块</h3><ul><li><strong>装备数据</strong>：装备实例的属性、穿戴状态；</li><li><strong>装备属性</strong>：攻击&#x2F;防御等加成，影响最终战力；</li><li>装备来源：副本掉落、打造、任务奖励。</li></ul><h3 id="8-任务模块"><a href="#8-任务模块" class="headerlink" title="8. 任务模块"></a>8. 任务模块</h3><ul><li><strong>任务 id &#x2F; 类型</strong>：主线、日常、活动等；</li><li><strong>任务奖励</strong>：金币、经验、装备等；</li><li>任务进度推进与奖励领取由服务端校验。</li></ul><h3 id="9-背包模块"><a href="#9-背包模块" class="headerlink" title="9. 背包模块"></a>9. 背包模块</h3><ul><li><strong>item &#x2F; 装备</strong>：背包格子管理，装备与道具分类；</li><li><strong>item 售卖</strong>：出售道具获得货币，管理背包空间。</li></ul><h3 id="10-装备打造模块"><a href="#10-装备打造模块" class="headerlink" title="10. 装备打造模块"></a>10. 装备打造模块</h3><ul><li><strong>打造条件</strong>：等级、前置任务等门槛；</li><li><strong>打造所需材料</strong>：消耗材料合成装备；</li><li><strong>打造定时器</strong>：打造是<strong>耗时行为</strong>（如倒计时完成），由定时器驱动完成事件，是放置类”挂机等待”体验的一部分。</li></ul><hr><h2 id="平台与社交系统"><a href="#平台与社交系统" class="headerlink" title="平台与社交系统"></a>平台与社交系统</h2><h3 id="缓存服务器与定时数据存储"><a href="#缓存服务器与定时数据存储" class="headerlink" title="缓存服务器与定时数据存储"></a>缓存服务器与定时数据存储</h3><p>放置类游戏<strong>数据写入频繁</strong>（等级、资源不断变化），本项目用<strong>缓存服务器</strong>做中间层：</p><ul><li>高频数据先写缓存（内存），<strong>定时批量落库</strong>到 MongoDB；</li><li>减少数据库压力、提升吞吐，是放置类高写入场景的标配方案。</li></ul><h3 id="世界聊天"><a href="#世界聊天" class="headerlink" title="世界聊天"></a>世界聊天</h3><ul><li>全服&#x2F;频道聊天消息广播；</li><li>通过消息系统分发，支持世界频道等。</li></ul><h3 id="排行榜"><a href="#排行榜" class="headerlink" title="排行榜"></a>排行榜</h3><ul><li><strong>定时刷新排行榜</strong>：周期性重算排名，避免每次变化都全量排序；</li><li><strong>根据等级进行排行榜</strong>：按等级&#x2F;战力等维度排行；</li><li><strong>等级变化回调刷新该等级区域排行榜</strong>：玩家等级变化时，只增量刷新<strong>受影响区段</strong>的排名，而非全榜重排——这是排行榜的性能关键。</li></ul><hr><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这套放置类游戏覆盖了<strong>账号、区服、角色、数值、战斗、装备、任务、背包、打造、缓存、聊天、排行榜</strong>的完整闭环。几个值得借鉴的设计：</p><ul><li><strong>确定性战斗（随机数种子）</strong>：服务器模拟可复现，防作弊；</li><li><strong>数值三分层</strong>：一级&#x2F;二级&#x2F;百分比，成长曲线易调；</li><li><strong>缓存服务器 + 定时落库</strong>：扛住放置类高频写入；</li><li><strong>排行榜增量刷新</strong>：只重算受影响区段。</li></ul><blockquote><p>更多作品见：<a href="/2022/04/07/Demo/">本人作品</a></p></blockquote>]]></content>
+        <content type="html"><![CDATA[<h1 id="基于-ET-的放置类网络游戏系统设计"><a href="#基于-ET-的放置类网络游戏系统设计" class="headerlink" title="基于 ET 的放置类网络游戏系统设计"></a>基于 ET 的放置类网络游戏系统设计</h1><blockquote><p>一款基于 <a href="https://github.com/egametang/ET">ET</a>（ET6.0）框架的<strong>放置类网络游戏</strong>实践项目。放置类（挂机）游戏的核心是”<strong>轻操作、重成长、数值驱动</strong>“——玩家上线点点、下线也成长，靠一套完整的数值与系统闭环支撑长线体验。</p></blockquote><ul><li><strong>视频展示</strong>：<a href="https://www.bilibili.com/video/BV1St421G7EP/">bilibili 演示</a></li><li><strong>仓库地址</strong>：<a href="https://gitee.com/FengChen512/wait-game">gitee.com&#x2F;FengChen512&#x2F;wait-game</a></li><li><strong>技术栈</strong>：rider + vs + Unity + MongoDB + Dotween + ET6.0</li></ul><hr><h2 id="项目概述"><a href="#项目概述" class="headerlink" title="项目概述"></a>项目概述</h2><p>放置类游戏的系统盘根错节：账号、区服、角色、数值、战斗、装备、任务、背包、打造、聊天、排行榜环环相扣。本文从<strong>玩家生命周期</strong>出发，梳理这套放置类网络游戏的核心系统设计。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">账号登录 → 区服/角色选择 → 角色数据/数值 → 战斗副本(挂机) → 装备/任务/背包 → 打造 → 排行榜/聊天</span><br></pre></td></tr></table></figure><hr><h2 id="核心系统模块"><a href="#核心系统模块" class="headerlink" title="核心系统模块"></a>核心系统模块</h2><h3 id="1-账号登录"><a href="#1-账号登录" class="headerlink" title="1. 账号登录"></a>1. 账号登录</h3><p>登录是玩家身份的起点，放置类游戏同样要做扎实：</p><ul><li><strong>账号规范</strong>：限定”大小写字母 + 数字”，且<strong>不可重复</strong>——注册时做唯一性校验，避免重名&#x2F;撞号；</li><li><strong>密码加密</strong>：密码不能明文落库，需哈希（加盐）存储，校验时比对密文；</li><li><strong>本地保存</strong>：客户端保存登录态（Token&#x2F;记住账号），减少重复输入。</li></ul><p><strong>要点</strong>：登录态校验在服务端完成，客户端仅保存凭证；账号唯一性在数据库层面加约束。</p><h3 id="2-区服管理"><a href="#2-区服管理" class="headerlink" title="2. 区服管理"></a>2. 区服管理</h3><p>放置类游戏常见<strong>分区分服</strong>：</p><ul><li>多个区服（如 1 区&#x2F;2 区），每区独立的世界与数据；</li><li>玩家选定区服后绑定，区服之间数据隔离；</li><li>区服可承载更多玩家，便于运营（开新服、合服）。</li></ul><p><strong>要点</strong>：区服是分布式隔离的自然单位，登录&#x2F;角色&#x2F;世界数据按区服分区。</p><h3 id="3-账号角色管理"><a href="#3-账号角色管理" class="headerlink" title="3. 账号角色管理"></a>3. 账号角色管理</h3><ul><li><strong>账号角色绑定</strong>：一个账号下可拥有<strong>多个角色</strong>；</li><li><strong>角色名称不可重复</strong>：全服&#x2F;区服内重名校验；</li><li>角色是玩家在游戏世界中的”操作主体”，账号是身份、角色是载体。</li></ul><p><strong>要点</strong>：账号表与角色表分离（1:N），角色名唯一性做全局约束，支持”一账号多角色”。</p><h3 id="4-角色数据管理"><a href="#4-角色数据管理" class="headerlink" title="4. 角色数据管理"></a>4. 角色数据管理</h3><ul><li><strong>账号数据</strong>：等级、经验、货币、签到等玩家级数据；</li><li><strong>装备数据</strong>：角色身上穿戴的装备列表；</li><li>数据持久化到 MongoDB，随角色读写。</li></ul><p><strong>要点</strong>：角色数据按<strong>热区&#x2F;冷区</strong>分层，热数据常驻内存、定期落库（配合下方”缓存服务器”）。</p><h3 id="5-角色数值"><a href="#5-角色数值" class="headerlink" title="5. 角色数值"></a>5. 角色数值</h3><p>放置类游戏的数值体系是核心，本项目分了三个层级：</p><table><thead><tr><th>层级</th><th>说明</th><th>示例</th></tr></thead><tbody><tr><td><strong>一级数值</strong></td><td>基础属性</td><td>攻击、防御、生命</td></tr><tr><td><strong>二级数值</strong></td><td>由一级推导</td><td>暴击率、闪避、攻速</td></tr><tr><td><strong>百分比数值</strong></td><td>百分比加成</td><td>攻击加成 %、暴伤加成 %</td></tr></tbody></table><p><strong>要点</strong>：数值分层便于成长曲线的设计与调参——一级数值是”底”，二级&#x2F;百分比是”乘区”，叠加后形成最终面板。</p><h3 id="6-战斗副本"><a href="#6-战斗副本" class="headerlink" title="6. 战斗副本"></a>6. 战斗副本</h3><p>放置类游戏的战斗常为<strong>自动&#x2F;托管</strong>，服务器负责核算：</p><ol><li><strong>根据配置生成怪物数量</strong>：副本配置定义怪物波次与数量；</li><li><strong>根据怪物 id 生成怪物</strong>：读取怪物配置实例化；</li><li><strong>伤害计算</strong>：攻防公式结算；</li><li><strong>战斗漂字</strong>：客户端表现伤害数字；</li><li><strong>服务器战斗核算</strong>：核心设计——<strong>服务器根据初始数据与随机数种子进行战斗模拟计算</strong>，即”<strong>确定性战斗</strong>“：给定相同输入与随机种子，战斗结果可完全复现，天然防作弊、便于回放与断线续战；</li><li>战斗结果由服务器权威下发。</li></ol><p><strong>要点</strong>：随机数种子机制让战斗可复现，是放置类（以及很多 MMO）战斗的关键设计。</p><h3 id="7-个人装备模块"><a href="#7-个人装备模块" class="headerlink" title="7. 个人装备模块"></a>7. 个人装备模块</h3><ul><li><strong>装备数据</strong>：装备实例的属性、穿戴状态；</li><li><strong>装备属性</strong>：攻击&#x2F;防御等加成，影响最终战力；</li><li>装备来源：副本掉落、打造、任务奖励。</li></ul><h3 id="8-任务模块"><a href="#8-任务模块" class="headerlink" title="8. 任务模块"></a>8. 任务模块</h3><ul><li><strong>任务 id &#x2F; 类型</strong>：主线、日常、活动等；</li><li><strong>任务奖励</strong>：金币、经验、装备等；</li><li>任务进度推进与奖励领取由服务端校验。</li></ul><h3 id="9-背包模块"><a href="#9-背包模块" class="headerlink" title="9. 背包模块"></a>9. 背包模块</h3><ul><li><strong>item &#x2F; 装备</strong>：背包格子管理，装备与道具分类；</li><li><strong>item 售卖</strong>：出售道具获得货币，管理背包空间。</li></ul><h3 id="10-装备打造模块"><a href="#10-装备打造模块" class="headerlink" title="10. 装备打造模块"></a>10. 装备打造模块</h3><ul><li><strong>打造条件</strong>：等级、前置任务等门槛；</li><li><strong>打造所需材料</strong>：消耗材料合成装备；</li><li><strong>打造定时器</strong>：打造是<strong>耗时行为</strong>（如倒计时完成），由定时器驱动完成事件，是放置类”挂机等待”体验的一部分。</li></ul><hr><h2 id="平台与社交系统"><a href="#平台与社交系统" class="headerlink" title="平台与社交系统"></a>平台与社交系统</h2><h3 id="缓存服务器与定时数据存储"><a href="#缓存服务器与定时数据存储" class="headerlink" title="缓存服务器与定时数据存储"></a>缓存服务器与定时数据存储</h3><p>放置类游戏<strong>数据写入频繁</strong>（等级、资源不断变化），本项目用<strong>缓存服务器</strong>做中间层：</p><ul><li>高频数据先写缓存（内存），<strong>定时批量落库</strong>到 MongoDB；</li><li>减少数据库压力、提升吞吐，是放置类高写入场景的标配方案。</li></ul><h3 id="世界聊天"><a href="#世界聊天" class="headerlink" title="世界聊天"></a>世界聊天</h3><ul><li>全服&#x2F;频道聊天消息广播；</li><li>通过消息系统分发，支持世界频道等。</li></ul><h3 id="排行榜"><a href="#排行榜" class="headerlink" title="排行榜"></a>排行榜</h3><ul><li><strong>定时刷新排行榜</strong>：周期性重算排名，避免每次变化都全量排序；</li><li><strong>根据等级进行排行榜</strong>：按等级&#x2F;战力等维度排行；</li><li><strong>等级变化回调刷新该等级区域排行榜</strong>：玩家等级变化时，只增量刷新<strong>受影响区段</strong>的排名，而非全榜重排——这是排行榜的性能关键。</li></ul><hr><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这套放置类游戏覆盖了<strong>账号、区服、角色、数值、战斗、装备、任务、背包、打造、缓存、聊天、排行榜</strong>的完整闭环。几个值得借鉴的设计：</p><ul><li><strong>确定性战斗（随机数种子）</strong>：服务器模拟可复现，防作弊；</li><li><strong>数值三分层</strong>：一级&#x2F;二级&#x2F;百分比，成长曲线易调；</li><li><strong>缓存服务器 + 定时落库</strong>：扛住放置类高频写入；</li><li><strong>排行榜增量刷新</strong>：只重算受影响区段。</li></ul><blockquote><p>更多作品见：<a href="/2022/04/07/Demo/">本人作品</a></p></blockquote>]]></content>
       
       
       <categories>
@@ -440,11 +440,11 @@
       
         <tags>
             
-            <tag> Unity </tag>
-            
             <tag> ET框架 </tag>
             
             <tag> 游戏服务器 </tag>
+            
+            <tag> Unity </tag>
             
             <tag> 放置类游戏 </tag>
             
