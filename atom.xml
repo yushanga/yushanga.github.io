@@ -18,9 +18,9 @@
     </author>
     <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
     <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <category term="架构设计" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
     <category term="ECS" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/ECS/"/>
     <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
+    <category term="架构设计" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
     <category term="性能优化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     <category term="DOTS" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/DOTS/"/>
     <id>https://fengchen512.gitee.io/FengChen512/2026/07/02/Learn/FirstECS/</id>
@@ -37,9 +37,9 @@
       <name>Wind Dust</name>
     </author>
     <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
-    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
     <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
     <category term="SLG" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/SLG/"/>
+    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
     <category term="大地图流式加载" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
     <category term="AOI" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/AOI/"/>
     <category term="寻路优化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
@@ -59,9 +59,9 @@
       <name>Wind Dust</name>
     </author>
     <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
-    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
     <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
     <category term="SLG" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/SLG/"/>
+    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
     <category term="大地图流式加载" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
     <category term="AOI" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/AOI/"/>
     <category term="寻路优化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
@@ -95,9 +95,9 @@
       <name>Wind Dust</name>
     </author>
     <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
-    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
     <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
     <category term="SLG" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/SLG/"/>
+    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
     <category term="大地图流式加载" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
     <category term="AOI" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/AOI/"/>
     <category term="寻路优化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
@@ -150,10 +150,10 @@
     </author>
     <category term="作品展示" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
     <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
+    <category term="架构设计" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
     <category term="框架" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%A1%86%E6%9E%B6/"/>
     <category term="定时器" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%AE%9A%E6%97%B6%E5%99%A8/"/>
     <category term="红点系统" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F/"/>
-    <category term="架构设计" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
     <id>https://fengchen512.gitee.io/FengChen512/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/</id>
     <link href="https://fengchen512.gitee.io/FengChen512/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/"/>
     <published>2024-06-02T11:57:40.000Z</published>
@@ -248,27 +248,8 @@
       <name>Wind Dust</name>
     </author>
     <category term="作品展示" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
-    <category term="ET框架" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/ET%E6%A1%86%E6%9E%B6/"/>
-    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
-    <category term="分布式" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    <category term="游戏服务器" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%B8%B8%E6%88%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
     <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/"/>
-    <published>2024-03-22T05:47:40.000Z</published>
-    <summary>
-      <![CDATA[<h1 id="基于-ET-框架的-MMO-项目架构笔记"><a href="#基于-ET-框架的-MMO-项目架构笔记" class="headerlink" title="基于 ET 框架的 MMO 项目架构笔记"></a>基于 ET 框架的 MMO]]>
-    </summary>
-    <title>基于 ET 框架的 MMO 项目架构笔记</title>
-    <updated>2026-09-27T04:02:14.982Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>Wind Dust</name>
-    </author>
-    <category term="作品展示" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
     <category term="ET框架" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/ET%E6%A1%86%E6%9E%B6/"/>
-    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
     <category term="战斗系统" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%88%98%E6%96%97%E7%B3%BB%E7%BB%9F/"/>
     <category term="技能" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%8A%80%E8%83%BD/"/>
     <category term="Buff" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Buff/"/>
@@ -287,10 +268,29 @@
       <name>Wind Dust</name>
     </author>
     <category term="作品展示" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
+    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
+    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
     <category term="ET框架" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/ET%E6%A1%86%E6%9E%B6/"/>
     <category term="游戏服务器" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%B8%B8%E6%88%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    <category term="分布式" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    <id>https://fengchen512.gitee.io/FengChen512/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/</id>
+    <link href="https://fengchen512.gitee.io/FengChen512/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/"/>
+    <published>2024-03-22T05:47:40.000Z</published>
+    <summary>
+      <![CDATA[<h1 id="基于-ET-框架的-MMO-项目架构笔记"><a href="#基于-ET-框架的-MMO-项目架构笔记" class="headerlink" title="基于 ET 框架的 MMO 项目架构笔记"></a>基于 ET 框架的 MMO]]>
+    </summary>
+    <title>基于 ET 框架的 MMO 项目架构笔记</title>
+    <updated>2026-09-27T04:02:14.982Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>Wind Dust</name>
+    </author>
+    <category term="作品展示" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
     <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
+    <category term="ET框架" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/ET%E6%A1%86%E6%9E%B6/"/>
     <category term="放置类游戏" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%94%BE%E7%BD%AE%E7%B1%BB%E6%B8%B8%E6%88%8F/"/>
+    <category term="游戏服务器" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%B8%B8%E6%88%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
     <category term="数值系统" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%95%B0%E5%80%BC%E7%B3%BB%E7%BB%9F/"/>
     <id>https://fengchen512.gitee.io/FengChen512/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/</id>
     <link href="https://fengchen512.gitee.io/FengChen512/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/"/>
