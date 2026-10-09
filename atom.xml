@@ -4,10 +4,10 @@
     <name>Wind Dust</name>
   </author>
   <generator uri="https://hexo.io/">Hexo</generator>
-  <icon>https://fengchen512.gitee.io/FengChen512/icon.png</icon>
-  <id>https://fengchen512.gitee.io/FengChen512/</id>
-  <link href="https://fengchen512.gitee.io/FengChen512/" rel="alternate"/>
-  <link href="https://fengchen512.gitee.io/FengChen512/atom.xml" rel="self"/>
+  <icon>https://yushanga.github.io/icon.png</icon>
+  <id>https://yushanga.github.io/</id>
+  <link href="https://yushanga.github.io/" rel="alternate"/>
+  <link href="https://yushanga.github.io/atom.xml" rel="self"/>
   <rights>All rights reserved 2026, Wind Dust</rights>
   <subtitle>行到水深处，坐看云起时</subtitle>
   <title>Wind Dust</title>
@@ -16,15 +16,15 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
-    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <category term="ECS" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/ECS/"/>
-    <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
-    <category term="架构设计" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
-    <category term="性能优化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
-    <category term="DOTS" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/DOTS/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2026/07/02/Learn/FirstECS/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2026/07/02/Learn/FirstECS/"/>
+    <category term="游戏开发" scheme="https://yushanga.github.io/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
+    <category term="Unity" scheme="https://yushanga.github.io/tagsF/Unity/"/>
+    <category term="架构设计" scheme="https://yushanga.github.io/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
+    <category term="性能优化" scheme="https://yushanga.github.io/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    <category term="ECS" scheme="https://yushanga.github.io/tagsF/ECS/"/>
+    <category term="游戏开发" scheme="https://yushanga.github.io/tagsF/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
+    <category term="DOTS" scheme="https://yushanga.github.io/tagsF/DOTS/"/>
+    <id>https://yushanga.github.io/2026/07/02/Learn/FirstECS/</id>
+    <link href="https://yushanga.github.io/2026/07/02/Learn/FirstECS/"/>
     <published>2026-07-02T04:00:00.000Z</published>
     <summary>
       <![CDATA[<h1 id="前言"><a href="#前言" class="headerlink"]]>
@@ -36,17 +36,17 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
-    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <category term="SLG" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/SLG/"/>
-    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
-    <category term="大地图流式加载" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
-    <category term="AOI" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/AOI/"/>
-    <category term="寻路优化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
-    <category term="网络同步" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5/"/>
-    <category term="对象池" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%AF%B9%E8%B1%A1%E6%B1%A0/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2026/06/29/Learn/MapWorldFillHoles/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2026/06/29/Learn/MapWorldFillHoles/"/>
+    <category term="游戏开发" scheme="https://yushanga.github.io/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
+    <category term="MMO" scheme="https://yushanga.github.io/tagsF/MMO/"/>
+    <category term="Unity" scheme="https://yushanga.github.io/tagsF/Unity/"/>
+    <category term="SLG" scheme="https://yushanga.github.io/tagsF/SLG/"/>
+    <category term="大地图流式加载" scheme="https://yushanga.github.io/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
+    <category term="AOI" scheme="https://yushanga.github.io/tagsF/AOI/"/>
+    <category term="寻路优化" scheme="https://yushanga.github.io/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
+    <category term="网络同步" scheme="https://yushanga.github.io/tagsF/%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5/"/>
+    <category term="对象池" scheme="https://yushanga.github.io/tagsF/%E5%AF%B9%E8%B1%A1%E6%B1%A0/"/>
+    <id>https://yushanga.github.io/2026/06/29/Learn/MapWorldFillHoles/</id>
+    <link href="https://yushanga.github.io/2026/06/29/Learn/MapWorldFillHoles/"/>
     <published>2026-06-29T09:09:57.000Z</published>
     <summary>
       <![CDATA[<h2 id="后端-AOI-算法选型：九宫格-vs-十字链表"><a href="#后端-AOI-算法选型：九宫格-vs-十字链表" class="headerlink" title="后端 AOI 算法选型：九宫格 vs 十字链表"></a>后端 AOI 算法选型：九宫格]]>
@@ -58,15 +58,15 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
-    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <category term="SLG" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/SLG/"/>
-    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
-    <category term="大地图流式加载" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
-    <category term="AOI" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/AOI/"/>
-    <category term="寻路优化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2026/06/24/Learn/mapStreamLoad/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2026/06/24/Learn/mapStreamLoad/"/>
+    <category term="游戏开发" scheme="https://yushanga.github.io/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
+    <category term="MMO" scheme="https://yushanga.github.io/tagsF/MMO/"/>
+    <category term="Unity" scheme="https://yushanga.github.io/tagsF/Unity/"/>
+    <category term="SLG" scheme="https://yushanga.github.io/tagsF/SLG/"/>
+    <category term="大地图流式加载" scheme="https://yushanga.github.io/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
+    <category term="AOI" scheme="https://yushanga.github.io/tagsF/AOI/"/>
+    <category term="寻路优化" scheme="https://yushanga.github.io/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
+    <id>https://yushanga.github.io/2026/06/24/Learn/mapStreamLoad/</id>
+    <link href="https://yushanga.github.io/2026/06/24/Learn/mapStreamLoad/"/>
     <published>2026-06-24T03:09:57.000Z</published>
     <summary>
       <![CDATA[<h2 id="写在前面：一套经典但暗藏杀机的架构"><a href="#写在前面：一套经典但暗藏杀机的架构" class="headerlink" title="写在前面：一套经典但暗藏杀机的架构"></a>写在前面：一套经典但暗藏杀机的架构</h2><p>在 SLG 手游开发中，我们常会设定一套“看起来很稳”的大地图基础规格：</p>
@@ -94,15 +94,15 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
-    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <category term="SLG" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/SLG/"/>
-    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
-    <category term="大地图流式加载" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
-    <category term="AOI" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/AOI/"/>
-    <category term="寻路优化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2026/06/23/Learn/FirstLookWorldMap/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2026/06/23/Learn/FirstLookWorldMap/"/>
+    <category term="游戏开发" scheme="https://yushanga.github.io/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
+    <category term="MMO" scheme="https://yushanga.github.io/tagsF/MMO/"/>
+    <category term="Unity" scheme="https://yushanga.github.io/tagsF/Unity/"/>
+    <category term="SLG" scheme="https://yushanga.github.io/tagsF/SLG/"/>
+    <category term="大地图流式加载" scheme="https://yushanga.github.io/tagsF/%E5%A4%A7%E5%9C%B0%E5%9B%BE%E6%B5%81%E5%BC%8F%E5%8A%A0%E8%BD%BD/"/>
+    <category term="AOI" scheme="https://yushanga.github.io/tagsF/AOI/"/>
+    <category term="寻路优化" scheme="https://yushanga.github.io/tagsF/%E5%AF%BB%E8%B7%AF%E4%BC%98%E5%8C%96/"/>
+    <id>https://yushanga.github.io/2026/06/23/Learn/FirstLookWorldMap/</id>
+    <link href="https://yushanga.github.io/2026/06/23/Learn/FirstLookWorldMap/"/>
     <published>2026-06-23T03:09:57.000Z</published>
     <summary>
       <![CDATA[<h2 id="看到的公司slg-架构"><a href="#看到的公司slg-架构" class="headerlink" title="看到的公司slg 架构"></a>看到的公司slg 架构</h2><ul>
@@ -115,13 +115,13 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="开发工具" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    <category term="自动化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E8%87%AA%E5%8A%A8%E5%8C%96/"/>
-    <category term="代码生成" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/"/>
-    <category term="C#" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/C/"/>
-    <category term="Lua" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Lua/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/11/25/Learn/GeneratedCode/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/11/25/Learn/GeneratedCode/"/>
+    <category term="开发工具" scheme="https://yushanga.github.io/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    <category term="自动化" scheme="https://yushanga.github.io/tagsF/%E8%87%AA%E5%8A%A8%E5%8C%96/"/>
+    <category term="代码生成" scheme="https://yushanga.github.io/tagsF/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/"/>
+    <category term="C#" scheme="https://yushanga.github.io/tagsF/C/"/>
+    <category term="Lua" scheme="https://yushanga.github.io/tagsF/Lua/"/>
+    <id>https://yushanga.github.io/2024/11/25/Learn/GeneratedCode/</id>
+    <link href="https://yushanga.github.io/2024/11/25/Learn/GeneratedCode/"/>
     <published>2024-11-25T13:09:57.000Z</published>
     <summary>
       <![CDATA[<h1 id="Unity-UI-自动化绑定代码生成方案（总结）"><a href="#Unity-UI-自动化绑定代码生成方案（总结）" class="headerlink" title="Unity UI 自动化绑定代码生成方案（总结）"></a>Unity UI]]>
@@ -133,10 +133,10 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="开发工具" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    <category term="战斗" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%88%98%E6%96%97/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/09/05/Learn/BatterDev/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/09/05/Learn/BatterDev/"/>
+    <category term="开发工具" scheme="https://yushanga.github.io/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    <category term="战斗" scheme="https://yushanga.github.io/tagsF/%E6%88%98%E6%96%97/"/>
+    <id>https://yushanga.github.io/2024/09/05/Learn/BatterDev/</id>
+    <link href="https://yushanga.github.io/2024/09/05/Learn/BatterDev/"/>
     <published>2024-09-05T13:46:00.000Z</published>
     <summary>
       <![CDATA[<h4 id="此面板记录自己开发战斗编辑器的部分想法与思考"><a href="#此面板记录自己开发战斗编辑器的部分想法与思考" class="headerlink"]]>
@@ -148,14 +148,14 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="作品展示" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
-    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <category term="架构设计" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
-    <category term="框架" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%A1%86%E6%9E%B6/"/>
-    <category term="定时器" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%AE%9A%E6%97%B6%E5%99%A8/"/>
-    <category term="红点系统" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/"/>
+    <category term="作品展示" scheme="https://yushanga.github.io/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
+    <category term="Unity" scheme="https://yushanga.github.io/tagsF/Unity/"/>
+    <category term="框架" scheme="https://yushanga.github.io/tagsF/%E6%A1%86%E6%9E%B6/"/>
+    <category term="定时器" scheme="https://yushanga.github.io/tagsF/%E5%AE%9A%E6%97%B6%E5%99%A8/"/>
+    <category term="红点系统" scheme="https://yushanga.github.io/tagsF/%E7%BA%A2%E7%82%B9%E7%B3%BB%E7%BB%9F/"/>
+    <category term="架构设计" scheme="https://yushanga.github.io/tagsF/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
+    <id>https://yushanga.github.io/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/</id>
+    <link href="https://yushanga.github.io/2024/06/02/Demo%E9%A1%B9%E7%9B%AE/MyFrams/"/>
     <published>2024-06-02T11:57:40.000Z</published>
     <summary>
       <![CDATA[<h1 id="Unity-游戏开发框架设计笔记"><a href="#Unity-游戏开发框架设计笔记" class="headerlink" title="Unity 游戏开发框架设计笔记"></a>Unity]]>
@@ -167,10 +167,10 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="游戏开发" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
-    <category term="性能优化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/04/06/Learn/UnityOPtim/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/04/06/Learn/UnityOPtim/"/>
+    <category term="游戏开发" scheme="https://yushanga.github.io/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/"/>
+    <category term="性能优化" scheme="https://yushanga.github.io/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    <id>https://yushanga.github.io/2024/04/06/Learn/UnityOPtim/</id>
+    <link href="https://yushanga.github.io/2024/04/06/Learn/UnityOPtim/"/>
     <published>2024-04-06T10:13:57.000Z</published>
     <summary>
       <![CDATA[<h3 id="为什么需要性能优化？"><a href="#为什么需要性能优化？" class="headerlink" title="为什么需要性能优化？"></a>为什么需要性能优化？</h3><h4 id="性能优化的本质-：-慢与快的问题"><a]]>
@@ -182,9 +182,9 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="开发工具" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/04/01/Learn/UiToolKitLearn/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/04/01/Learn/UiToolKitLearn/"/>
+    <category term="开发工具" scheme="https://yushanga.github.io/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    <id>https://yushanga.github.io/2024/04/01/Learn/UiToolKitLearn/</id>
+    <link href="https://yushanga.github.io/2024/04/01/Learn/UiToolKitLearn/"/>
     <published>2024-04-01T03:14:00.000Z</published>
     <summary>
       <![CDATA[<p><a href="https://www.bilibili.com/video/BV1RH4y1J7Xo/">视频地址</a></p>
@@ -197,16 +197,16 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="图形渲染" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E5%9B%BE%E5%BD%A2%E6%B8%B2%E6%9F%93/"/>
-    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <category term="性能优化" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
-    <category term="UGUI" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/UGUI/"/>
-    <category term="DrawCall" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/DrawCall/"/>
-    <category term="合批" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%90%88%E6%89%B9/"/>
-    <category term="Rebuild" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Rebuild/"/>
-    <category term="Rebatch" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Rebatch/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/03/22/graphics/Drawcall/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/03/22/graphics/Drawcall/"/>
+    <category term="图形渲染" scheme="https://yushanga.github.io/categories/%E5%9B%BE%E5%BD%A2%E6%B8%B2%E6%9F%93/"/>
+    <category term="Unity" scheme="https://yushanga.github.io/tagsF/Unity/"/>
+    <category term="UGUI" scheme="https://yushanga.github.io/tagsF/UGUI/"/>
+    <category term="DrawCall" scheme="https://yushanga.github.io/tagsF/DrawCall/"/>
+    <category term="合批" scheme="https://yushanga.github.io/tagsF/%E5%90%88%E6%89%B9/"/>
+    <category term="性能优化" scheme="https://yushanga.github.io/tagsF/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    <category term="Rebuild" scheme="https://yushanga.github.io/tagsF/Rebuild/"/>
+    <category term="Rebatch" scheme="https://yushanga.github.io/tagsF/Rebatch/"/>
+    <id>https://yushanga.github.io/2024/03/22/graphics/Drawcall/</id>
+    <link href="https://yushanga.github.io/2024/03/22/graphics/Drawcall/"/>
     <published>2024-03-22T13:47:40.000Z</published>
     <summary>
       <![CDATA[<blockquote>
@@ -219,12 +219,12 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="图形渲染" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E5%9B%BE%E5%BD%A2%E6%B8%B2%E6%9F%93/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/03/22/graphics/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/03/22/graphics/"/>
+    <category term="图形渲染" scheme="https://yushanga.github.io/categories/%E5%9B%BE%E5%BD%A2%E6%B8%B2%E6%9F%93/"/>
+    <id>https://yushanga.github.io/2024/03/22/graphics/</id>
+    <link href="https://yushanga.github.io/2024/03/22/graphics/"/>
     <published>2024-03-22T12:47:40.000Z</published>
     <summary>
-      <![CDATA[<h1 id><a href="#" class="headerlink" title></a><a href="/FengChen512/2024/03/22/graphics/RenderPipeline/" title="渲染管线Render]]>
+      <![CDATA[<h1 id><a href="#" class="headerlink" title></a><a href="/2024/03/22/graphics/RenderPipeline/" title="渲染管线Render]]>
     </summary>
     <title>关于图形学</title>
     <updated>2026-09-27T03:22:49.515Z</updated>
@@ -233,9 +233,9 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="图形渲染" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E5%9B%BE%E5%BD%A2%E6%B8%B2%E6%9F%93/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/03/22/graphics/RenderPipeline/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/03/22/graphics/RenderPipeline/"/>
+    <category term="图形渲染" scheme="https://yushanga.github.io/categories/%E5%9B%BE%E5%BD%A2%E6%B8%B2%E6%9F%93/"/>
+    <id>https://yushanga.github.io/2024/03/22/graphics/RenderPipeline/</id>
+    <link href="https://yushanga.github.io/2024/03/22/graphics/RenderPipeline/"/>
     <published>2024-03-22T12:47:40.000Z</published>
     <summary>
       <![CDATA[<h2 id="CPU与GPU的区别"><a href="#CPU与GPU的区别" class="headerlink"]]>
@@ -247,34 +247,14 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="作品展示" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
-    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <category term="ET框架" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/ET%E6%A1%86%E6%9E%B6/"/>
-    <category term="战斗系统" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%88%98%E6%96%97%E7%B3%BB%E7%BB%9F/"/>
-    <category term="技能" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%8A%80%E8%83%BD/"/>
-    <category term="Buff" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Buff/"/>
-    <category term="双端" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%8F%8C%E7%AB%AF/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/"/>
-    <published>2024-03-22T05:47:40.000Z</published>
-    <summary>
-      <![CDATA[<h1 id="基于-ET-的双端战斗系统"><a href="#基于-ET-的双端战斗系统" class="headerlink" title="基于 ET 的双端战斗系统"></a>基于 ET 的双端战斗系统</h1><p><img]]>
-    </summary>
-    <title>基于 ET 的双端战斗系统</title>
-    <updated>2026-09-27T04:02:41.125Z</updated>
-  </entry>
-  <entry>
-    <author>
-      <name>Wind Dust</name>
-    </author>
-    <category term="作品展示" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
-    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <category term="MMO" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/MMO/"/>
-    <category term="ET框架" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/ET%E6%A1%86%E6%9E%B6/"/>
-    <category term="游戏服务器" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%B8%B8%E6%88%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
-    <category term="分布式" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/"/>
+    <category term="作品展示" scheme="https://yushanga.github.io/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
+    <category term="ET框架" scheme="https://yushanga.github.io/tagsF/ET%E6%A1%86%E6%9E%B6/"/>
+    <category term="MMO" scheme="https://yushanga.github.io/tagsF/MMO/"/>
+    <category term="分布式" scheme="https://yushanga.github.io/tagsF/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    <category term="游戏服务器" scheme="https://yushanga.github.io/tagsF/%E6%B8%B8%E6%88%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    <category term="Unity" scheme="https://yushanga.github.io/tagsF/Unity/"/>
+    <id>https://yushanga.github.io/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/</id>
+    <link href="https://yushanga.github.io/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETMMorpg/"/>
     <published>2024-03-22T05:47:40.000Z</published>
     <summary>
       <![CDATA[<h1 id="基于-ET-框架的-MMO-项目架构笔记"><a href="#基于-ET-框架的-MMO-项目架构笔记" class="headerlink" title="基于 ET 框架的 MMO 项目架构笔记"></a>基于 ET 框架的 MMO]]>
@@ -286,14 +266,34 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="作品展示" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
-    <category term="Unity" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/Unity/"/>
-    <category term="ET框架" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/ET%E6%A1%86%E6%9E%B6/"/>
-    <category term="放置类游戏" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%94%BE%E7%BD%AE%E7%B1%BB%E6%B8%B8%E6%88%8F/"/>
-    <category term="游戏服务器" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%B8%B8%E6%88%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
-    <category term="数值系统" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E6%95%B0%E5%80%BC%E7%B3%BB%E7%BB%9F/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/"/>
+    <category term="作品展示" scheme="https://yushanga.github.io/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
+    <category term="ET框架" scheme="https://yushanga.github.io/tagsF/ET%E6%A1%86%E6%9E%B6/"/>
+    <category term="Unity" scheme="https://yushanga.github.io/tagsF/Unity/"/>
+    <category term="战斗系统" scheme="https://yushanga.github.io/tagsF/%E6%88%98%E6%96%97%E7%B3%BB%E7%BB%9F/"/>
+    <category term="技能" scheme="https://yushanga.github.io/tagsF/%E6%8A%80%E8%83%BD/"/>
+    <category term="Buff" scheme="https://yushanga.github.io/tagsF/Buff/"/>
+    <category term="双端" scheme="https://yushanga.github.io/tagsF/%E5%8F%8C%E7%AB%AF/"/>
+    <id>https://yushanga.github.io/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/</id>
+    <link href="https://yushanga.github.io/2024/03/22/Demo%E9%A1%B9%E7%9B%AE/ETSkill/"/>
+    <published>2024-03-22T05:47:40.000Z</published>
+    <summary>
+      <![CDATA[<h1 id="基于-ET-的双端战斗系统"><a href="#基于-ET-的双端战斗系统" class="headerlink" title="基于 ET 的双端战斗系统"></a>基于 ET 的双端战斗系统</h1><p><img]]>
+    </summary>
+    <title>基于 ET 的双端战斗系统</title>
+    <updated>2026-09-27T04:02:41.125Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>Wind Dust</name>
+    </author>
+    <category term="作品展示" scheme="https://yushanga.github.io/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
+    <category term="ET框架" scheme="https://yushanga.github.io/tagsF/ET%E6%A1%86%E6%9E%B6/"/>
+    <category term="游戏服务器" scheme="https://yushanga.github.io/tagsF/%E6%B8%B8%E6%88%8F%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    <category term="Unity" scheme="https://yushanga.github.io/tagsF/Unity/"/>
+    <category term="放置类游戏" scheme="https://yushanga.github.io/tagsF/%E6%94%BE%E7%BD%AE%E7%B1%BB%E6%B8%B8%E6%88%8F/"/>
+    <category term="数值系统" scheme="https://yushanga.github.io/tagsF/%E6%95%B0%E5%80%BC%E7%B3%BB%E7%BB%9F/"/>
+    <id>https://yushanga.github.io/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/</id>
+    <link href="https://yushanga.github.io/2022/04/17/Demo%E9%A1%B9%E7%9B%AE/WaitGame/"/>
     <published>2022-04-17T07:47:40.000Z</published>
     <summary>
       <![CDATA[<h1 id="基于-ET-的放置类网络游戏系统设计"><a href="#基于-ET-的放置类网络游戏系统设计" class="headerlink" title="基于 ET 的放置类网络游戏系统设计"></a>基于 ET]]>
@@ -305,9 +305,9 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="作品展示" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2022/04/07/Demo/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2022/04/07/Demo/"/>
+    <category term="作品展示" scheme="https://yushanga.github.io/categories/%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA/"/>
+    <id>https://yushanga.github.io/2022/04/07/Demo/</id>
+    <link href="https://yushanga.github.io/2022/04/07/Demo/"/>
     <published>2022-04-07T05:47:40.000Z</published>
     <summary>
       <![CDATA[<h1 id="本人作品"><a href="#本人作品" class="headerlink" title="本人作品"></a>本人作品</h1><p>从早期独立游戏，到商业合作项目，再到基于 ET 的双端作品，这里汇总我的游戏开发作品集。</p>
@@ -321,10 +321,10 @@
     <author>
       <name>Wind Dust</name>
     </author>
-    <category term="开发工具" scheme="https://fengchen512.gitee.io/FengChen512/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    <category term="开发工具" scheme="https://fengchen512.gitee.io/FengChen512/tagsF/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    <id>https://fengchen512.gitee.io/FengChen512/2022/04/01/rider/</id>
-    <link href="https://fengchen512.gitee.io/FengChen512/2022/04/01/rider/"/>
+    <category term="开发工具" scheme="https://yushanga.github.io/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    <category term="开发工具" scheme="https://yushanga.github.io/tagsF/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
+    <id>https://yushanga.github.io/2022/04/01/rider/</id>
+    <link href="https://yushanga.github.io/2022/04/01/rider/"/>
     <published>2022-04-01T03:14:00.000Z</published>
     <summary>
       <![CDATA[<p>前阵子 IDEA 更新了最新 2021.3 版本，很多网友更新之后发现以前的激活教程都不能用了。大家不用担心，最新的教程已经有了！</p>
