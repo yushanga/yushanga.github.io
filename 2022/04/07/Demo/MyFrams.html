@@ -1,0 +1,205 @@
+<hr>
+<h2 id="title-Unity-游戏开发框架设计笔记date-2024-06-02-19-57-40categories-作品展示tags-Unity-框架-定时器-红点系统-架构设计"><a href="#title-Unity-游戏开发框架设计笔记date-2024-06-02-19-57-40categories-作品展示tags-Unity-框架-定时器-红点系统-架构设计" class="headerlink" title="title: Unity 游戏开发框架设计笔记date: 2024-06-02 19:57:40categories:  - 作品展示tags:  - Unity  - 框架  - 定时器  - 红点系统  - 架构设计"></a>title: Unity 游戏开发框架设计笔记<br>date: 2024-06-02 19:57:40<br>categories:<br>  - 作品展示<br>tags:<br>  - Unity<br>  - 框架<br>  - 定时器<br>  - 红点系统<br>  - 架构设计</h2><h1 id="Unity-游戏开发框架设计笔记"><a href="#Unity-游戏开发框架设计笔记" class="headerlink" title="Unity 游戏开发框架设计笔记"></a>Unity 游戏开发框架设计笔记</h1><blockquote>
+<p>一款自己从零搭建的 Unity 开发框架，沉淀了多年项目中的通用能力，覆盖 <strong>UI、资源、场景、输入、定时器、红点</strong> 等模块，服务端（C#）与 Unity 客户端共用，目标是用一套代码解决团队高频复用的基础问题。</p>
+</blockquote>
+<ul>
+<li><strong>仓库地址</strong>：<a href="https://gitee.com/FengChen512/my-frams">gitee.com&#x2F;FengChen512&#x2F;my-frams</a></li>
+</ul>
+<hr>
+<h2 id="一、基础框架功能（2021-9）"><a href="#一、基础框架功能（2021-9）" class="headerlink" title="一、基础框架功能（2021.9）"></a>一、基础框架功能（2021.9）</h2><p>框架的第一版，先把游戏开发里”绕不开的基础设施”搭好。设计原则是<strong>每个模块职责单一、可插拔、不相互依赖</strong>，方便项目按需取用。</p>
+<h3 id="UI-模块"><a href="#UI-模块" class="headerlink" title="UI 模块"></a>UI 模块</h3><ul>
+<li>统一的 <strong>界面管理</strong>（打开&#x2F;关闭&#x2F;层级管理）；</li>
+<li>支持 <strong>UI 预加载与缓存</strong>，避免频繁实例化；</li>
+<li>提供界面之间的<strong>事件通信</strong>，降低耦合。</li>
+</ul>
+<h3 id="缓存池模块"><a href="#缓存池模块" class="headerlink" title="缓存池模块"></a>缓存池模块</h3><ul>
+<li>对象池化：游戏物、特效、子弹等高频创建销毁对象统一池化；</li>
+<li>减少 <code>Instantiate / Destroy</code> 带来的 GC 与卡顿；</li>
+<li>支持 <strong>自动回收</strong> 与 <strong>按需扩容</strong>。</li>
+</ul>
+<h3 id="资源加载模块"><a href="#资源加载模块" class="headerlink" title="资源加载模块"></a>资源加载模块</h3><ul>
+<li>统一的资源加载入口（同步&#x2F;异步）；</li>
+<li>支持 <strong>引用计数</strong> 与 <strong>自动卸载</strong>，避免资源泄漏；</li>
+<li>为 Addressable &#x2F; AssetBundle 预留扩展接口。</li>
+</ul>
+<h3 id="场景加载模块"><a href="#场景加载模块" class="headerlink" title="场景加载模块"></a>场景加载模块</h3><ul>
+<li>统一场景切换入口（含异步加载、进度回调）；</li>
+<li>管理加载中的<strong>加载界面</strong>与<strong>状态回调</strong>；</li>
+<li>支持场景叠加与切换的扩展。</li>
+</ul>
+<h3 id="音乐管理模块"><a href="#音乐管理模块" class="headerlink" title="音乐管理模块"></a>音乐管理模块</h3><ul>
+<li>BGM &#x2F; 音效的统一播放与管理；</li>
+<li>音量控制、暂停&#x2F;恢复、音效池；</li>
+<li>全局单例，任何模块可调用。</li>
+</ul>
+<h3 id="管理基类模块（继承-不继承-Mono）"><a href="#管理基类模块（继承-不继承-Mono）" class="headerlink" title="管理基类模块（继承&#x2F;不继承 Mono）"></a>管理基类模块（继承&#x2F;不继承 Mono）</h3><p>这是框架最有辨识度的一点——管理类分成两种：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>特点</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>继承 Mono</strong></td>
+<td>依赖 MonoBehaviour，走 Update 生命周期</td>
+<td>需要每帧逻辑、挂载到场景对象的模块</td>
+</tr>
+<tr>
+<td><strong>不继承 Mono</strong></td>
+<td>纯 C# 类，不依赖引擎生命周期</td>
+<td>服务端逻辑、可脱离引擎运行、易单测</td>
+</tr>
+</tbody></table>
+<p><strong>意义</strong>：同一套业务逻辑，既能跑在 Unity（继承 Mono），也能跑在纯 C# 环境（不继承），为<strong>双端复用</strong>打基础。</p>
+<h3 id="UI-事件管理器"><a href="#UI-事件管理器" class="headerlink" title="UI 事件管理器"></a>UI 事件管理器</h3><ul>
+<li>全局事件发布&#x2F;订阅；</li>
+<li>解耦 UI 与业务（UI 订阅事件，业务发事件，互不引用）；</li>
+<li>支持<strong>带参数</strong>与<strong>带优先级</strong>的事件。</li>
+</ul>
+<h3 id="输入管理模块"><a href="#输入管理模块" class="headerlink" title="输入管理模块"></a>输入管理模块</h3><ul>
+<li>统一封装键盘、鼠标、触摸输入；</li>
+<li>屏蔽平台差异（PC &#x2F; 移动端）；</li>
+<li>提供输入事件回调，业务不直接监听底层输入。</li>
+</ul>
+<hr>
+<h2 id="二、定时器功能模块（2024-5）"><a href="#二、定时器功能模块（2024-5）" class="headerlink" title="二、定时器功能模块（2024.5）"></a>二、定时器功能模块（2024.5）</h2><p>定时器是游戏逻辑的”心脏”——技能冷却、Buff 跳结算、野怪刷新、倒计时都离不开它。本项目定时器模块解决了”<strong>既要在 Unity 用、又要在服务器用</strong>“的痛点。</p>
+<h3 id="继承-Mono-不继承-Mono-双实现"><a href="#继承-Mono-不继承-Mono-双实现" class="headerlink" title="继承 Mono &#x2F; 不继承 Mono 双实现"></a>继承 Mono &#x2F; 不继承 Mono 双实现</h3><p>和框架基调一致，定时器也提供两种形态：</p>
+<ul>
+<li><strong>继承 Mono 版</strong>：在 Unity 内用，依赖 Update &#x2F; 协程驱动，方便直接挂载；</li>
+<li><strong>不继承 Mono 版</strong>：纯 C# 实现，<strong>服务器可用</strong>，用主循环&#x2F;Tick 驱动，不依赖引擎。</li>
+</ul>
+<p>▎真实代码（两种实现核心逻辑一致，仅”驱动源”不同）</p>
+<p>继承 Mono 版（<code>Assets/Scripts/Manager/Timer/AtimerMono.cs</code>）由 <code>Update()</code> 驱动，用 <code>Time.deltaTime</code> 推进：</p>
+<pre><code class="language-csharp">public class AtimerMono : BaseMonoManager&lt;AtimerMono&gt;
+{
+    private List&lt;TimerInfo&gt; _timerInfos = new List&lt;TimerInfo&gt;();
+    private void Update() { OnUpdateTimer(); OnUpdate?.Invoke(); }
+
+    private void OnUpdateTimer()
+    {
+        for (int i = 0; i &lt; _timerInfos.Count; i++)
+        {
+            var timerInfo = _timerInfos[i];
+            if (timerInfo.isPuase) continue;
+            // isFrame=true 按帧计数，否则按时间(秒)推进
+            timerInfo.current -= timerInfo.isFrame ? 1 : Time.deltaTime;
+            if (timerInfo.current &lt;= 0)
+            {
+                timerInfo.loopCount--;
+                timerInfo.current = timerInfo.target;
+                if (timerInfo.loopCount == 0) { RemoveTimer(timerInfo.guid); i--; }
+                timerInfo.callback?.Invoke();
+            }
+        }
+    }
+    // 对外 API：Delay(延时) / DelayLoop(循环) / DelayFrame(帧) / NextFrame(下一帧)
+    public long Delay(float second, Action callback, int loopCount = 1, string flag = null) { ... }
+    public long NextFrame(Action callback) =&gt; AddTimer(1, callback, 1, true).guid;
+}
+</code></pre>
+<p>不继承 Mono 版（<code>Assets/Scripts/Manager/Timer/ATimer.cs</code>）用 <code>System.Timers.Timer(1ms)</code> 驱动，可在服务器&#x2F;纯 C# 环境运行：</p>
+<pre><code class="language-csharp">public class ATimerMgr : BaseManager&lt;ATimerMgr&gt;
+{
+    private System.Timers.Timer srvTimer;
+    public ATimerMgr()
+    {
+        srvTimer = new System.Timers.Timer(1) { AutoReset = true }; // 1ms 定时驱动
+        srvTimer.Elapsed += (s, e) =&gt; Update(1);
+        srvTimer.Start();
+    }
+    private void Update(int interval) { OnUpdateTimer(interval); OnUpdate?.Invoke(); }
+    // OnUpdateTimer 逻辑与 Mono 版一致，仅推进基准为 interval（毫秒）
+}
+</code></pre>
+<p><strong>同一套 <code>TimerInfo</code> 结构与 <code>Delay/DelayLoop/DelayFrame/NextFrame</code> API</strong>，只换驱动源——这正是”服务器和 Unity 都支持、毫秒级、支持每帧”的来源。</p>
+<h3 id="服务器与-Unity-都支持"><a href="#服务器与-Unity-都支持" class="headerlink" title="服务器与 Unity 都支持"></a>服务器与 Unity 都支持</h3><p>一套定时器 API，双端通用：</p>
+<pre><code class="language-csharp">// 延迟执行
+Timer.Wait(delayMs, () =&gt; { ... });
+// 间隔循环
+Timer.Repeat(intervalMs, () =&gt; { ... });
+</code></pre>
+<p>服务器端用它做战斗周期任务，Unity 端用它做 UI 倒计时、技能冷却，<strong>同一套心智模型</strong>。</p>
+<h3 id="毫秒级精度"><a href="#毫秒级精度" class="headerlink" title="毫秒级精度"></a>毫秒级精度</h3><p>时间基准统一为<strong>毫秒</strong>，配合 <code>DateTime</code>&#x2F;<code>Stopwatch</code> 计时，避免浮点误差导致的定时漂移，适合对精度敏感的战斗&#x2F;服务端逻辑。</p>
+<h3 id="支持每帧（每-Tick）回调"><a href="#支持每帧（每-Tick）回调" class="headerlink" title="支持每帧（每 Tick）回调"></a>支持每帧（每 Tick）回调</h3><p>除了”延时&#x2F;间隔”两种模式，还支持<strong>每帧&#x2F;每 Tick 执行</strong>：</p>
+<ul>
+<li>Unity 端：作为轻量级 Update 分发器，替代部分 MonoBehaviour Update；</li>
+<li>服务器端：作为主循环的 Tick 分发，统一驱动多个模块的帧逻辑。</li>
+</ul>
+<p><strong>好处</strong>：模块只需注册回调，无需各自维护 Update&#x2F;循环，代码更干净、也便于统一测试。</p>
+<hr>
+<h2 id="三、红点系统（2024-6）"><a href="#三、红点系统（2024-6）" class="headerlink" title="三、红点系统（2024.6）"></a>三、红点系统（2024.6）</h2><p>红点（提示角标）是游戏 UI 的标配，但<strong>维护起来很痛</strong>——层级多、来源杂、数量要实时。本项目红点系统解决了多层级与动态数量两大痛点。</p>
+<h3 id="支持多层级"><a href="#支持多层级" class="headerlink" title="支持多层级"></a>支持多层级</h3><p>红点不是”一个开关”，而是<strong>树状结构</strong>：</p>
+<pre><code>主城 → 邮箱(未读) → 邮件系统
+     → 商店(上新) → 商城
+</code></pre>
+<ul>
+<li>每个节点可挂红点状态；</li>
+<li><strong>父节点自动聚合</strong>子节点的红点（子节点有红点，父节点也亮）；</li>
+<li>刷新沿树向上传播，一次数据变更自动更新所有相关节点。</li>
+</ul>
+<p>▎真实代码（<code>Assets/Scripts/Manager/RedDot/</code> 精简）</p>
+<p><strong>节点树 + 向上传播</strong>（<code>RedDotNode.cs</code>）：子节点状态变了，<code>UpdateState</code> 会递归刷新父节点：</p>
+<pre><code class="language-csharp">// 更新红点状态：子节点有红点则父节点也亮，数量向上聚合
+public void UpdateState(bool state)
+{
+    this._state = state || IsTrueInChildren();
+    UpdateNumber();                       // 重算本节点数量
+    UpdateRedDot(state, _type, redDotNumber);  // 触发显示回调
+    _parent?.UpdateState(this._state);    // 向上传播到父节点
+}
+
+// 数量 = 自身 + 所有子节点数量之和
+public int GetNumber()
+{
+    var num = _state ? 1 : 0;
+    if (_childRens != null)
+        for (int i = 0; i &lt; _childRens.Count; i++) num += _childRens[i].redDotNumber;
+    return num;
+}
+</code></pre>
+<p><strong>无限嵌套 + GameObject 绑定</strong>（<code>RedDotSystem.cs</code>）：支持任意层级挂节点，绑定 GameObject 后自动显隐、显示数字：</p>
+<pre><code class="language-csharp">// 添加子节点（无限嵌套）：parent 下挂 children
+public void AddRedDot(RedDotId parentId, RedDotId childrenId,
+    RedDotType redDotType = RedDotType.Normal, Action&lt;bool&gt; action = null)
+{
+    var childrenNode = GetOrCreateNode(childrenId, redDotType, action);
+    var parentNode = GetOrCreateNode(parentId);
+    parentNode.AddChildren(childrenNode);
+    childrenNode.SetParent(parentNode);
+}
+
+// 绑定 GameObject：状态变化自动 SetActive，Number 类型自动刷 TextMeshPro 文案
+public void Bind(RedDotId id, GameObject go)
+{
+    if (!_goBindings.TryGetValue(id, out var list)) { list = new HashSet&lt;GameObject&gt;(); _goBindings[id] = list; }
+    if (!list.Contains(go)) list.Add(go);
+    go.SetActive(GetState(id));
+}
+</code></pre>
+<p>红点类型（<code>RedDotType</code>）区分 <strong>Normal（纯红点）&#x2F; Number（数量角标）&#x2F; Exclamation（叹号）</strong>，对应不同显示回调——这就是”多层级、绑定 GameObj、数量显示、多类型显示”的实现。</p>
+<h3 id="绑定-GameObj"><a href="#绑定-GameObj" class="headerlink" title="绑定 GameObj"></a>绑定 GameObj</h3><p>红点节点可<strong>绑定到具体 GameObject</strong>（图标、按钮），自动挂载角标并随对象生命周期管理，无需手写 Show&#x2F;Hide。</p>
+<h3 id="支持数量显示"><a href="#支持数量显示" class="headerlink" title="支持数量显示"></a>支持数量显示</h3><p>除了”亮&#x2F;灭”，还支持<strong>数字角标</strong>（如”未读邮件 12 封”）：</p>
+<ul>
+<li>节点维护一个计数；</li>
+<li>达到阈值显示数字，超阈值显示 <code>99+</code>；</li>
+<li>计数变化自动刷新角标文案。</li>
+</ul>
+<h3 id="支持多类型显示"><a href="#支持多类型显示" class="headerlink" title="支持多类型显示"></a>支持多类型显示</h3><p>同一节点可按需呈现不同形态：</p>
+<ul>
+<li><strong>纯红点</strong>：仅一个圆点；</li>
+<li><strong>数字角标</strong>：显示数量；</li>
+<li><strong>自定义图标 &#x2F; 动效</strong>：可扩展。</li>
+</ul>
+<h3 id="实现要点"><a href="#实现要点" class="headerlink" title="实现要点"></a>实现要点</h3><ul>
+<li><strong>数据驱动</strong>：红点状态由业务数据（计数）计算，而非手动开关；</li>
+<li><strong>增量刷新</strong>：只有数据变化的节点及其祖先被刷新，避免全量遍历；</li>
+<li><strong>Todo 记录</strong>：如”未打开子节点时红点显示是否正常”这类边界，用清单跟踪。</li>
+</ul>
+<hr>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这套框架覆盖了游戏开发的<strong>高频基础设施</strong>，核心特色是**”继承 &#x2F; 不继承 Mono 双实现”**，让同一套 C# 逻辑既能在 Unity 表现、也能在服务器运行，为双端项目省去大量重复代码。</p>
+<p>后续方向：编辑器工具链（一键打包、热更新）、网络模块接入、红点系统的可视化调试。</p>
+<blockquote>
+<p>更多作品见：<a href="/2022/04/07/Demo/">本人作品</a></p>
+</blockquote>

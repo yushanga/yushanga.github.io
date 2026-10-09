@@ -1,0 +1,308 @@
+<hr>
+<h2 id="title-基于-ET-的放置类网络游戏系统设计date-2022-04-17-15-47-40categories-作品展示tags-ET框架-放置类游戏-游戏服务器-数值系统-Unity"><a href="#title-基于-ET-的放置类网络游戏系统设计date-2022-04-17-15-47-40categories-作品展示tags-ET框架-放置类游戏-游戏服务器-数值系统-Unity" class="headerlink" title="title: 基于 ET 的放置类网络游戏系统设计date: 2022-04-17 15:47:40categories:  - 作品展示tags:  - ET框架  - 放置类游戏  - 游戏服务器  - 数值系统  - Unity"></a>title: 基于 ET 的放置类网络游戏系统设计<br>date: 2022-04-17 15:47:40<br>categories:<br>  - 作品展示<br>tags:<br>  - ET框架<br>  - 放置类游戏<br>  - 游戏服务器<br>  - 数值系统<br>  - Unity</h2><h1 id="基于-ET-的放置类网络游戏系统设计"><a href="#基于-ET-的放置类网络游戏系统设计" class="headerlink" title="基于 ET 的放置类网络游戏系统设计"></a>基于 ET 的放置类网络游戏系统设计</h1><blockquote>
+<p>一款基于 <a href="https://github.com/egametang/ET">ET</a>（ET6.0）框架的<strong>放置类网络游戏</strong>实践项目。放置类（挂机）游戏的核心是”<strong>轻操作、重成长、数值驱动</strong>“——玩家上线点点、下线也成长，靠一套完整的数值与系统闭环支撑长线体验。下文核心模块附<strong>项目仓库真实代码</strong>。</p>
+</blockquote>
+<ul>
+<li><strong>视频展示</strong>：<a href="https://www.bilibili.com/video/BV1St421G7EP/">bilibili 演示</a></li>
+<li><strong>仓库地址</strong>：<a href="https://gitee.com/FengChen512/waitinggame">gitee.com&#x2F;FengChen512&#x2F;waitinggame</a></li>
+<li><strong>技术栈</strong>：rider + vs + Unity + MongoDB + Dotween + ET6.0</li>
+</ul>
+<hr>
+<h2 id="项目概述"><a href="#项目概述" class="headerlink" title="项目概述"></a>项目概述</h2><p>放置类游戏的系统盘根错节：账号、区服、角色、数值、战斗、装备、任务、背包、打造、聊天、排行榜环环相扣。本文从<strong>玩家生命周期</strong>出发，梳理这套放置类网络游戏的核心系统设计。</p>
+<pre><code>账号登录 → 区服/角色选择 → 角色数据/数值 → 战斗副本(挂机) → 装备/任务/背包 → 打造 → 排行榜/聊天
+</code></pre>
+<hr>
+<h2 id="核心系统模块"><a href="#核心系统模块" class="headerlink" title="核心系统模块"></a>核心系统模块</h2><h3 id="1-账号登录"><a href="#1-账号登录" class="headerlink" title="1. 账号登录"></a>1. 账号登录</h3><p>登录是玩家身份的起点。项目采用 <strong>Realm（登录服）→ Gate（网关）→ Account（账号服）</strong> 的分服链路。</p>
+<p><strong>① 登录服分配网关（Realm）</strong> —— 客户端登录时，Realm 随机分配一个 Gate，并向 Gate 请求一个 key，客户端拿 key 连 Gate：</p>
+<pre><code class="language-csharp">// Server/Hotfix/Demo/C2R_LoginHandler.cs（精简）
+public class C2R_LoginHandler : AMRpcHandler&lt;C2R_Login, R2C_Login&gt;
+{
+    protected override async ETTask Run(Session session, C2R_Login request, R2C_Login response, Action reply)
+    {
+        // 随机分配一个Gate
+        StartSceneConfig config = RealmGateAddressHelper.GetGate(session.DomainZone(), 1);
+        // 向gate请求一个key,客户端可以拿着这个key连接gate
+        G2R_GetLoginKey g2RGetLoginKey = (G2R_GetLoginKey) await ActorMessageSenderComponent.Instance.Call(
+            config.InstanceId, new R2G_GetLoginKey() {Account = request.Account});
+        response.Address = config.OuterIPPort.ToString();
+        response.Key = g2RGetLoginKey.Key;
+        reply();
+    }
+}
+</code></pre>
+<p><strong>② 账号服校验与注册（Account）</strong> —— 账号规范（大小写+数字）、密码校验、防重复、生成 Token：</p>
+<pre><code class="language-csharp">// Server/Hotfix/Demo/Account/Handler/C2A_LoginAccountHandler.cs（精简）
+// 账号必须同时含小写、大写、数字，6-15 位
+if (!Regex.IsMatch(request.AccountName.Trim(), @&quot;^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{6,15}$&quot;))
+{ response.Error = ErrorCode.Err_LoginInfoAccountError; reply(); session.Disconnect().Coroutine(); return; }
+
+using (session.AddComponent&lt;SessionLockingComponent&gt;())   // 防止重复请求
+{
+    using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginAccount, request.AccountName.Trim().GetHashCode()))
+    {
+        var accountinfolist = await DBManagerComponent.Instance.GetZoneDB(session.DomainZone())
+            .Query&lt;Account&gt;(d =&gt; d.AccountName.Equals(request.AccountName.Trim()));
+        if (accountinfolist != null &amp;&amp; accountinfolist.Count &gt; 0)
+        {
+            account = accountinfolist[0];
+            if (!account.password.Equals(request.Password)) { response.Error = ErrorCode.Err_LoginInfoPassWorkFlaseError; ... }
+        }
+        else   // 新账号：自动注册入库
+        {
+            account = session.AddChild&lt;Account&gt;();
+            account.AccountName = request.AccountName.Trim();
+            account.password = request.Password;
+            await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save&lt;Account&gt;(account);
+        }
+        // 生成 Token（时间戳+随机数），实现单点登录
+        string Token = TimeHelper.ServerNow().ToString() + RandomHelper.RandomNumber(int.MinValue, int.MaxValue).ToString();
+        ...
+    }
+}
+</code></pre>
+<p><strong>要点</strong>：</p>
+<ul>
+<li><strong>账号规范</strong>用正则强约束（大小写+数字+长度），不可重复由 DB 唯一查询 + 协程锁保证；</li>
+<li><strong>密码加密</strong>：注册&#x2F;登录前对密码做哈希（项目里存密文），不落明文；</li>
+<li><strong>本地保存</strong>：客户端保存登录返回的 <strong>Token</strong>，后续请求携带 Token 免重复登录；</li>
+<li><strong>单点登录</strong>：新登录会踢掉旧 session（<code>otherSession?.Disconnect()</code>）。</li>
+</ul>
+<h3 id="2-区服管理"><a href="#2-区服管理" class="headerlink" title="2. 区服管理"></a>2. 区服管理</h3><p><strong>不同区服独立世界</strong>。登录后向 Account 服拉取区服列表，供玩家选择：</p>
+<pre><code class="language-csharp">// Server/Hotfix/Demo/ServerInfo/Handler/C2A_GetServerInfoHandler.cs（精简）
+// 校验 Token 后，返回全部区服信息
+foreach (var serverInfo in session.DomainScene().GetComponent&lt;ServerInfoManagerComponent&gt;().ServerInfos)
+{
+    response.ServerInfosProto.Add(serverInfo.ToMessage());
+}
+</code></pre>
+<p>区服由 <code>ServerInfoManagerComponent</code> 统一管理，每个区服独立承载世界与数据；玩家选定区服后绑定，区服之间数据隔离，便于运营开新服&#x2F;合服。</p>
+<h3 id="3-账号角色管理"><a href="#3-账号角色管理" class="headerlink" title="3. 账号角色管理"></a>3. 账号角色管理</h3><p><strong>一个账号绑定多个角色、角色名不可重复</strong>。创建角色时做 Token 校验 + 重名校验 + 协程锁：</p>
+<pre><code class="language-csharp">// Server/Hotfix/Demo/Role/Handler/C2A_CreatRoleHandler.cs（精简）
+// 校验 Token，防止越权创建
+string token = session.DomainScene().GetComponent&lt;TokenComponent&gt;().Get(request.AccountId);
+if (token == null || token != request.Token) { response.Error = ErrorCode.Err_TokenError; ... return; }
+
+using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.CreatRole, request.AccountId))
+{
+    // 同区服角色名唯一
+    var roleInfos = await DBManagerComponent.Instance.GetZoneDB(session.DomainZone())
+        .Query&lt;RoleInfo&gt;(d =&gt; d.Name == request.Name &amp;&amp; d.ServerID == request.ServerId);
+    if (roleInfos != null &amp;&amp; roleInfos.Count &gt; 0) { response.Error = ErrorCode.Err_RoleNameSame; reply(); return; }
+
+    RoleInfo roleInfo = session.AddChildWithId&lt;RoleInfo&gt;(IdGenerater.Instance.GenerateUnitId(request.ServerId));
+    roleInfo.Name = request.Name;
+    roleInfo.AccountId = request.AccountId;      // 账号→角色绑定（一个账号多个角色）
+    roleInfo.ServerID = request.ServerId;
+    await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save&lt;RoleInfo&gt;(roleInfo);
+}
+</code></pre>
+<p><strong>要点</strong>：角色名唯一用 <strong>DB 条件查询</strong>（<code>Name == 请求名 &amp;&amp; ServerID == 请求服</code>）在<strong>创建前</strong>校验；账号与角色是 1:N，靠 <code>AccountId</code> 关联。</p>
+<h3 id="4-角色数据管理"><a href="#4-角色数据管理" class="headerlink" title="4. 角色数据管理"></a>4. 角色数据管理</h3><ul>
+<li><strong>账号数据</strong>：等级、经验、货币、签到等玩家级数据；</li>
+<li><strong>装备数据</strong>：角色穿戴的装备列表；</li>
+<li>持久化到 MongoDB。数据按<strong>热区&#x2F;冷区</strong>分层，热数据常驻内存、定期落库（配合下方”缓存服务器”）。</li>
+</ul>
+<h3 id="5-角色数值"><a href="#5-角色数值" class="headerlink" title="5. 角色数值"></a>5. 角色数值</h3><p>放置类游戏的数值体系是核心。项目用 <strong>ET Numeric 数值组件</strong>实现”<strong>加点消耗 → 属性值 → 二级&#x2F;百分比联动</strong>“：</p>
+<p><strong>① 加点处理</strong>（消耗属性点、扣点、写值、立即存库）：</p>
+<pre><code class="language-csharp">// Server/Hotfix/Demo/Numeric/Handler/C2M_AddAttributePointHnadler.cs（精简）
+NumericComponent numericComponent = unit.GetComponent&lt;NumericComponent&gt;();
+// 校验该属性类型是否可加点
+PlayerNumericConfig config = PlayerNumericConfigCategory.Instance.Get(targetNumericType);
+if (config.isAddPoint == 0) { response.Error = ErrorCode.Err_NumericTypeNoExist; reply(); return; }
+
+int AttributePointCount = numericComponent.GetAsInt(NumericType.AttributePoint);
+if (AttributePointCount &lt;= 0) { response.Error = ErrorCode.AddPointNoEnough; reply(); return; }
+
+--AttributePointCount;
+numericComponent.Set(NumericType.AttributePoint, AttributePointCount);
+numericComponent.Set(targetNumericType, numericComponent.GetAsInt(targetNumericType) + 1);
+await numericComponent.AddOrUpdateUnitCache();   // 关键数据立即存库
+</code></pre>
+<p><strong>② 数值联动</strong>（属性点变动 → 一级数值派生出二级&#x2F;百分比属性）：</p>
+<pre><code class="language-csharp">// Server/Hotfix/Demo/Numeric/Event/NumericWatcher_AddAttributePoint.cs（精简）
+[NumericWatcher(NumericType.Spirit)]
+[NumericWatcher(NumericType.Agile)]
+[NumericWatcher(NumericType.PhysicalStrength)]
+[NumericWatcher(NumericType.Power)]
+public class NumericWatcher_AddAttributePoint : INumericWatcher
+{
+    public void Run(NumbericChange args)
+    {
+        if (args.NumericType == NumericType.Power)              // 力量
+            unit.GetComponent&lt;NumericComponent&gt;()[NumericType.DamageValueAdd] += 5;      // 二级：攻击力+5
+        if (args.NumericType == NumericType.PhysicalStrength)   // 体力
+            unit.GetComponent&lt;NumericComponent&gt;()[NumericType.HpPct] += 1 * 10000;        // 百分比：生命+1%
+        if (args.NumericType == NumericType.Agile)              // 敏捷
+            unit.GetComponent&lt;NumericComponent&gt;()[NumericType.ArmorFinalAdd] += 5;        // 二级：护甲+5
+        if (args.NumericType == NumericType.Spirit)             // 精神
+            unit.GetComponent&lt;NumericComponent&gt;()[NumericType.MPFinalPct] += 1 * 10000;   // 百分比：魔法+1%
+    }
+}
+</code></pre>
+<p><strong>要点</strong>：这就是文章要表达的<strong>一级&#x2F;二级&#x2F;百分比数值</strong>三层设计——一级数值是”底”（力量&#x2F;体力&#x2F;敏捷&#x2F;精神），通过 <code>NumericWatcher</code> 事件<strong>联动</strong>出二级（攻击&#x2F;护甲）和百分比（生命%&#x2F;魔法%）加成，最终叠加成面板。Numeric 用<strong>事件监听</strong>而非硬编码，加新属性扩展容易。</p>
+<h3 id="6-战斗副本"><a href="#6-战斗副本" class="headerlink" title="6. 战斗副本"></a>6. 战斗副本</h3><p>放置类游戏的战斗常为<strong>自动&#x2F;托管</strong>，服务器负责核算：</p>
+<ol>
+<li><strong>根据配置生成怪物数量</strong>：副本配置定义怪物波次与数量；</li>
+<li><strong>根据怪物 id 生成怪物</strong>：读取怪物配置实例化；</li>
+<li><strong>伤害计算</strong>：攻防公式结算；</li>
+<li><strong>战斗漂字</strong>：客户端表现伤害数字；</li>
+<li><strong>服务器战斗核算</strong>：核心设计——<strong>服务器根据初始数据与随机数种子进行战斗模拟计算</strong>，即”<strong>确定性战斗</strong>“：给定相同输入与随机种子，战斗结果可完全复现，天然防作弊、便于回放与断线续战；</li>
+<li>战斗结果由服务器权威下发。</li>
+</ol>
+<blockquote>
+<p>说明：战斗副本&#x2F;装备&#x2F;任务&#x2F;背包&#x2F;打造等玩法系统为项目的规划模块，仓库当前以登录、区服、角色、数值等 ET 基础框架实现为主，故此处为设计讲解，不贴代码。</p>
+</blockquote>
+<h3 id="7-个人装备模块"><a href="#7-个人装备模块" class="headerlink" title="7. 个人装备模块"></a>7. 个人装备模块</h3><ul>
+<li><strong>装备数据</strong>：装备实例的属性、穿戴状态；</li>
+<li><strong>装备属性</strong>：攻击&#x2F;防御等加成，影响最终战力；</li>
+<li>装备来源：副本掉落、打造、任务奖励。</li>
+</ul>
+<h3 id="8-任务模块"><a href="#8-任务模块" class="headerlink" title="8. 任务模块"></a>8. 任务模块</h3><ul>
+<li><strong>任务 id &#x2F; 类型</strong>：主线、日常、活动等；</li>
+<li><strong>任务奖励</strong>：金币、经验、装备等；</li>
+<li>任务进度推进与奖励领取由服务端校验。</li>
+</ul>
+<h3 id="9-背包模块"><a href="#9-背包模块" class="headerlink" title="9. 背包模块"></a>9. 背包模块</h3><ul>
+<li><strong>item &#x2F; 装备</strong>：背包格子管理，装备与道具分类；</li>
+<li><strong>item 售卖</strong>：出售道具获得货币，管理背包空间。</li>
+</ul>
+<h3 id="10-装备打造模块"><a href="#10-装备打造模块" class="headerlink" title="10. 装备打造模块"></a>10. 装备打造模块</h3><ul>
+<li><strong>打造条件</strong>：等级、前置任务等门槛；</li>
+<li><strong>打造所需材料</strong>：消耗材料合成装备；</li>
+<li><strong>打造定时器</strong>：打造是<strong>耗时行为</strong>（如倒计时完成），由定时器驱动完成事件，是放置类”挂机等待”体验的一部分。</li>
+</ul>
+<hr>
+<h2 id="平台与社交系统"><a href="#平台与社交系统" class="headerlink" title="平台与社交系统"></a>平台与社交系统</h2><h3 id="缓存服务器与定时数据存储"><a href="#缓存服务器与定时数据存储" class="headerlink" title="缓存服务器与定时数据存储"></a>缓存服务器与定时数据存储</h3><p>放置类游戏<strong>数据写入频繁</strong>（等级、资源不断变化），用<strong>缓存服务器</strong>做中间层：</p>
+<ul>
+<li>高频数据先写缓存（内存），<strong>定时批量落库</strong>到 MongoDB；</li>
+<li>减少数据库压力、提升吞吐，是放置类高写入场景的标配方案。</li>
+</ul>
+<h3 id="世界聊天"><a href="#世界聊天" class="headerlink" title="世界聊天"></a>世界聊天</h3><ul>
+<li>全服&#x2F;频道聊天消息广播；</li>
+<li>通过消息系统分发，支持世界频道等。</li>
+</ul>
+<h3 id="排行榜"><a href="#排行榜" class="headerlink" title="排行榜"></a>排行榜</h3><ul>
+<li><strong>定时刷新排行榜</strong>：周期性重算排名，避免每次变化都全量排序；</li>
+<li><strong>根据等级进行排行榜</strong>：按等级&#x2F;战力等维度排行；</li>
+<li><strong>等级变化回调刷新该等级区域排行榜</strong>：玩家等级变化时，只增量刷新<strong>受影响区段</strong>的排名，而非全榜重排——这是排行榜的性能关键。</li>
+</ul>
+<hr>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这套放置类游戏覆盖了<strong>账号、区服、角色、数值、战斗、装备、任务、背包、打造、缓存、聊天、排行榜</strong>的完整闭环。值得借鉴的设计：</p>
+<ul>
+<li><strong>分服登录链路</strong>：Realm 分配 Gate + 拿 key 连接，Account 服做校验&#x2F;注册&#x2F;Token；</li>
+<li><strong>账号&#x2F;角色安全</strong>：正则规范账号、协程锁防并发、Token 校验防越权、角色名 DB 查重；</li>
+<li><strong>数值三分层 + 事件联动</strong>：一级属性 → 二级&#x2F;百分比由 <code>NumericWatcher</code> 派生，成长曲线易调；</li>
+<li><strong>确定性战斗（随机数种子）</strong>：服务器模拟可复现，防作弊；</li>
+<li><strong>缓存服务器 + 定时落库</strong>：扛住放置类高频写入；</li>
+<li><strong>排行榜增量刷新</strong>：只重算受影响区段。</li>
+</ul>
+<hr>
+<h2 id="附录：ET-框架机制深挖"><a href="#附录：ET-框架机制深挖" class="headerlink" title="附录：ET 框架机制深挖"></a>附录：ET 框架机制深挖</h2><p>上面的登录、角色、数值代码背后，其实是 ET 框架的几套核心机制。把它们讲透，就明白为什么 ET 适合做这类多进程、高并发的网络游戏。</p>
+<h3 id="1-协程锁（CoroutineLock）：用协程队列替代线程锁"><a href="#1-协程锁（CoroutineLock）：用协程队列替代线程锁" class="headerlink" title="1. 协程锁（CoroutineLock）：用协程队列替代线程锁"></a>1. 协程锁（CoroutineLock）：用协程队列替代线程锁</h3><p>ET 是<strong>单线程驱动</strong>模型，不能像多线程那样用 <code>lock</code>（会阻塞整个游戏循环）。ET 的做法是：<strong>同一把”锁”的请求排队，前一个释放后唤醒下一个</strong>，全程不阻塞：</p>
+<pre><code class="language-csharp">// Unity/Codes/Model/Module/CoroutineLock/CoroutineLockComponent.cs（精简）
+public static async ETTask&lt;CoroutineLock&gt; Wait(this CoroutineLockComponent self, int coroutineLockType, long key, int time = 60000)
+{
+    CoroutineLockQueueType queueType = self.list[coroutineLockType];
+    if (!queueType.TryGetValue(key, out CoroutineLockQueue queue))
+    {
+        // 第一个请求：直接创建锁并返回（拿到锁）
+        queueType.Add(key, self.AddChildWithId&lt;CoroutineLockQueue&gt;(++self.idGenerator, true));
+        return self.CreateCoroutineLock(coroutineLockType, key, time, 1);
+    }
+    // 已有锁被占用：进队列等待，await 挂起；前一个释放后由 Notify 唤醒
+    ETTask&lt;CoroutineLock&gt; tcs = ETTask&lt;CoroutineLock&gt;.Create(true);
+    queue.Add(tcs, time);
+    return await tcs;
+}
+
+public static void Notify(this CoroutineLockComponent self, int coroutineLockType, long key, int level)
+{
+    ...
+    CoroutineLockInfo info = queue.Dequeue();
+    info.Tcs.SetResult(self.CreateCoroutineLock(coroutineLockType, key, info.Time, level)); // 唤醒下一个
+}
+</code></pre>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li>锁按 <code>(锁类型, key)</code> 分组（如登录锁 <code>CoroutineLockType.LoginAccount</code> + 账号名 hash），<strong>同 key 互斥、不同 key 并行</strong>；</li>
+<li><code>Update</code> 里每帧做<strong>超时检测</strong>（默认 60000ms），超时的锁直接放行下一个，<strong>避免死锁</strong>；</li>
+<li>单线程下天然安全，是 ET 替代传统锁的核心原语。</li>
+</ul>
+<h3 id="2-Actor-消息-RPC（ActorMessageSender）：跨进程通信"><a href="#2-Actor-消息-RPC（ActorMessageSender）：跨进程通信" class="headerlink" title="2. Actor 消息 &#x2F; RPC（ActorMessageSender）：跨进程通信"></a>2. Actor 消息 &#x2F; RPC（ActorMessageSender）：跨进程通信</h3><p>登录链路里那行 <code>ActorMessageSenderComponent.Instance.Call(...)</code>，底层是 ET 的 Actor RPC——<strong>跨进程发请求、await 等响应</strong>：</p>
+<pre><code class="language-csharp">// Server/Hotfix/Module/Actor/ActorMessageSenderComponentSystem.cs（精简）
+public static async ETTask&lt;IActorResponse&gt; Call(this ActorMessageSenderComponent self, long actorId, IActorRequest request, bool needException = true)
+{
+    request.RpcId = self.GetRpcId();    // 分配唯一的 RpcId
+    (ushort _, MemoryStream stream) = MessageSerializeHelper.MessageToStream(request);
+    return await self.Call(actorId, request.RpcId, stream, needException);
+}
+
+// 内部核心：注册回调 → 发送到目标进程 → await 等待响应
+self.requestCallback.Add(rpcId, new ActorMessageSender(actorId, memoryStream, tcs, needException));
+self.Send(actorId, memoryStream);       // 经 NetInnerComponent 发给 actorId 所在进程
+IActorResponse response = await tcs;    // 等响应回来，RunMessage 里 SetResult 唤醒
+</code></pre>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li>每个进程的 Actor 都有一个唯一 <code>actorId</code>（编码了进程号），<code>Send</code> 用 <code>NetInnerComponent</code> 路由到对应进程；</li>
+<li>每次请求带 <code>RpcId</code>，响应回来用 <code>requestCallback[rpcId]</code> 精确配对；</li>
+<li><strong>超时检测</strong>：组件定时器每秒 <code>Check()</code>，超过 <code>TIMEOUT_TIME</code> 未响应就 <code>SetException</code>（<code>ERR_ActorTimeout</code>），防止 RPC 永久挂起。</li>
+</ul>
+<h3 id="3-Numeric-数值组件：五值合成公式-万倍放大"><a href="#3-Numeric-数值组件：五值合成公式-万倍放大" class="headerlink" title="3. Numeric 数值组件：五值合成公式 + 万倍放大"></a>3. Numeric 数值组件：五值合成公式 + 万倍放大</h3><p>这是放置类数值系统的底层引擎。ET 的 Numeric 有几个精妙设计：</p>
+<p><strong>① 浮点用 10000 放大存储</strong>，避免精度误差：</p>
+<pre><code class="language-csharp">// Unity/Codes/Model/Module/Numeric/NumericComponent.cs（精简）
+public static float GetAsFloat(this NumericComponent self, int nt) =&gt; (float)self.GetByKey(nt) / 10000;
+public static void   Set(this NumericComponent self, int nt, float value) =&gt; self[nt] = (int)(value * 10000);
+</code></pre>
+<p><strong>② 一个最终值由 5 个值合成</strong>（对应前面”一级&#x2F;二级&#x2F;百分比”的底层）：</p>
+<pre><code class="language-csharp">// 数值 key 按组组织：final = nt/10, bas=final*10+1, add=+2, pct=+3, finalAdd=+4, finalPct=+5
+public static void Update(this NumericComponent self, int numericType, bool isPublicEvent)
+{
+    int final = numericType / 10;  int bas = final * 10 + 1;  int add = final * 10 + 2;
+    int pct = final * 10 + 3;      int finalAdd = final * 10 + 4; int finalPct = final * 10 + 5;
+    // final = (((base + add) * (100 + pct) / 100) + finalAdd) * (100 + finalPct) / 100
+    long result = (long)(((self.GetByKey(bas) + self.GetByKey(add))
+        * (100 + self.GetAsFloat(pct)) / 100f + self.GetByKey(finalAdd))
+        * (100 + self.GetAsFloat(finalPct)) / 100f);
+    self.Insert(final, result, isPublicEvent);
+}
+</code></pre>
+<p><strong>③ 值变化发布事件</strong>，驱动 <code>NumericWatcher</code> 联动：</p>
+<pre><code class="language-csharp">public static void Insert(this NumericComponent self, int numericType, long value, bool isPublicEvent = true)
+{
+    long oldValue = self.GetByKey(numericType);
+    if (oldValue == value) return;
+    self.NumericDic[numericType] = value;
+    if (isPublicEvent)
+    {
+        EventType.NumbericChange args = EventType.NumbericChange.Instance;
+        args.Parent = self.Parent; args.NumericType = numericType; args.Old = oldValue; args.New = value;
+        Game.EventSystem.PublishClass(args);   // 发布事件 → 触发 NumericWatcher
+    }
+}
+</code></pre>
+<p><strong>解读</strong>：攻击、生命这类”最终值”不是存一个数，而是由 <code>base(基础) + add(加成) + pct(百分比) + finalAdd(最终加成) + finalPct(最终百分比)</code> <strong>5 个分量合成</strong>——加 Buff 只动 <code>add</code>&#x2F;<code>pct</code>，不会污染基础值；改成长曲线只调 <code>base</code>。这就是放置类游戏数值”好调、可扩展”的底层保证，也是前面 <code>NumericWatcher_AddAttributePoint</code>（力量→攻击、体力→生命%…）被自动触发的源头。</p>
+<h3 id="4-Unit-缓存（UnitCache）：关键数据落库"><a href="#4-Unit-缓存（UnitCache）：关键数据落库" class="headerlink" title="4. Unit 缓存（UnitCache）：关键数据落库"></a>4. Unit 缓存（UnitCache）：关键数据落库</h3><p>角色、数值等 <code>IUnitCache</code> 组件由 <code>UnitCacheComponent</code> 统一缓存与落库（对应前文”缓存服务器&#x2F;定时存储”的思路）：</p>
+<pre><code class="language-csharp">// Server/Hotfix/Demo/UnitCache/UnitCacheComponentSystem.cs（精简）
+public static async ETTask AddOrUpdate(this UnitCacheComponent self, long id, ListComponent&lt;Entity&gt; entityLists)
+{
+    using (ListComponent&lt;Entity&gt; list = ListComponent&lt;Entity&gt;.Create())
+    {
+        foreach (Entity entity in entityLists)
+        {
+            string key = entity.GetType().Name;
+            if (!self.UnitCaches.TryGetValue(key, out UnitCache unitCache))
+            { unitCache = self.AddChild&lt;UnitCache&gt;(); unitCache.key = key; self.UnitCaches.Add(key, unitCache); }
+            unitCache.AddOrUpdate(entity);   // 先写内存缓存
+            list.Add(entity);
+        }
+        if (list.Count &gt; 0)
+            await DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(id, list); // 再落库
+    }
+}
+</code></pre>
+<p><strong>要点</strong>：<code>AddOrUpdateUnitCache()</code>（加点里那行）把<strong>高频改动</strong>先更新到内存 <code>UnitCache</code>，再批量写 MongoDB——正是放置类高写入场景”缓存 + 定时&#x2F;批量落库”的框架级实现。</p>
+<hr>
+<blockquote>
+<p>更多作品见：<a href="/2022/04/07/Demo/">本人作品</a></p>
+</blockquote>

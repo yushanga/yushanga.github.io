@@ -1,0 +1,214 @@
+<hr>
+<h2 id="title-基于-ET-的双端战斗系统date-2024-03-22-13-47-40categories-作品展示tags-ET框架-战斗系统-技能-Buff-双端-Unity"><a href="#title-基于-ET-的双端战斗系统date-2024-03-22-13-47-40categories-作品展示tags-ET框架-战斗系统-技能-Buff-双端-Unity" class="headerlink" title="title: 基于 ET 的双端战斗系统date: 2024-03-22 13:47:40categories:  - 作品展示tags:  - ET框架  - 战斗系统  - 技能  - Buff  - 双端  - Unity"></a>title: 基于 ET 的双端战斗系统<br>date: 2024-03-22 13:47:40<br>categories:<br>  - 作品展示<br>tags:<br>  - ET框架<br>  - 战斗系统<br>  - 技能<br>  - Buff<br>  - 双端<br>  - Unity</h2><h1 id="基于-ET-的双端战斗系统"><a href="#基于-ET-的双端战斗系统" class="headerlink" title="基于 ET 的双端战斗系统"></a>基于 ET 的双端战斗系统</h1><p><img src="/2024/03/22/Demo/ETSkill/1.png" alt="基于ET的双端战斗分布式架构" title="ET分布式架构"></p>
+<blockquote>
+<p>一款基于 ET 框架实现的<strong>双端战斗</strong>项目：服务端负责战斗结算，客户端负责表现与输入，通过消息通信保持同步。战斗系统采用<strong>配置驱动 + 服务器权威</strong>的设计——所有技能、Buff、野怪数值均可配置，命中&#x2F;结算以服务器为准，客户端只做表现。</p>
+</blockquote>
+<ul>
+<li><strong>仓库地址</strong>：<a href="https://gitee.com/FengChen512/etskill">gitee.com&#x2F;FengChen512&#x2F;etskill</a></li>
+<li><strong>视频地址</strong>：<a href="https://www.bilibili.com/video/BV1ct421J76n/">bilibili 演示</a></li>
+</ul>
+<hr>
+<h2 id="总体设计"><a href="#总体设计" class="headerlink" title="总体设计"></a>总体设计</h2><p>战斗的核心矛盾是**”公平”与”手感”**：</p>
+<ul>
+<li><strong>服务器权威</strong>：技能释放、命中判定、伤害计算都在服务器执行，防止客户端作弊；</li>
+<li><strong>客户端表现</strong>：客户端根据服务器下发的战斗消息播放动画、特效、音效，追求流畅；</li>
+<li><strong>消息驱动</strong>：双端通过一条<strong>战斗消息协议</strong>联动，服务器发”事件”，客户端播”表现”。</li>
+</ul>
+<p>本文按 <strong>战斗系统 &#x2F; Buff 系统 &#x2F; 野怪数值</strong> 三个子系统，拆解服务端设计，再讲客户端如何配合。</p>
+<hr>
+<h2 id="服务端设计"><a href="#服务端设计" class="headerlink" title="服务端设计"></a>服务端设计</h2><h3 id="1-战斗系统"><a href="#1-战斗系统" class="headerlink" title="1. 战斗系统"></a>1. 战斗系统</h3><p>战斗系统围绕<strong>技能</strong>展开，核心是”技能的生命周期”与”命中结算”。</p>
+<h4 id="技能配置"><a href="#技能配置" class="headerlink" title="技能配置"></a>技能配置</h4><p>技能不应写死在代码里，而应由<strong>配置表驱动</strong>（Excel&#x2F;JSON）：</p>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>技能 ID &#x2F; 名称</td>
+<td>唯一标识</td>
+</tr>
+<tr>
+<td>技能类型</td>
+<td>主动 &#x2F; 被动 &#x2F; 触发</td>
+</tr>
+<tr>
+<td>施放条件</td>
+<td>蓝耗、冷却、距离</td>
+</tr>
+<tr>
+<td>目标规则</td>
+<td>单体 &#x2F; 群体 &#x2F; 指定范围</td>
+</tr>
+<tr>
+<td>效果</td>
+<td>伤害、治疗、Buff 引用</td>
+</tr>
+<tr>
+<td>表现资源</td>
+<td>动画 &#x2F; 特效 &#x2F; 音效</td>
+</tr>
+</tbody></table>
+<p>好处：调整数值、加新技能只改配置，不改代码。</p>
+<h4 id="技能生命周期"><a href="#技能生命周期" class="headerlink" title="技能生命周期"></a>技能生命周期</h4><p>一次技能施放，在服务器端经历明确的阶段：</p>
+<pre><code>创建技能 → 施放(扣耗蓝/进入CD) → 飞行/延迟 → 命中判定 → 应用效果 → 释放结束
+</code></pre>
+<p>每个阶段都由服务器推进，阶段之间可插入<strong>事件回调</strong>（如”命中后触发 Buff”）。这种”状态机 + 事件”的结构让复杂技能（多段、引导、弹射）可组合实现。</p>
+<p>▎真实代码（<code>Hotfix/Server/MMO/Battle/Skill/SkillStatusComponentSystem.cs</code> 精简）</p>
+<p>技能施放被建模成显式状态机：<code>New → Init（施放）→ Running（运行）→ Finish（结束）</code>，由 <code>SkillStatusComponent</code> 维护当前状态与冷却：</p>
+<pre><code class="language-csharp">// 施放前校验：单位存在、禁技能、冷却
+public static int CanCastSkill(this SkillStatusComponent self, int castConfigId)
+{
+    Unit unit = self.GetParent&lt;Unit&gt;();
+    if (unit == null) return ErrorCode.ERR_Cast_UnitIsNull;
+    NumericComponent numericComponent = unit.GetComponent&lt;NumericComponent&gt;();
+    if (numericComponent[NumericType.ForBidSkill] &gt; 0) return ErrorCode.ERR_Cast_ForBidSkill;
+    if (self.CoolDowns.TryGetValue(castConfigId, out long tarTime))
+        if (TimeHelper.ServerNow() &lt;= tarTime) return ErrorCode.ERR_CastCDDowns; // 冷却中
+    return ErrorCode.ERR_Success;
+}
+
+// 开始施放：记录冷却与起始时间，状态 → Init
+public static bool StartSkill(this SkillStatusComponent self, Cast cast)
+{
+    if (self.CanCastSkill(cast.ConfigId) != ErrorCode.ERR_Success) return false;
+    long now = TimeHelper.ServerNow();
+    self.CurSkillCastId = cast.ConfigId;
+    self.CurskillstartTime = now;
+    self.CurSkillStatusType = SkillStatusType.Init;
+    int coolDown = CastConfigCategory.Instance.Get(cast.ConfigId).CoolDown;
+    if (coolDown &gt; 0) self.CoolDowns[cast.ConfigId] = now + coolDown; // 进冷却
+    Log.Console(&quot;开始释放技能&quot;);
+    return true;
+}
+
+// 运行 / 结束：状态迁移，非法状态则拒绝
+public static bool RunningSkill(this SkillStatusComponent self, Cast cast)
+{
+    if (self.CurSkillStatusType != SkillStatusType.Init || self.CurSkillCastInstanceId != cast.InstanceId) return false;
+    self.CurSkillStatusType = SkillStatusType.Running; return true;
+}
+public static bool FinishSkill(this SkillStatusComponent self, Cast cast)
+{
+    if (self.CurSkillStatusType != SkillStatusType.Running || self.CurSkillCastInstanceId != cast.InstanceId) return false;
+    self.CurSkillStatusType = SkillStatusType.Finish; return true;
+}
+public static bool BreakSkill(this SkillStatusComponent self) { self.ClearSkillInfo(); return true; } // 打断
+</code></pre>
+<p><strong>为什么用状态机</strong>：多段技能、引导、可打断技能在收到任意中间消息时，能通过 <code>CurSkillStatusType</code> 快速判定”现在合不合法”，杜绝乱序请求导致的错乱。</p>
+<h4 id="创建技能"><a href="#创建技能" class="headerlink" title="创建技能"></a>创建技能</h4><p>玩家发出技能请求后，服务器校验后<strong>创建技能实体</strong>（Actor），并分配技能实例 ID。技能实例持有其配置引用与运行状态，是生命周期的主体。</p>
+<h4 id="技能释放"><a href="#技能释放" class="headerlink" title="技能释放"></a>技能释放</h4><p>释放阶段处理：施放者锁定、消耗校验（蓝量&#x2F;冷却&#x2F;距离）、广播”释放动作”。之后根据技能类型进入<strong>即时命中</strong>或<strong>飞行&#x2F;引导</strong>流程。</p>
+<h4 id="释放结束与命中"><a href="#释放结束与命中" class="headerlink" title="释放结束与命中"></a>释放结束与命中</h4><p>命中判定的关键是<strong>服务器计算</strong>：目标是否在射程、是否被闪避&#x2F;格挡、是否命中单位。命中后<strong>计算伤害并广播结果</strong>，客户端据此播放受击表现。</p>
+<h4 id="法球子弹"><a href="#法球子弹" class="headerlink" title="法球子弹"></a>法球子弹</h4><p>法球子弹（弹道类技能）是战斗系统的经典难题，本项目实现要点：</p>
+<ul>
+<li>服务器维护子弹的<strong>运动轨迹与碰撞检测</strong>（不信任客户端位置）；</li>
+<li>子弹命中目标后触发对应效果并<strong>销毁</strong>；</li>
+<li>客户端根据服务器下发的子弹事件做表现（导弹、光球、轨迹）。</li>
+</ul>
+<h4 id="战斗消息处理"><a href="#战斗消息处理" class="headerlink" title="战斗消息处理"></a>战斗消息处理</h4><p>战斗系统的所有交互都收敛到一套<strong>消息协议</strong>：</p>
+<ul>
+<li>客户端 → 服务器：<code>释放技能请求</code></li>
+<li>服务器 → 客户端：<code>技能释放广播</code>、<code>命中事件</code>、<code>伤害结算</code>、<code>战斗单位死亡</code></li>
+</ul>
+<p>消息处理统一在战斗 Actor 内，保证并发安全与顺序一致。</p>
+<h3 id="2-Buff-系统"><a href="#2-Buff-系统" class="headerlink" title="2. Buff 系统"></a>2. Buff 系统</h3><p>Buff（增益&#x2F;减益）是战斗深度的核心。本项目 Buff 系统关注”<strong>何时施加、持续多久、每多久跳一次</strong>“。</p>
+<h4 id="Buff-配置"><a href="#Buff-配置" class="headerlink" title="Buff 配置"></a>Buff 配置</h4><p>每个 Buff 由配置定义：</p>
+<ul>
+<li><strong>类型</strong>：增益 &#x2F; 减益 &#x2F; 控制（眩晕、减速、定身）</li>
+<li><strong>数值</strong>：攻击加成、移速变化、持续伤害等</li>
+<li><strong>持续方式</strong>：固定时长 &#x2F; 永久 &#x2F; 可叠加</li>
+<li><strong>触发</strong>：命中施加、技能触发、层数刷新</li>
+</ul>
+<h4 id="Buff-拥有者"><a href="#Buff-拥有者" class="headerlink" title="Buff 拥有者"></a>Buff 拥有者</h4><p>Buff 挂在<strong>拥有者实体</strong>上（单位&#x2F;角色），由拥有者统一管理其 Buff 列表与生效逻辑。施加 &#x2F; 移除 &#x2F; 刷新都走拥有者的统一入口，避免状态错乱。</p>
+<h4 id="时间与间隔"><a href="#时间与间隔" class="headerlink" title="时间与间隔"></a>时间与间隔</h4><p>Buff 的两个关键维度：</p>
+<ul>
+<li><strong>总时长</strong>：Buff 何时过期移除；</li>
+<li><strong>生效间隔</strong>：多长时间的”一跳”（如每秒结算一次持续伤害&#x2F;回血）。</li>
+</ul>
+<h4 id="定时器任务"><a href="#定时器任务" class="headerlink" title="定时器任务"></a>定时器任务</h4><p>间隔结算用<strong>定时器</strong>实现：Buff 进入时注册定时器，每到间隔执行一次效果，到期移除并触发”Buff 结束”事件。ET 的定时器机制天然适合这类周期任务。</p>
+<p>▎真实代码（<code>Hotfix/Server/MMO/Battle/Buff/BuffSystem.cs</code> 精简）</p>
+<p>Buff 的两个时间维度——<strong>过期（ExiprTime）<strong>与</strong>间隔（TickTime）</strong>——都用 ET 定时器实现；效果统一收敛到 <strong>BuffAction</strong>：</p>
+<pre><code class="language-csharp">// 设置过期时间：注册一次性定时器，到时触发 BuffExirpTimer
+public static void SetExoireTime(this Buff buff, long expireTime, bool isSendToClient = false)
+{
+    if (expireTime == 0) { buff.ExirpTime = 0; return; }
+    if (buff.ExirpTime == expireTime) return;
+    if (buff.ExirpTime != 0) TimerComponent.Instance.Remove(ref buff.ExirpTime);
+    buff.ExirpTime = TimerComponent.Instance.NewOnceTimer(expireTime,
+        TimerInvokeType.BuffExirpTimer, buff);
+}
+
+// 设置间隔任务：注册循环定时器，每 Tick 执行一次
+public static void SetTickTime(this Buff buff, int tickTime)
+{
+    if (tickTime &gt; 0)
+    {
+        buff.TickBeginTime = TimeHelper.ServerNow();
+        buff.TickTime = tickTime;
+        TimerComponent.Instance.Remove(ref buff.TickTimer);
+        buff.TickTimer = TimerComponent.Instance.NewRepeatedTimer(tickTime,
+            TimerInvokeType.BuffTickTimer, buff);
+    }
+}
+
+// 间隔跳结算：执行配置里的 TickActions，并同步给客户端
+public static void TickActions(this Buff buff)
+{
+    if (buff == null || buff.IsDisposed) return;
+    long buffInstanceId = buff.InstanceId;
+    foreach (var action in buff.Config.TickActions)      // 例如持续伤害、回血
+    {
+        buff.CreatActions(action, ActionsRunType.BuffTick);
+        if (buff.InstanceId != buffInstanceId) break;   // 执行中 Buff 被销毁则中断
+    }
+    // 同步 Buff 移除/刷新到客户端（M2C_BuffRemove / M2C_BuffUpdate）
+    M2C_BuffRemove msg = new M2C_BuffRemove() { BuffId = buff.Id, UnitId = buff.Owner.Id };
+    MMoMessageHelper.SendClient(buff.Owner, msg, (NoticeClienType)buff.Config.NoticToClientType);
+}
+</code></pre>
+<p>过期与间隔分别对应两个定时器 handler：<code>BuffExirpTime_TimerHandler</code>（到时移除）与 <code>BuffTickTimer_TimerHandler</code>（到时跳结算）。<strong>所有”效果”都是配置里的 Action 列表</strong>——加个新 Buff 不改代码，只改配置。</p>
+<h4 id="BuffAction"><a href="#BuffAction" class="headerlink" title="BuffAction"></a>BuffAction</h4><p>Buff 的实际效果收敛为 <strong>BuffAction</strong>（可复用的动作单元）：施加属性修改、执行伤害、施加子 Buff、触发特效等。通过”配置选择 Action + 参数”的方式，同一套 Action 可被多个 Buff 复用，扩展性强。</p>
+<h4 id="Buff-消息处理"><a href="#Buff-消息处理" class="headerlink" title="Buff 消息处理"></a>Buff 消息处理</h4><p>Buff 的施加 &#x2F; 移除 &#x2F; 跳结算，都会通过消息同步给客户端：</p>
+<ul>
+<li>客户端收到”Buff 施加”→ 播放头顶图标 &#x2F; 状态栏更新；</li>
+<li>收到”Buff 跳结算”→ 播放飘字 &#x2F; 特效；</li>
+<li>收到”Buff 移除”→ 清理表现。</li>
+</ul>
+<h3 id="3-野怪数值"><a href="#3-野怪数值" class="headerlink" title="3. 野怪数值"></a>3. 野怪数值</h3><p>野怪（AI 敌人）是战斗内容的载体，本项目把野怪的”数值与生成”也做成配置驱动。</p>
+<h4 id="野怪配置"><a href="#野怪配置" class="headerlink" title="野怪配置"></a>野怪配置</h4><p>单个野怪类型定义：生命、攻击、防御、移速、技能 ID 列表、掉落等。数值全部走配置表，方便策划调参。</p>
+<h4 id="野怪群配置"><a href="#野怪群配置" class="headerlink" title="野怪群配置"></a>野怪群配置</h4><p>将多个野怪按”群”组织（如一片区域的怪点）：定义群包含的野怪类型、数量、刷新点、触发范围。战斗时按群加载与刷怪。</p>
+<h4 id="生成与死亡"><a href="#生成与死亡" class="headerlink" title="生成与死亡"></a>生成与死亡</h4><ul>
+<li><strong>生成</strong>：按野怪群配置在指定点位实例化野怪（服务器创建实体并同步给客户端）；</li>
+<li><strong>死亡</strong>：血量归零后走死亡流程——广播死亡事件、掉落结算、清理实体、记录击杀。</li>
+</ul>
+<h4 id="定时器任务-1"><a href="#定时器任务-1" class="headerlink" title="定时器任务"></a>定时器任务</h4><p>野怪的<strong>行为节奏</strong>（巡逻、技能冷却、刷新重生）由定时器驱动，避免每帧轮询，降低服务端开销。</p>
+<hr>
+<h2 id="客户端设计"><a href="#客户端设计" class="headerlink" title="客户端设计"></a>客户端设计</h2><p>客户端不负责结算，只负责<strong>把服务器的”事件”变成”表现”</strong>。</p>
+<h3 id="1-战斗表型（表现）"><a href="#1-战斗表型（表现）" class="headerlink" title="1. 战斗表型（表现）"></a>1. 战斗表型（表现）</h3><ul>
+<li>播放技能动画、特效、受击反馈；</li>
+<li>法球子弹的飞行表现（轨迹、命中特效）；</li>
+<li>单位死亡表现（死亡动画、消失）。</li>
+</ul>
+<p>客户端表现<strong>以服务器广播为触发</strong>，不做自主判定，保证与服务器结果一致。</p>
+<h3 id="2-Buff-表现"><a href="#2-Buff-表现" class="headerlink" title="2. Buff 表现"></a>2. Buff 表现</h3><ul>
+<li>头顶状态图标、状态栏列表；</li>
+<li>持续伤害 &#x2F; 回血的飘字；</li>
+<li>控制状态的视觉反馈（眩晕旋转、减速拖尾）。</li>
+</ul>
+<h3 id="3-消息处理"><a href="#3-消息处理" class="headerlink" title="3. 消息处理"></a>3. 消息处理</h3><ul>
+<li>客户端维护一套<strong>战斗消息处理器</strong>，把服务器消息映射到表现层；</li>
+<li>消息按类型分发（技能 &#x2F; Buff &#x2F; 伤害 &#x2F; 死亡），表现层订阅并响应；</li>
+<li>对高频消息（伤害飘字、Buff 跳结算）做<strong>合并与队列化</strong>，避免卡顿。</li>
+</ul>
+<hr>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这套双端战斗的核心价值在于**”配置驱动 + 服务器权威 + 消息同步”**：</p>
+<ul>
+<li><strong>服务端</strong>：战斗 &#x2F; Buff &#x2F; 野怪三大系统全部配置化，生命周期清晰、定时器驱动、消息收敛；</li>
+<li><strong>客户端</strong>：专注表现，跟随服务器广播；</li>
+<li><strong>双端</strong>：通过一套战斗消息协议联动，兼顾公平与手感。</li>
+</ul>
+<p>对于想用 ET 实现战斗的开发者，这套”技能状态机 + Buff Action + 野怪配置”的骨架可以直接复用与扩展。</p>
+<blockquote>
+<p>延伸阅读：<a href="/2024/03/22/Demo/ETMMorpg/">基于 ET 框架的 MMO 项目架构笔记</a></p>
+</blockquote>
