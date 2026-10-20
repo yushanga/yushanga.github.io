@@ -1,3 +1,4 @@
+https://yushanga.github.io/2026/10/17/Learn/AIForUnityProgrammers/
 https://yushanga.github.io/2022/04/07/Demo/
 https://yushanga.github.io/about/index.html
 https://yushanga.github.io/tags/index.html
@@ -57,6 +58,9 @@ https://yushanga.github.io/tagsF/DrawCall/
 https://yushanga.github.io/tagsF/batching/
 https://yushanga.github.io/tagsF/Rebuild/
 https://yushanga.github.io/tagsF/Rebatch/
+https://yushanga.github.io/tagsF/ai/
+https://yushanga.github.io/tagsF/toolchain/
+https://yushanga.github.io/tagsF/efficiency/
 https://yushanga.github.io/categories/works/
 https://yushanga.github.io/categories/graphics/
 https://yushanga.github.io/categories/dev-tools/

@@ -11,7 +11,25 @@
   <rights>All rights reserved 2026, Wind Dust</rights>
   <subtitle>行到水深处，坐看云起时</subtitle>
   <title>Wind Dust's Blog</title>
-  <updated>2026-10-10T12:33:04.765Z</updated>
+  <updated>2026-10-17T10:10:39.788Z</updated>
+  <entry>
+    <author>
+      <name>Wind Dust</name>
+    </author>
+    <category term="游戏开发" scheme="https://yushanga.github.io/categories/game-dev/"/>
+    <category term="Unity" scheme="https://yushanga.github.io/tagsF/Unity/"/>
+    <category term="AI" scheme="https://yushanga.github.io/tagsF/ai/"/>
+    <category term="工具链" scheme="https://yushanga.github.io/tagsF/toolchain/"/>
+    <category term="效率" scheme="https://yushanga.github.io/tagsF/efficiency/"/>
+    <id>https://yushanga.github.io/2026/10/17/Learn/AIForUnityProgrammers/</id>
+    <link href="https://yushanga.github.io/2026/10/17/Learn/AIForUnityProgrammers/"/>
+    <published>2026-10-17T10:08:00.000Z</published>
+    <summary>
+      <![CDATA[<h1 id="AI-使用建议：写给-Unity-程序员（2026-版）"><a href="#AI-使用建议：写给-Unity-程序员（2026-版）" class="headerlink" title="AI 使用建议：写给 Unity 程序员（2026]]>
+    </summary>
+    <title>AI 使用建议：写给 Unity 程序员（2026 版）</title>
+    <updated>2026-10-17T10:10:39.788Z</updated>
+  </entry>
   <entry>
     <author>
       <name>Wind Dust</name>
