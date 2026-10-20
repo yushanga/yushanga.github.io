@@ -845,7 +845,7 @@
 </tr>
 </tbody></table>
 <blockquote>
-<p>经验：<strong>工具深度讲得实，方法论讲得深。</strong> 别因为「会用 MCP」就吹成「搭过 AI×Unity 桥」——主程一问 transport &#x2F; schema 就穿帮。</p>
+<p>经验：<strong>工具用得多 ≠ 理解得深。</strong> 会用 MCP，不等于会搭桥——transport、schema、鉴权这些底层细节，才决定你到底走多深。</p>
 </blockquote>
 <hr>
 <h2 id="三、★-落地闭环：六段式（最该照做的骨架）"><a href="#三、★-落地闭环：六段式（最该照做的骨架）" class="headerlink" title="三、★ 落地闭环：六段式（最该照做的骨架）"></a>三、★ 落地闭环：六段式（最该照做的骨架）</h2><blockquote>
@@ -1152,36 +1152,12 @@
 <td><code>.cs</code> 存 UTF-8；Windows 脚本别混 GBK</td>
 </tr>
 </tbody></table>
-<h3 id="8-8-诚实口径"><a href="#8-8-诚实口径" class="headerlink" title="8.8 诚实口径"></a>8.8 诚实口径</h3><blockquote>
-<p>「MCP 是协议层，CLI 是实现层。我做的桥是让 AI 能调用 Unity Editor 的能力；外面套 MCP 就能让 Cursor 自动发现工具。我的实现是 HTTP 桥 + JSON，不需要通用 MCP 也能工作。」</p>
+<h3 id="8-8-小结：落地顺序"><a href="#8-8-小结：落地顺序" class="headerlink" title="8.8 小结：落地顺序"></a>8.8 小结：落地顺序</h3><blockquote>
+<p><strong>MCP 是协议层，CLI 是实现层。</strong> 桥负责让 AI 能调用 Unity Editor 的能力，外面套一层 MCP 就能让 Cursor 自动发现工具；即便不套 MCP，HTTP 桥 + JSON 也能独立工作。</p>
 </blockquote>
-<p>别一上来写 MCP：先 batchmode 跑通 → 再常驻桥 → 最后包 MCP。每步都能单独拿出来讲。Step 2 就是你的「AI×Unity 桥」最小版——和焦龙写的「自研桥」是同一件事的诚实表述，不吹。</p>
+<p>落地顺序建议：先 batchmode 跑通 → 再常驻桥 → 最后包 MCP。<strong>Step 2 就是最小可用的「AI×Unity 桥」</strong>，后面加不加 MCP，取决于你是否需要 AI 自动发现工具。</p>
 <hr>
-<h2 id="九、诚实边界（别吹，也别藏）"><a href="#九、诚实边界（别吹，也别藏）" class="headerlink" title="九、诚实边界（别吹，也别藏）"></a>九、诚实边界（别吹，也别藏）</h2><table>
-<thead>
-<tr>
-<th>层级</th>
-<th>你该有的姿态</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>可认领</td>
-<td>契约前置、信息前置汇聚、编译门禁、人在回路——真实做过就写</td>
-</tr>
-<tr>
-<td>可讲不可吹</td>
-<td>AI 友好型架构（模块边界 &#x2F; 依赖单向）、自建 Editor 桥——讲工程素养，不冒充「主程级从 0 设计」「团队级多 Agent」</td>
-</tr>
-<tr>
-<td>不要碰</td>
-<td>多 Agent 全自动流水线、AI×Unity 自研桥的深度封装、团队级量化——无真实经历一追问就穿帮</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>硬门槛提示：很多 JD 已把「1 年+ Cursor &#x2F; Claude Code 实际项目经验」列为<strong>准入项</strong>而非加分项。用得久就是你的牌，老实写「近 2 年 AI 辅助开发实际项目经验」即可。</p>
-</blockquote>
-<hr>
-<h2 id="十、行动清单（给-Unity-程序员的）"><a href="#十、行动清单（给-Unity-程序员的）" class="headerlink" title="十、行动清单（给 Unity 程序员的）"></a>十、行动清单（给 Unity 程序员的）</h2><table>
+<h2 id="九、行动清单（给-Unity-程序员的）"><a href="#九、行动清单（给-Unity-程序员的）" class="headerlink" title="九、行动清单（给 Unity 程序员的）"></a>九、行动清单（给 Unity 程序员的）</h2><table>
 <thead>
 <tr>
 <th>优先级</th>
